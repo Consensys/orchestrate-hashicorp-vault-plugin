@@ -13,21 +13,26 @@ type importOperation struct {
 }
 
 func NewImportOperation(useCase ethereum.CreateAccountUseCase) framework.OperationHandler {
+	exampleAccount := ExampleETHAccount()
+
 	return &importOperation{
 		properties: &framework.OperationProperties{
-			Summary:     "Imports an Ethereum account given a private key",
-			Description: "",
+			Summary:     "Imports an Ethereum account",
+			Description: "Imports an Ethereum account given a private key, storing it in the Vault and computing its public key and address",
 			Examples: []framework.RequestExample{
 				{
-					Description: "",
-					Data:        nil,
-					Response:    nil,
+					Description: "Creates a new account on the tenant0 namespace",
+					Data: map[string]interface{}{
+						namespaceLabel:  exampleAccount.Namespace,
+						privateKeyLabel: exampleAccount.PrivateKey,
+					},
+					Response: Example200Response(),
 				},
 			},
 			Responses: map[int][]framework.Response{
-				400: nil,
-				422: nil,
-				500: nil,
+				400: {Example400Response()},
+				422: {Example422Response()},
+				500: {Example500Response()},
 			},
 		},
 		useCase: useCase,
@@ -39,9 +44,8 @@ func (op *importOperation) Handler() framework.OperationFunc {
 		privateKeyString := data.Get("privateKey").(string)
 		namespace := data.Get("namespace").(string)
 
-		account, err := op.useCase.Execute(ctx, namespace, privateKeyString)
+		account, err := op.useCase.WithStorage(req.Storage).Execute(ctx, namespace, privateKeyString)
 		if err != nil {
-			// b.Logger().Error("Failed to save the new account to storage", "error", err)
 			return nil, err
 		}
 

@@ -23,6 +23,8 @@ func NewVaultPlugin(ctx context.Context, conf *logical.BackendConfig) (logical.B
 		Secrets:     []*framework.Secret{},
 		BackendType: logical.TypeLogical,
 	}
+
+	ctx = WithLogger(ctx, vaultPlugin.Logger())
 	if err := vaultPlugin.Setup(ctx, conf); err != nil {
 		return nil, err
 	}

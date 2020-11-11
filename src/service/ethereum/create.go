@@ -13,21 +13,24 @@ type createOperation struct {
 }
 
 func NewCreateOperation(useCase ethereum.CreateAccountUseCase) framework.OperationHandler {
+	exampleAccount := ExampleETHAccount()
+
 	return &createOperation{
 		properties: &framework.OperationProperties{
-			Summary:     "Imports an Ethereum account given a private key",
-			Description: "",
+			Summary:     "Creates a new Ethereum account",
+			Description: "Creates a new Ethereum account by generating a private key, storing it in the Vault and computing its public key and address",
 			Examples: []framework.RequestExample{
 				{
-					Description: "",
-					Data:        nil,
-					Response:    nil,
+					Description: "Creates a new account on the tenant0 namespace",
+					Data: map[string]interface{}{
+						namespaceLabel: exampleAccount.Namespace,
+					},
+					Response: Example200Response(),
 				},
 			},
 			Responses: map[int][]framework.Response{
-				400: nil,
-				422: nil,
-				500: nil,
+				400: {Example400Response()},
+				500: {Example500Response()},
 			},
 		},
 		useCase: useCase,
@@ -38,9 +41,8 @@ func (op *createOperation) Handler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 		namespace := data.Get("namespace").(string)
 
-		account, err := op.useCase.Execute(ctx, namespace, "")
+		account, err := op.useCase.WithStorage(req.Storage).Execute(ctx, namespace, "")
 		if err != nil {
-			// b.Logger().Error("Failed to save the new account to storage", "error", err)
 			return nil, err
 		}
 

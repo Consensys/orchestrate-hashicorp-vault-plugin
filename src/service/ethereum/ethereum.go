@@ -40,7 +40,7 @@ func (c *ethereumController) Paths() []*framework.Path {
 
 func (c *ethereumController) pathAccounts() *framework.Path {
 	return &framework.Path{
-		Pattern:      "ethereum/accounts",
+		Pattern:      "ethereum/accounts/{address}",
 		HelpSynopsis: "Creates a new Ethereum account",
 		Fields: map[string]*framework.FieldSchema{
 			namespaceLabel: namespaceFieldSchema,

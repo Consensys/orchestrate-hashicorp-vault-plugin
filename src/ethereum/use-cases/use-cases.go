@@ -2,6 +2,7 @@ package ethereum
 
 import (
 	"context"
+	"github.com/hashicorp/vault/sdk/logical"
 
 	quorumtypes "github.com/consensys/quorum/core/types"
 
@@ -25,18 +26,22 @@ type UseCases interface {
 
 type CreateAccountUseCase interface {
 	Execute(ctx context.Context, namespace, importedPrivKey string) (*entities.ETHAccount, error)
+	WithStorage(storage logical.Storage) CreateAccountUseCase
 }
 
 type SignUseCase interface {
 	Execute(ctx context.Context, address, namespace, data string) (string, error)
+	WithStorage(storage logical.Storage) SignUseCase
 }
 
 type SignTransactionUseCase interface {
 	Execute(ctx context.Context, address, namespace, chainID string, tx *ethtypes.Transaction) (string, error)
+	WithStorage(storage logical.Storage) SignTransactionUseCase
 }
 
 type SignQuorumPrivateTransactionUseCase interface {
 	Execute(ctx context.Context, address, namespace string, tx *quorumtypes.Transaction) (string, error)
+	WithStorage(storage logical.Storage) SignQuorumPrivateTransactionUseCase
 }
 
 type SignEEATransactionUseCase interface {
@@ -46,4 +51,5 @@ type SignEEATransactionUseCase interface {
 		tx *ethtypes.Transaction,
 		privateArgs *entities.PrivateETHTransactionParams,
 	) (string, error)
+	WithStorage(storage logical.Storage) SignEEATransactionUseCase
 }

@@ -1,4 +1,4 @@
-package builder
+package ethereum
 
 import ethereum "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/use-cases"
 
@@ -12,11 +12,7 @@ type useCases struct {
 
 func NewEthereumUseCases() ethereum.UseCases {
 	return &useCases{
-		createAccount:       ethereum.NewCreateAccountUseCase(),
-		sign:                ethereum.NewSignUseCase(),
-		signTx:              ethereum.NewSignTransactionUseCase(),
-		signQuorumPrivateTx: ethereum.NewSignQuorumPrivateTransactionUseCase(),
-		signEEATx:           ethereum.NewSignEEATransactionUseCase(),
+		createAccount: ethereum.NewCreateAccountUseCase(),
 	}
 }
 
