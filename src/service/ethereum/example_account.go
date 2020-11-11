@@ -23,7 +23,7 @@ func Example500Response() framework.Response {
 		Description: "Internal server error",
 		Example: &logical.Response{
 			Data: map[string]interface{}{
-				"error": "an unexpected error occured. Please retry later or contact an administrator",
+				"error": "an unexpected error occurred. Please retry later or contact an administrator",
 			},
 		},
 	}
