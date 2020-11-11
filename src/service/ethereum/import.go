@@ -21,7 +21,7 @@ func NewImportOperation(useCase ethereum.CreateAccountUseCase) framework.Operati
 			Description: "Imports an Ethereum account given a private key, storing it in the Vault and computing its public key and address",
 			Examples: []framework.RequestExample{
 				{
-					Description: "Creates a new account on the tenant0 namespace",
+					Description: "Imports an account on the tenant0 namespace",
 					Data: map[string]interface{}{
 						namespaceLabel:  exampleAccount.Namespace,
 						privateKeyLabel: exampleAccount.PrivateKey,

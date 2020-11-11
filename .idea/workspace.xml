@@ -2,30 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d7a2547c-82d6-41c4-9ce5-af00f7c4bbf5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/context.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ethereum/entities/eth_params.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ethereum/utils/utils.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/ethereum/example_account.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/builder.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/ethereum/builder.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/entities/eth_account.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/ethereum/entities/eth_account.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/create_account.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/ethereum/use-cases/create_account.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/parsers.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/sign-eea-transaction.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/sign-eea-transaction_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/sign-quorum-priv-tx.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/sign-quorum-priv-tx_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/sign-transaction.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/sign-transaction_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/sign_payload.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/sign_payload_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ethereum/use-cases/use-cases.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/ethereum/use-cases/use-cases.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/ethereum/create.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ethereum/create.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/ethereum/ethereum.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ethereum/ethereum.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/ethereum/import.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ethereum/import.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/vault.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/vault.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +46,7 @@
       <recent name="$PROJECT_DIR$/src/service/controllers" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/utils" />
       <recent name="$PROJECT_DIR$/src/ethereum/utils" />
       <recent name="$PROJECT_DIR$/src/service/ethereum" />
       <recent name="$PROJECT_DIR$/src/service" />
