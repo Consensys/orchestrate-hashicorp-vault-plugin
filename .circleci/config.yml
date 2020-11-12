@@ -27,6 +27,9 @@ jobs:
     executor: golang_executor
     steps:
       - prepare_golang
+      - install_tools:
+          name: Install linting tools
+          command: make lint-tools
       - run:
           name: Check lints
           command: make lint
