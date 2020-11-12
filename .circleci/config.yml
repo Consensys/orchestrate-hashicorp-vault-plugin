@@ -32,7 +32,7 @@ jobs:
           command: make lint-tools
       - run:
           name: Check lints
-          command: make lint
+          command: make lint-ci
 
   build:
     executor: golang_executor
