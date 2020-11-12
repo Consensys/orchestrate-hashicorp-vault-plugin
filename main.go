@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"github.com/hashicorp/go-hclog"
 	"os"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src"
@@ -13,7 +13,8 @@ func main() {
 	client := &api.PluginAPIClientMeta{}
 	err := client.FlagSet().Parse(os.Args[1:])
 	if err != nil {
-		log.Println(err)
+		logger := hclog.New(&hclog.LoggerOptions{})
+		logger.Error("failed to parse args", "error", err)
 		os.Exit(1)
 	}
 
@@ -22,7 +23,8 @@ func main() {
 		TLSProviderFunc:    api.VaultPluginTLSProvider(client.GetTLSConfig()),
 	})
 	if err != nil {
-		log.Println(err)
+		logger := hclog.New(&hclog.LoggerOptions{})
+		logger.Error("failed to start plugin", "error", err)
 		os.Exit(1)
 	}
 }
