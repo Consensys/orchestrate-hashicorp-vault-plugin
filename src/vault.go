@@ -9,8 +9,8 @@ import (
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
-// NewVaultPlugin returns the Hashicorp Vault backend
-func NewVaultPlugin(ctx context.Context, conf *logical.BackendConfig) (logical.Backend, error) {
+// NewVaultBackend returns the Hashicorp Vault backend
+func NewVaultBackend(ctx context.Context, conf *logical.BackendConfig) (logical.Backend, error) {
 	ethereumController := ethereum.NewEthereumController(builder.NewEthereumUseCases())
 
 	vaultPlugin := &framework.Backend{

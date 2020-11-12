@@ -18,7 +18,7 @@ func main() {
 	}
 
 	err = plugin.Serve(&plugin.ServeOpts{
-		BackendFactoryFunc: src.NewVaultPlugin,
+		BackendFactoryFunc: src.NewVaultBackend,
 		TLSProviderFunc:    api.VaultPluginTLSProvider(client.GetTLSConfig()),
 	})
 	if err != nil {
