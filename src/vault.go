@@ -11,7 +11,7 @@ import (
 
 // NewVaultBackend returns the Hashicorp Vault backend
 func NewVaultBackend(ctx context.Context, conf *logical.BackendConfig) (logical.Backend, error) {
-	ethereumController := ethereum.NewEthereumController(builder.NewEthereumUseCases())
+	ethereumController := ethereum.NewController(builder.NewEthereumUseCases())
 
 	vaultPlugin := &framework.Backend{
 		Help:  "Orchestrate Hashicorp Vault Plugin. Please submit a request for help.",

@@ -18,18 +18,18 @@ var namespaceFieldSchema = &framework.FieldSchema{
 	Default:     "",
 }
 
-type ethereumController struct {
+type controller struct {
 	useCases ethereum.UseCases
 }
 
-func NewEthereumController(useCases ethereum.UseCases) *ethereumController {
-	return &ethereumController{
+func NewController(useCases ethereum.UseCases) *controller {
+	return &controller{
 		useCases: useCases,
 	}
 }
 
 // Paths returns the list of paths
-func (c *ethereumController) Paths() []*framework.Path {
+func (c *controller) Paths() []*framework.Path {
 	return framework.PathAppend(
 		[]*framework.Path{
 			c.pathAccounts(),
@@ -38,7 +38,7 @@ func (c *ethereumController) Paths() []*framework.Path {
 	)
 }
 
-func (c *ethereumController) pathAccounts() *framework.Path {
+func (c *controller) pathAccounts() *framework.Path {
 	return &framework.Path{
 		Pattern:      "ethereum/accounts/{address}",
 		HelpSynopsis: "Creates a new Ethereum account",
@@ -51,7 +51,7 @@ func (c *ethereumController) pathAccounts() *framework.Path {
 	}
 }
 
-func (c *ethereumController) pathImportAccount() *framework.Path {
+func (c *controller) pathImportAccount() *framework.Path {
 	return &framework.Path{
 		Pattern: "ethereum/accounts/import",
 		Fields: map[string]*framework.FieldSchema{
