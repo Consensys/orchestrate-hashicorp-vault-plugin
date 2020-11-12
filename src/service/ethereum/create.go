@@ -4,6 +4,7 @@ import (
 	"context"
 	ethereum "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/use-cases"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -14,7 +15,7 @@ type createOperation struct {
 }
 
 func NewCreateOperation(useCase ethereum.CreateAccountUseCase) framework.OperationHandler {
-	exampleAccount := ExampleETHAccount()
+	exampleAccount := utils.ExampleETHAccount()
 
 	return &createOperation{
 		properties: &framework.OperationProperties{
@@ -26,12 +27,12 @@ func NewCreateOperation(useCase ethereum.CreateAccountUseCase) framework.Operati
 					Data: map[string]interface{}{
 						namespaceLabel: exampleAccount.Namespace,
 					},
-					Response: Example200Response(),
+					Response: utils.Example200Response(),
 				},
 			},
 			Responses: map[int][]framework.Response{
-				400: {Example400Response()},
-				500: {Example500Response()},
+				400: {utils.Example400Response()},
+				500: {utils.Example500Response()},
 			},
 		},
 		useCase: useCase,
