@@ -16,3 +16,6 @@
 
 # Build folder
 build/
+
+#Coverage
+coverage.txt
