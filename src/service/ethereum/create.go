@@ -3,6 +3,7 @@ package ethereum
 import (
 	"context"
 	ethereum "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/use-cases"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -46,7 +47,7 @@ func (op *createOperation) Handler() framework.OperationFunc {
 			return nil, err
 		}
 
-		return FormatAccountResponse(account), nil
+		return formatters.FormatAccountResponse(account), nil
 	}
 }
 

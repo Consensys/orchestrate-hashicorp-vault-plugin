@@ -2,6 +2,7 @@ package ethereum
 
 import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/entities"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 
@@ -54,6 +55,6 @@ func Example422Response() framework.Response {
 func Example200Response() *framework.Response {
 	return &framework.Response{
 		Description: "Success",
-		Example:     FormatAccountResponse(ExampleETHAccount()),
+		Example:     formatters.FormatAccountResponse(ExampleETHAccount()),
 	}
 }
