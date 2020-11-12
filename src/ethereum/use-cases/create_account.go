@@ -24,9 +24,9 @@ func NewCreateAccountUseCase() CreateAccountUseCase {
 	return &createAccountUseCase{}
 }
 
-func (uc *createAccountUseCase) WithStorage(storage logical.Storage) CreateAccountUseCase {
+func (uc createAccountUseCase) WithStorage(storage logical.Storage) CreateAccountUseCase {
 	uc.storage = storage
-	return uc
+	return &uc
 }
 
 // Execute creates a new Ethereum account and stores it in the Vault
