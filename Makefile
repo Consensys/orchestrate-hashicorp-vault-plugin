@@ -1,9 +1,13 @@
+.ONESHELL:
 GOFILES := $(shell find . -name '*.go' -not -path "./vendor/*" | egrep -v "^\./\.go" | grep -v _test.go)
+DATE = $(shell date +'%s')
 
 test:
 	go test  ./... -cover -coverprofile=coverage.txt -covermode=atomic
 build:
-	go build -o build/orchestrate-hashicorp-vault-plugin -ldflags "-X main.buildDate=`date -u +\"%Y-%m-%dT%H:%M:%SZ\"` -X main.buildVersion=$(BUILD_VERSION)" -tags=prod -v
+	@CGO_ENABLED=1 GOOS=linux go build -a -v -i -o build/bin/orchestrate-hashicorp-vault-plugin
+docker-build:
+	docker build --build-arg always_upgrade="$(DATE)" -t consensys/orchestrate-hashicorp-vault-plugin:latest .
 lint-tools: ## Install linting tools
 	@GO111MODULE=on go get github.com/client9/misspell/cmd/misspell@v0.3.4
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH)/bin v1.27.0
@@ -13,3 +17,5 @@ lint:
 lint-ci: ## Check linting
 	@misspell -error $(GOFILES)
 	@golangci-lint run
+run:
+	docker-compose -f docker/docker-compose.yml up --build --remove-orphans
