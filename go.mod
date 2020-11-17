@@ -10,5 +10,4 @@ require (
 	github.com/hashicorp/vault/api v1.0.4
 	github.com/hashicorp/vault/sdk v0.1.13
 	github.com/stretchr/testify v1.4.0
-	gotest.tools v2.2.0+incompatible
 )
