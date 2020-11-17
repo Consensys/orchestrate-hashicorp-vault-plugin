@@ -6,8 +6,6 @@ test:
 	go test  ./... -cover -coverprofile=coverage.txt -covermode=atomic
 build:
 	@CGO_ENABLED=1 GOOS=linux go build -a -v -o build/bin/orchestrate-hashicorp-vault-plugin
-docker-build:
-	docker build --build-arg always_upgrade="$(DATE)" -t consensys/orchestrate-hashicorp-vault-plugin:latest .
 lint-tools: ## Install linting tools
 	@GO111MODULE=on go get github.com/client9/misspell/cmd/misspell@v0.3.4
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH)/bin v1.27.0

@@ -14,5 +14,5 @@ build/
 #Coverage
 coverage.txt
 
-#IDEA folder
-.idea/
+# Vendor
+vendor/
