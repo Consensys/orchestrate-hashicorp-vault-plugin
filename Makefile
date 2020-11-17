@@ -5,7 +5,7 @@ DATE = $(shell date +'%s')
 test:
 	go test  ./... -cover -coverprofile=coverage.txt -covermode=atomic
 build:
-	@CGO_ENABLED=1 GOOS=linux go build -a -v -i -o build/bin/orchestrate-hashicorp-vault-plugin
+	@CGO_ENABLED=1 GOOS=linux go build -a -v -o build/bin/orchestrate-hashicorp-vault-plugin
 docker-build:
 	docker build --build-arg always_upgrade="$(DATE)" -t consensys/orchestrate-hashicorp-vault-plugin:latest .
 lint-tools: ## Install linting tools

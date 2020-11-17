@@ -11,7 +11,7 @@ RUN go mod download
 
 COPY  / .
 RUN mkdir -p /build/bin \
-    && CGO_ENABLED=1 GOOS=linux go build -a -v -i -o /build/bin/orchestrate-hashicorp-vault-plugin . \
+    && CGO_ENABLED=1 GOOS=linux go build -a -v -o /build/bin/orchestrate-hashicorp-vault-plugin . \
     && sha256sum -b /build/bin/orchestrate-hashicorp-vault-plugin > /build/bin/SHA256PLUGIN
 
 FROM vault:latest
