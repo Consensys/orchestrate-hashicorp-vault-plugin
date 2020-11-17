@@ -11,19 +11,19 @@ import (
 
 // NewVaultBackend returns the Hashicorp Vault backend
 func NewVaultBackend(ctx context.Context, conf *logical.BackendConfig) (logical.Backend, error) {
-	ethereumController := ethereum.NewController(builder.NewEthereumUseCases())
-
 	vaultPlugin := &framework.Backend{
-		Help:  "Orchestrate Hashicorp Vault Plugin. Please submit a request for help.",
-		Paths: ethereumController.Paths(),
+		Help: "Orchestrate Hashicorp Vault Plugin",
 		PathsSpecial: &logical.Paths{
 			SealWrapStorage: []string{
-				"ethereum/accounts",
+				"ethereum/accounts/",
 			},
 		},
 		Secrets:     []*framework.Secret{},
 		BackendType: logical.TypeLogical,
 	}
+
+	ethereumController := ethereum.NewController(builder.NewEthereumUseCases(), vaultPlugin.Logger())
+	vaultPlugin.Paths = ethereumController.Paths()
 
 	ctx = utils.WithLogger(ctx, vaultPlugin.Logger())
 	if err := vaultPlugin.Setup(ctx, conf); err != nil {

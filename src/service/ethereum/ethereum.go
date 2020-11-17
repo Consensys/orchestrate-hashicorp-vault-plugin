@@ -2,6 +2,7 @@ package ethereum
 
 import (
 	ethereum "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/use-cases"
+	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -20,11 +21,13 @@ var namespaceFieldSchema = &framework.FieldSchema{
 
 type controller struct {
 	useCases ethereum.UseCases
+	logger   hclog.Logger
 }
 
-func NewController(useCases ethereum.UseCases) *controller {
+func NewController(useCases ethereum.UseCases, logger hclog.Logger) *controller {
 	return &controller{
 		useCases: useCases,
+		logger:   logger,
 	}
 }
 
@@ -45,8 +48,10 @@ func (c *controller) pathAccounts() *framework.Path {
 		Fields: map[string]*framework.FieldSchema{
 			namespaceLabel: namespaceFieldSchema,
 		},
+
 		Operations: map[logical.Operation]framework.OperationHandler{
-			logical.CreateOperation: NewCreateOperation(c.useCases.CreateAccount()),
+			logical.CreateOperation: c.NewCreateOperation(),
+			logical.UpdateOperation: c.NewCreateOperation(),
 		},
 	}
 }
@@ -62,9 +67,10 @@ func (c *controller) pathImportAccount() *framework.Path {
 			},
 			namespaceLabel: namespaceFieldSchema,
 		},
-		HelpSynopsis: "Imports an Ethereum account",
 		Operations: map[logical.Operation]framework.OperationHandler{
-			logical.CreateOperation: NewImportOperation(c.useCases.CreateAccount()),
+			logical.CreateOperation: c.NewImportOperation(),
+			logical.UpdateOperation: c.NewImportOperation(),
 		},
+		HelpSynopsis: "Imports an Ethereum account",
 	}
 }

@@ -1,6 +1,8 @@
 package ethereum
 
-import ethereum "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/use-cases"
+import (
+	ethereum "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/use-cases"
+)
 
 type useCases struct {
 	createAccount       ethereum.CreateAccountUseCase
