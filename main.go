@@ -11,9 +11,9 @@ import (
 
 func main() {
 	client := &api.PluginAPIClientMeta{}
+	logger := hclog.New(&hclog.LoggerOptions{})
 	err := client.FlagSet().Parse(os.Args[1:])
 	if err != nil {
-		logger := hclog.New(&hclog.LoggerOptions{})
 		logger.Error("failed to parse args", "error", err)
 		os.Exit(1)
 	}
@@ -21,9 +21,9 @@ func main() {
 	err = plugin.Serve(&plugin.ServeOpts{
 		BackendFactoryFunc: src.NewVaultBackend,
 		TLSProviderFunc:    api.VaultPluginTLSProvider(client.GetTLSConfig()),
+		Logger:             logger,
 	})
 	if err != nil {
-		logger := hclog.New(&hclog.LoggerOptions{})
 		logger.Error("failed to start plugin", "error", err)
 		os.Exit(1)
 	}

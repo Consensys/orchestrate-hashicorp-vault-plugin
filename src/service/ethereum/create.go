@@ -16,6 +16,7 @@ type createOperation struct {
 
 func NewCreateOperation(useCase ethereum.CreateAccountUseCase) framework.OperationHandler {
 	exampleAccount := utils.ExampleETHAccount()
+	successExample := utils.Example200Response()
 
 	return &createOperation{
 		properties: &framework.OperationProperties{
@@ -27,10 +28,11 @@ func NewCreateOperation(useCase ethereum.CreateAccountUseCase) framework.Operati
 					Data: map[string]interface{}{
 						namespaceLabel: exampleAccount.Namespace,
 					},
-					Response: utils.Example200Response(),
+					Response: successExample,
 				},
 			},
 			Responses: map[int][]framework.Response{
+				200: {*successExample},
 				400: {utils.Example400Response()},
 				500: {utils.Example500Response()},
 			},

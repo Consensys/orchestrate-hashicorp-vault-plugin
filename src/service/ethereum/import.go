@@ -16,6 +16,7 @@ type importOperation struct {
 
 func NewImportOperation(useCase ethereum.CreateAccountUseCase) framework.OperationHandler {
 	exampleAccount := utils.ExampleETHAccount()
+	successExample := utils.Example200Response()
 
 	return &importOperation{
 		properties: &framework.OperationProperties{
@@ -28,10 +29,11 @@ func NewImportOperation(useCase ethereum.CreateAccountUseCase) framework.Operati
 						namespaceLabel:  exampleAccount.Namespace,
 						privateKeyLabel: exampleAccount.PrivateKey,
 					},
-					Response: utils.Example200Response(),
+					Response: successExample,
 				},
 			},
 			Responses: map[int][]framework.Response{
+				200: {*successExample},
 				400: {utils.Example400Response()},
 				422: {utils.Example422Response()},
 				500: {utils.Example500Response()},

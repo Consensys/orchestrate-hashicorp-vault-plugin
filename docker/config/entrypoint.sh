@@ -3,7 +3,7 @@
 CONFIG_DIR="/home/vault/config"
 INIT_SCRIPT="/home/vault/config/init.sh"
 
-export VAULT_ADDR="http://127.0.0.1:9200"
+export VAULT_ADDR="http://localhost:9200"
 
 mkdir -p $CONFIG_DIR
 
