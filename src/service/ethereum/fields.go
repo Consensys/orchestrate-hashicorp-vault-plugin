@@ -9,13 +9,6 @@ const (
 	namespaceHeader = "X-Vault-Namespace"
 )
 
-var namespaceFieldSchema = &framework.FieldSchema{
-	Type:        framework.TypeString,
-	Description: "Namespace in which to store the account",
-	Required:    false,
-	Default:     "",
-}
-
 var addressFieldSchema = &framework.FieldSchema{
 	Type:        framework.TypeString,
 	Description: "Address of the account",
