@@ -6,6 +6,7 @@ import (
 
 type useCases struct {
 	createAccount       ethereum.CreateAccountUseCase
+	getAccount          ethereum.GetAccountUseCase
 	sign                ethereum.SignUseCase
 	signTx              ethereum.SignTransactionUseCase
 	signQuorumPrivateTx ethereum.SignQuorumPrivateTransactionUseCase
@@ -15,11 +16,16 @@ type useCases struct {
 func NewEthereumUseCases() ethereum.UseCases {
 	return &useCases{
 		createAccount: ethereum.NewCreateAccountUseCase(),
+		getAccount:    ethereum.NewGetAccountUseCase(),
 	}
 }
 
 func (ucs *useCases) CreateAccount() ethereum.CreateAccountUseCase {
 	return ucs.createAccount
+}
+
+func (ucs *useCases) GetAccount() ethereum.GetAccountUseCase {
+	return ucs.getAccount
 }
 
 func (ucs *useCases) SignPayload() ethereum.SignUseCase {

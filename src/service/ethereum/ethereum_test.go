@@ -20,6 +20,7 @@ import (
 type ethereumCtrlTestSuite struct {
 	suite.Suite
 	createAccountUC *mocks.MockCreateAccountUseCase
+	getAccountUC    *mocks.MockGetAccountUseCase
 	storage         *mocks2.MockStorage
 	ctx             context.Context
 	controller      *controller
@@ -27,6 +28,10 @@ type ethereumCtrlTestSuite struct {
 
 func (s *ethereumCtrlTestSuite) CreateAccount() ethereum.CreateAccountUseCase {
 	return s.createAccountUC
+}
+
+func (s *ethereumCtrlTestSuite) GetAccount() ethereum.GetAccountUseCase {
+	return s.getAccountUC
 }
 
 func (s *ethereumCtrlTestSuite) SignPayload() ethereum.SignUseCase {
@@ -57,11 +62,13 @@ func (s *ethereumCtrlTestSuite) SetupTest() {
 	defer ctrl.Finish()
 
 	s.createAccountUC = mocks.NewMockCreateAccountUseCase(ctrl)
+	s.getAccountUC = mocks.NewMockGetAccountUseCase(ctrl)
 	s.controller = NewController(s, hclog.Default())
 	s.storage = mocks2.NewMockStorage(ctrl)
 	s.ctx = context.Background()
 
 	s.createAccountUC.EXPECT().WithStorage(s.storage).Return(s.createAccountUC).AnyTimes()
+	s.getAccountUC.EXPECT().WithStorage(s.storage).Return(s.getAccountUC).AnyTimes()
 }
 
 func (s *ethereumCtrlTestSuite) TestEthereumController_Create() {
@@ -213,6 +220,80 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Import() {
 		s.createAccountUC.EXPECT().Execute(gomock.Any(), "myNamespace", privKey).Return(nil, expectedErr)
 
 		response, err := importOperation.Handler()(s.ctx, request, data)
+
+		assert.Empty(t, response)
+		assert.Equal(t, expectedErr, err)
+	})
+}
+
+func (s *ethereumCtrlTestSuite) TestEthereumController_Get() {
+	path := s.controller.Paths()[2]
+	getOperation := path.Operations[logical.ReadOperation]
+
+	s.T().Run("should define the correct path", func(t *testing.T) {
+		assert.Equal(t, fmt.Sprintf("ethereum/accounts/%s", framework.GenericNameRegex("address")), path.Pattern)
+		assert.NotEmpty(t, getOperation)
+	})
+
+	s.T().Run("should define correct properties", func(t *testing.T) {
+		properties := getOperation.Properties()
+
+		assert.NotEmpty(t, properties.Description)
+		assert.NotEmpty(t, properties.Summary)
+		assert.NotEmpty(t, properties.Examples[0].Description)
+		assert.NotEmpty(t, properties.Examples[0].Data)
+		assert.NotEmpty(t, properties.Examples[0].Response)
+		assert.NotEmpty(t, properties.Responses[200])
+		assert.NotEmpty(t, properties.Responses[400])
+		assert.NotEmpty(t, properties.Responses[500])
+	})
+
+	s.T().Run("handler should execute the correct use case", func(t *testing.T) {
+		account := testutils.FakeETHAccount()
+		request := &logical.Request{
+			Storage: s.storage,
+		}
+		data := &framework.FieldData{
+			Raw: map[string]interface{}{
+				namespaceLabel: account.Namespace,
+				addressLabel:   account.Address,
+			},
+			Schema: map[string]*framework.FieldSchema{
+				namespaceLabel: namespaceFieldSchema,
+				addressLabel:   addressFieldSchema,
+			},
+		}
+
+		s.getAccountUC.EXPECT().Execute(gomock.Any(), account.Address, account.Namespace).Return(account, nil)
+
+		response, err := getOperation.Handler()(s.ctx, request, data)
+
+		assert.NoError(t, err)
+		assert.Equal(t, account.Address, response.Data["address"])
+		assert.Equal(t, account.PublicKey, response.Data["publicKey"])
+		assert.Equal(t, account.CompressedPublicKey, response.Data["compressedPublicKey"])
+		assert.Equal(t, account.Namespace, response.Data["namespace"])
+	})
+
+	s.T().Run("should return same error if use case fails", func(t *testing.T) {
+		request := &logical.Request{
+			Storage: s.storage,
+		}
+		data := &framework.FieldData{
+			Raw: map[string]interface{}{
+				namespaceLabel: "myNamespace",
+				addressLabel:   "myAddress",
+			},
+			Schema: map[string]*framework.FieldSchema{
+				namespaceLabel: namespaceFieldSchema,
+				addressLabel:   addressFieldSchema,
+			},
+		}
+		expectedErr := fmt.Errorf("error")
+
+		s.getAccountUC.EXPECT().Execute(gomock.Any(), "myAddress", "myNamespace").Return(nil, expectedErr)
+
+		response, err := getOperation.Handler()(s.ctx, request, data)
 
 		assert.Empty(t, response)
 		assert.Equal(t, expectedErr, err)

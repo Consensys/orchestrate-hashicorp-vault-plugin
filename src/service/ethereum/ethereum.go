@@ -1,23 +1,12 @@
 package ethereum
 
 import (
+	"fmt"
 	ethereum "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/use-cases"
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
-
-const (
-	namespaceLabel  = "namespace"
-	privateKeyLabel = "privateKey"
-)
-
-var namespaceFieldSchema = &framework.FieldSchema{
-	Type:        framework.TypeString,
-	Description: "Namespace in which to store the account",
-	Required:    false,
-	Default:     "",
-}
 
 type controller struct {
 	useCases ethereum.UseCases
@@ -37,6 +26,7 @@ func (c *controller) Paths() []*framework.Path {
 		[]*framework.Path{
 			c.pathAccounts(),
 			c.pathImportAccount(),
+			c.pathAccount(),
 		},
 	)
 }
@@ -52,6 +42,20 @@ func (c *controller) pathAccounts() *framework.Path {
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewCreateOperation(),
 			logical.UpdateOperation: c.NewCreateOperation(),
+		},
+	}
+}
+
+func (c *controller) pathAccount() *framework.Path {
+	return &framework.Path{
+		Pattern:      fmt.Sprintf("ethereum/accounts/%s", framework.GenericNameRegex("address")),
+		HelpSynopsis: "Get, update or delete an Ethereum account",
+		Fields: map[string]*framework.FieldSchema{
+			namespaceLabel: namespaceFieldSchema,
+			addressLabel:   addressFieldSchema,
+		},
+		Operations: map[logical.Operation]framework.OperationHandler{
+			logical.ReadOperation: c.NewGetOperation(),
 		},
 	}
 }
