@@ -86,10 +86,9 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Create() {
 		assert.NotEmpty(t, properties.Description)
 		assert.NotEmpty(t, properties.Summary)
 		assert.NotEmpty(t, properties.Examples[0].Description)
-		assert.NotEmpty(t, properties.Examples[0].Data)
+		assert.Empty(t, properties.Examples[0].Data)
 		assert.NotEmpty(t, properties.Examples[0].Response)
 		assert.NotEmpty(t, properties.Responses[200])
-		assert.NotEmpty(t, properties.Responses[400])
 		assert.NotEmpty(t, properties.Responses[500])
 	})
 
@@ -97,19 +96,14 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Create() {
 		account := testutils.FakeETHAccount()
 		request := &logical.Request{
 			Storage: s.storage,
-		}
-		data := &framework.FieldData{
-			Raw: map[string]interface{}{
-				namespaceLabel: account.Namespace,
-			},
-			Schema: map[string]*framework.FieldSchema{
-				namespaceLabel: namespaceFieldSchema,
+			Headers: map[string][]string{
+				namespaceHeader: {account.Namespace},
 			},
 		}
 
 		s.createAccountUC.EXPECT().Execute(gomock.Any(), account.Namespace, "").Return(account, nil)
 
-		response, err := createOperation.Handler()(s.ctx, request, data)
+		response, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
 
 		assert.NoError(t, err)
 		assert.Equal(t, account.Address, response.Data["address"])
@@ -122,19 +116,11 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Create() {
 		request := &logical.Request{
 			Storage: s.storage,
 		}
-		data := &framework.FieldData{
-			Raw: map[string]interface{}{
-				namespaceLabel: "myNamespace",
-			},
-			Schema: map[string]*framework.FieldSchema{
-				namespaceLabel: namespaceFieldSchema,
-			},
-		}
 		expectedErr := fmt.Errorf("error")
 
-		s.createAccountUC.EXPECT().Execute(gomock.Any(), "myNamespace", "").Return(nil, expectedErr)
+		s.createAccountUC.EXPECT().Execute(gomock.Any(), "", "").Return(nil, expectedErr)
 
-		response, err := createOperation.Handler()(s.ctx, request, data)
+		response, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
 
 		assert.Empty(t, response)
 		assert.Equal(t, expectedErr, err)
@@ -169,14 +155,15 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Import() {
 		privKey := "fa88c4a5912f80503d6b5503880d0745f4b88a1ff90ce8f64cdd8f32cc3bc249"
 		request := &logical.Request{
 			Storage: s.storage,
+			Headers: map[string][]string{
+				namespaceHeader: {account.Namespace},
+			},
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				namespaceLabel:  account.Namespace,
 				privateKeyLabel: privKey,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				namespaceLabel: namespaceFieldSchema,
 				privateKeyLabel: {
 					Type:        framework.TypeString,
 					Description: "Private key in hexadecimal format",
@@ -203,11 +190,9 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Import() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				namespaceLabel:  "myNamespace",
 				privateKeyLabel: privKey,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				namespaceLabel: namespaceFieldSchema,
 				privateKeyLabel: {
 					Type:        framework.TypeString,
 					Description: "Private key in hexadecimal format",
@@ -217,7 +202,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Import() {
 		}
 		expectedErr := fmt.Errorf("error")
 
-		s.createAccountUC.EXPECT().Execute(gomock.Any(), "myNamespace", privKey).Return(nil, expectedErr)
+		s.createAccountUC.EXPECT().Execute(gomock.Any(), "", privKey).Return(nil, expectedErr)
 
 		response, err := importOperation.Handler()(s.ctx, request, data)
 
@@ -252,15 +237,16 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Get() {
 		account := testutils.FakeETHAccount()
 		request := &logical.Request{
 			Storage: s.storage,
+			Headers: map[string][]string{
+				namespaceHeader: {account.Namespace},
+			},
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				namespaceLabel: account.Namespace,
-				addressLabel:   account.Address,
+				addressLabel: account.Address,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				namespaceLabel: namespaceFieldSchema,
-				addressLabel:   addressFieldSchema,
+				addressLabel: addressFieldSchema,
 			},
 		}
 
@@ -281,17 +267,15 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Get() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				namespaceLabel: "myNamespace",
-				addressLabel:   "myAddress",
+				addressLabel: "myAddress",
 			},
 			Schema: map[string]*framework.FieldSchema{
-				namespaceLabel: namespaceFieldSchema,
-				addressLabel:   addressFieldSchema,
+				addressLabel: addressFieldSchema,
 			},
 		}
 		expectedErr := fmt.Errorf("error")
 
-		s.getAccountUC.EXPECT().Execute(gomock.Any(), "myAddress", "myNamespace").Return(nil, expectedErr)
+		s.getAccountUC.EXPECT().Execute(gomock.Any(), "myAddress", "").Return(nil, expectedErr)
 
 		response, err := getOperation.Handler()(s.ctx, request, data)
 

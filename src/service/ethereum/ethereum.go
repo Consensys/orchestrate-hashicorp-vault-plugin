@@ -37,6 +37,7 @@ func (c *controller) pathAccounts() *framework.Path {
 		HelpSynopsis: "Creates a new Ethereum account",
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewCreateOperation(),
+			logical.UpdateOperation: c.NewCreateOperation(),
 		},
 	}
 }
@@ -51,6 +52,7 @@ func (c *controller) pathAccount() *framework.Path {
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.ReadOperation: c.NewGetOperation(),
 		},
+		ExistenceCheck: c.ExistenceHandler,
 	}
 }
 
@@ -66,9 +68,9 @@ func (c *controller) pathImportAccount() *framework.Path {
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewImportOperation(),
+			logical.UpdateOperation: c.NewImportOperation(),
 		},
 		HelpSynopsis:   "Imports an Ethereum account",
-		ExistenceCheck: c.ExistenceHandler,
 	}
 }
 
