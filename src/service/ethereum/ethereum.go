@@ -35,13 +35,8 @@ func (c *controller) pathAccounts() *framework.Path {
 	return &framework.Path{
 		Pattern:      "ethereum/accounts",
 		HelpSynopsis: "Creates a new Ethereum account",
-		Fields: map[string]*framework.FieldSchema{
-			namespaceLabel: namespaceFieldSchema,
-		},
-
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewCreateOperation(),
-			logical.UpdateOperation: c.NewCreateOperation(),
 		},
 	}
 }
@@ -51,8 +46,7 @@ func (c *controller) pathAccount() *framework.Path {
 		Pattern:      fmt.Sprintf("ethereum/accounts/%s", framework.GenericNameRegex("address")),
 		HelpSynopsis: "Get, update or delete an Ethereum account",
 		Fields: map[string]*framework.FieldSchema{
-			namespaceLabel: namespaceFieldSchema,
-			addressLabel:   addressFieldSchema,
+			addressLabel: addressFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.ReadOperation: c.NewGetOperation(),
@@ -69,12 +63,21 @@ func (c *controller) pathImportAccount() *framework.Path {
 				Description: "Private key in hexadecimal format",
 				Required:    true,
 			},
-			namespaceLabel: namespaceFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewImportOperation(),
-			logical.UpdateOperation: c.NewImportOperation(),
 		},
-		HelpSynopsis: "Imports an Ethereum account",
+		HelpSynopsis:   "Imports an Ethereum account",
+		ExistenceCheck: c.ExistenceHandler,
 	}
+}
+
+func getNamespace(req *logical.Request) string {
+	namespace := ""
+
+	if val, hasVal := req.Headers[namespaceHeader]; hasVal {
+		namespace = val[0]
+	}
+
+	return namespace
 }

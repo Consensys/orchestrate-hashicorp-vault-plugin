@@ -2,6 +2,7 @@ package ethereum
 
 import (
 	"context"
+	"fmt"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/hashicorp/vault/sdk/framework"
@@ -20,8 +21,7 @@ func (c *controller) NewGetOperation() *framework.PathOperation {
 			{
 				Description: "Gets an account on the tenant0 namespace",
 				Data: map[string]interface{}{
-					namespaceLabel: exampleAccount.Namespace,
-					addressLabel:   exampleAccount.Address,
+					addressLabel: exampleAccount.Address,
 				},
 				Response: successExample,
 			},
@@ -36,12 +36,8 @@ func (c *controller) NewGetOperation() *framework.PathOperation {
 
 func (c *controller) getHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-		namespace := data.Get("namespace").(string)
-		address := data.Get("address").(string)
-
-		if address == "" {
-			return logical.ErrorResponse("address must be provided"), nil
-		}
+		address := data.Get(addressLabel).(string)
+		namespace := getNamespace(req)
 
 		ctx = utils.WithLogger(ctx, c.logger)
 		account, err := c.useCases.GetAccount().WithStorage(req.Storage).Execute(ctx, address, namespace)
@@ -49,6 +45,19 @@ func (c *controller) getHandler() framework.OperationFunc {
 			return nil, err
 		}
 
+		if account == nil {
+			return nil, logical.CodedError(404, fmt.Sprintf("account not found at address %s and namespace %s", address, namespace))
+		}
+
 		return formatters.FormatAccountResponse(account), nil
 	}
+}
+
+func (c *controller) ExistenceHandler(ctx context.Context, req *logical.Request, data *framework.FieldData) (bool, error) {
+	response, err := c.getHandler()(ctx, req, data)
+	if err != nil {
+		return false, err
+	}
+
+	return response != nil, nil
 }

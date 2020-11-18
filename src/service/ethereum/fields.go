@@ -3,9 +3,10 @@ package ethereum
 import "github.com/hashicorp/vault/sdk/framework"
 
 const (
-	namespaceLabel  = "namespace"
 	privateKeyLabel = "privateKey"
 	addressLabel    = "address"
+
+	namespaceHeader = "X-Vault-Namespace"
 )
 
 var namespaceFieldSchema = &framework.FieldSchema{
