@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/testutils"
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/use-cases/utils"
 	mocks2 "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/testutils/mocks"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/ethereum/go-ethereum/common"
