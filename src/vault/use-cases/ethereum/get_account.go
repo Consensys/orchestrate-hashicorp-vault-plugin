@@ -44,6 +44,6 @@ func (uc *getAccountUseCase) Execute(ctx context.Context, address, namespace str
 		return nil, err
 	}
 
-	logger.Info("Ethereum account found successfully")
+	logger.Debug("Ethereum account found successfully")
 	return account, nil
 }
