@@ -27,6 +27,7 @@ func (c *controller) Paths() []*framework.Path {
 			c.pathAccounts(),
 			c.pathImportAccount(),
 			c.pathAccount(),
+			c.pathSignPayload(),
 		},
 	)
 }
@@ -73,6 +74,25 @@ func (c *controller) pathImportAccount() *framework.Path {
 			logical.UpdateOperation: c.NewImportOperation(),
 		},
 		HelpSynopsis: "Imports an Ethereum account",
+	}
+}
+
+func (c *controller) pathSignPayload() *framework.Path {
+	return &framework.Path{
+		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign", framework.GenericNameRegex("address")),
+		Fields: map[string]*framework.FieldSchema{
+			addressLabel: addressFieldSchema,
+			dataLabel: {
+				Type:        framework.TypeString,
+				Description: "data to sign",
+				Required:    true,
+			},
+		},
+		Operations: map[logical.Operation]framework.OperationHandler{
+			logical.CreateOperation: c.NewSignPayloadOperation(),
+			logical.UpdateOperation: c.NewSignPayloadOperation(),
+		},
+		HelpSynopsis: "Signs an arbitrary message using an existing Ethereum account",
 	}
 }
 

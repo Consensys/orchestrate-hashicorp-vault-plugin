@@ -15,3 +15,11 @@ func FormatAccountResponse(account *entities.ETHAccount) *logical.Response {
 		},
 	}
 }
+
+func FormatSignatureResponse(signature string) *logical.Response {
+	return &logical.Response{
+		Data: map[string]interface{}{
+			"signature": signature,
+		},
+	}
+}
