@@ -23,35 +23,35 @@ type ethereumCtrlTestSuite struct {
 	controller      *controller
 }
 
-func (s *ethereumCtrlTestSuite) CreateAccount() use_cases.CreateAccountUseCase {
+func (s *ethereumCtrlTestSuite) CreateAccount() usecases.CreateAccountUseCase {
 	return s.createAccountUC
 }
 
-func (s *ethereumCtrlTestSuite) GetAccount() use_cases.GetAccountUseCase {
+func (s *ethereumCtrlTestSuite) GetAccount() usecases.GetAccountUseCase {
 	return s.getAccountUC
 }
 
-func (s *ethereumCtrlTestSuite) ListAccounts() use_cases.ListAccountsUseCase {
+func (s *ethereumCtrlTestSuite) ListAccounts() usecases.ListAccountsUseCase {
 	return s.listAccountsUC
 }
 
-func (s *ethereumCtrlTestSuite) SignPayload() use_cases.SignUseCase {
+func (s *ethereumCtrlTestSuite) SignPayload() usecases.SignUseCase {
 	return s.signPayloadUC
 }
 
-func (s *ethereumCtrlTestSuite) SignTransaction() use_cases.SignTransactionUseCase {
+func (s *ethereumCtrlTestSuite) SignTransaction() usecases.SignTransactionUseCase {
 	return nil
 }
 
-func (s *ethereumCtrlTestSuite) SignQuorumPrivateTransaction() use_cases.SignQuorumPrivateTransactionUseCase {
+func (s *ethereumCtrlTestSuite) SignQuorumPrivateTransaction() usecases.SignQuorumPrivateTransactionUseCase {
 	return nil
 }
 
-func (s *ethereumCtrlTestSuite) SignEEATransaction() use_cases.SignEEATransactionUseCase {
+func (s *ethereumCtrlTestSuite) SignEEATransaction() usecases.SignEEATransactionUseCase {
 	return nil
 }
 
-var _ use_cases.UseCases = &ethereumCtrlTestSuite{}
+var _ usecases.UseCases = &ethereumCtrlTestSuite{}
 
 func TestEthereumController(t *testing.T) {
 	s := new(ethereumCtrlTestSuite)

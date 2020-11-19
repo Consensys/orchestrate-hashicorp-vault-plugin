@@ -21,11 +21,11 @@ type createAccountUseCase struct {
 }
 
 // NewCreateAccountUseCase creates a new CreateAccountUseCase
-func NewCreateAccountUseCase() use_cases.CreateAccountUseCase {
+func NewCreateAccountUseCase() usecases.CreateAccountUseCase {
 	return &createAccountUseCase{}
 }
 
-func (uc createAccountUseCase) WithStorage(storage logical.Storage) use_cases.CreateAccountUseCase {
+func (uc createAccountUseCase) WithStorage(storage logical.Storage) usecases.CreateAccountUseCase {
 	uc.storage = storage
 	return &uc
 }

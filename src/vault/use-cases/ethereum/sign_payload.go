@@ -13,17 +13,17 @@ import (
 
 // signPayloadUseCase is a use case to sign an arbitrary payload usign an existing Ethereum account
 type signPayloadUseCase struct {
-	getAccountUC use_cases.GetAccountUseCase
+	getAccountUC usecases.GetAccountUseCase
 }
 
 // NewSignUseCase creates a new SignUseCase
-func NewSignUseCase(getAccountUC use_cases.GetAccountUseCase) use_cases.SignUseCase {
+func NewSignUseCase(getAccountUC usecases.GetAccountUseCase) usecases.SignUseCase {
 	return &signPayloadUseCase{
 		getAccountUC: getAccountUC,
 	}
 }
 
-func (uc signPayloadUseCase) WithStorage(storage logical.Storage) use_cases.SignUseCase {
+func (uc signPayloadUseCase) WithStorage(storage logical.Storage) usecases.SignUseCase {
 	uc.getAccountUC = uc.getAccountUC.WithStorage(storage)
 	return &uc
 }

@@ -15,11 +15,11 @@ type getAccountUseCase struct {
 }
 
 // NewGetAccountUseCase creates a new GetAccountUseCase
-func NewGetAccountUseCase() use_cases.GetAccountUseCase {
+func NewGetAccountUseCase() usecases.GetAccountUseCase {
 	return &getAccountUseCase{}
 }
 
-func (uc getAccountUseCase) WithStorage(storage logical.Storage) use_cases.GetAccountUseCase {
+func (uc getAccountUseCase) WithStorage(storage logical.Storage) usecases.GetAccountUseCase {
 	uc.storage = storage
 	return &uc
 }

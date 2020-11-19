@@ -14,11 +14,11 @@ type listAccountsUseCase struct {
 }
 
 // NewListAccountUseCase creates a new ListAccountsUseCase
-func NewListAccountsUseCase() use_cases.ListAccountsUseCase {
+func NewListAccountsUseCase() usecases.ListAccountsUseCase {
 	return &listAccountsUseCase{}
 }
 
-func (uc listAccountsUseCase) WithStorage(storage logical.Storage) use_cases.ListAccountsUseCase {
+func (uc listAccountsUseCase) WithStorage(storage logical.Storage) usecases.ListAccountsUseCase {
 	uc.storage = storage
 	return &uc
 }
