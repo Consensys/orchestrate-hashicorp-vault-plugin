@@ -3,5 +3,10 @@ package utils
 import "fmt"
 
 func ComputeKey(address, namespace string) string {
-	return fmt.Sprintf("%s%s", namespace, address)
+	path := fmt.Sprintf("ethereum/accounts/%s", address)
+	if namespace != "" {
+		path = fmt.Sprintf("%s/%s", namespace, path)
+	}
+
+	return path
 }
