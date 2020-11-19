@@ -4,9 +4,10 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"encoding/hex"
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/entities"
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/utils"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases/ethereum/utils"
 	"github.com/hashicorp/vault/sdk/logical"
 
 	"github.com/consensys/quorum/common/hexutil"
@@ -20,11 +21,11 @@ type createAccountUseCase struct {
 }
 
 // NewCreateAccountUseCase creates a new CreateAccountUseCase
-func NewCreateAccountUseCase() CreateAccountUseCase {
+func NewCreateAccountUseCase() use_cases.CreateAccountUseCase {
 	return &createAccountUseCase{}
 }
 
-func (uc createAccountUseCase) WithStorage(storage logical.Storage) CreateAccountUseCase {
+func (uc createAccountUseCase) WithStorage(storage logical.Storage) use_cases.CreateAccountUseCase {
 	uc.storage = storage
 	return &uc
 }

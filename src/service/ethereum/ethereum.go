@@ -2,18 +2,18 @@ package ethereum
 
 import (
 	"fmt"
-	ethereum "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/use-cases"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
 type controller struct {
-	useCases ethereum.UseCases
+	useCases use_cases.UseCases
 	logger   hclog.Logger
 }
 
-func NewController(useCases ethereum.UseCases, logger hclog.Logger) *controller {
+func NewController(useCases use_cases.UseCases, logger hclog.Logger) *controller {
 	return &controller{
 		useCases: useCases,
 		logger:   logger,

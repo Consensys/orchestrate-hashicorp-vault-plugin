@@ -3,6 +3,7 @@ package ethereum
 import (
 	"context"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/hashicorp/vault/sdk/logical"
 
 	"github.com/consensys/quorum/common/hexutil"
@@ -12,19 +13,18 @@ import (
 
 // signPayloadUseCase is a use case to sign an arbitrary payload usign an existing Ethereum account
 type signPayloadUseCase struct {
-	storage      logical.Storage
-	getAccountUC GetAccountUseCase
+	getAccountUC use_cases.GetAccountUseCase
 }
 
 // NewSignUseCase creates a new SignUseCase
-func NewSignUseCase(getAccountUC GetAccountUseCase) SignUseCase {
+func NewSignUseCase(getAccountUC use_cases.GetAccountUseCase) use_cases.SignUseCase {
 	return &signPayloadUseCase{
 		getAccountUC: getAccountUC,
 	}
 }
 
-func (uc signPayloadUseCase) WithStorage(storage logical.Storage) SignUseCase {
-	uc.storage = storage
+func (uc signPayloadUseCase) WithStorage(storage logical.Storage) use_cases.SignUseCase {
+	uc.getAccountUC = uc.getAccountUC.WithStorage(storage)
 	return &uc
 }
 
@@ -33,7 +33,7 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, address, namespace, d
 	logger := apputils.Logger(ctx).With("namespace", namespace).With("address", address)
 	logger.Debug("signing message")
 
-	account, err := uc.getAccountUC.WithStorage(uc.storage).Execute(ctx, address, namespace)
+	account, err := uc.getAccountUC.Execute(ctx, address, namespace)
 	if err != nil {
 		return "", err
 	}

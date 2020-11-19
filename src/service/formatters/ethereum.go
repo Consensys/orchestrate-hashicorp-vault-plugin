@@ -1,7 +1,7 @@
 package formatters
 
 import (
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/entities"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
 	"github.com/hashicorp/vault/sdk/logical"
 )
 

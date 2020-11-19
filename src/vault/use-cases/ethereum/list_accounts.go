@@ -2,8 +2,9 @@ package ethereum
 
 import (
 	"context"
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/ethereum/utils"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases/ethereum/utils"
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
@@ -13,11 +14,11 @@ type listAccountsUseCase struct {
 }
 
 // NewListAccountUseCase creates a new ListAccountsUseCase
-func NewListAccountsUseCase() ListAccountsUseCase {
+func NewListAccountsUseCase() use_cases.ListAccountsUseCase {
 	return &listAccountsUseCase{}
 }
 
-func (uc listAccountsUseCase) WithStorage(storage logical.Storage) ListAccountsUseCase {
+func (uc listAccountsUseCase) WithStorage(storage logical.Storage) use_cases.ListAccountsUseCase {
 	uc.storage = storage
 	return &uc
 }
