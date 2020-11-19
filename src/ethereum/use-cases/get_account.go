@@ -13,7 +13,7 @@ type getAccountUseCase struct {
 	storage logical.Storage
 }
 
-// NewGetAccountUseCase creates a new CreateAccountUseCase
+// NewGetAccountUseCase creates a new GetAccountUseCase
 func NewGetAccountUseCase() GetAccountUseCase {
 	return &getAccountUseCase{}
 }

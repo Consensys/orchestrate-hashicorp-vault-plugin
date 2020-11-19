@@ -29,6 +29,7 @@ func (c *controller) NewGetOperation() *framework.PathOperation {
 		Responses: map[int][]framework.Response{
 			200: {*successExample},
 			400: {utils.Example400Response()},
+			404: {utils.Example404Response()},
 			500: {utils.Example500Response()},
 		},
 	}

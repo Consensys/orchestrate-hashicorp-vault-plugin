@@ -66,6 +66,20 @@ func (mr *MockUseCasesMockRecorder) GetAccount() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccount", reflect.TypeOf((*MockUseCases)(nil).GetAccount))
 }
 
+// ListAccounts mocks base method
+func (m *MockUseCases) ListAccounts() ethereum.ListAccountsUseCase {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAccounts")
+	ret0, _ := ret[0].(ethereum.ListAccountsUseCase)
+	return ret0
+}
+
+// ListAccounts indicates an expected call of ListAccounts
+func (mr *MockUseCasesMockRecorder) ListAccounts() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAccounts", reflect.TypeOf((*MockUseCases)(nil).ListAccounts))
+}
+
 // SignPayload mocks base method
 func (m *MockUseCases) SignPayload() ethereum.SignUseCase {
 	m.ctrl.T.Helper()
@@ -224,6 +238,58 @@ func (m *MockGetAccountUseCase) WithStorage(storage logical.Storage) ethereum.Ge
 func (mr *MockGetAccountUseCaseMockRecorder) WithStorage(storage interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithStorage", reflect.TypeOf((*MockGetAccountUseCase)(nil).WithStorage), storage)
+}
+
+// MockListAccountsUseCase is a mock of ListAccountsUseCase interface
+type MockListAccountsUseCase struct {
+	ctrl     *gomock.Controller
+	recorder *MockListAccountsUseCaseMockRecorder
+}
+
+// MockListAccountsUseCaseMockRecorder is the mock recorder for MockListAccountsUseCase
+type MockListAccountsUseCaseMockRecorder struct {
+	mock *MockListAccountsUseCase
+}
+
+// NewMockListAccountsUseCase creates a new mock instance
+func NewMockListAccountsUseCase(ctrl *gomock.Controller) *MockListAccountsUseCase {
+	mock := &MockListAccountsUseCase{ctrl: ctrl}
+	mock.recorder = &MockListAccountsUseCaseMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockListAccountsUseCase) EXPECT() *MockListAccountsUseCaseMockRecorder {
+	return m.recorder
+}
+
+// Execute mocks base method
+func (m *MockListAccountsUseCase) Execute(ctx context.Context, namespace string) ([]string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Execute", ctx, namespace)
+	ret0, _ := ret[0].([]string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Execute indicates an expected call of Execute
+func (mr *MockListAccountsUseCaseMockRecorder) Execute(ctx, namespace interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Execute", reflect.TypeOf((*MockListAccountsUseCase)(nil).Execute), ctx, namespace)
+}
+
+// WithStorage mocks base method
+func (m *MockListAccountsUseCase) WithStorage(storage logical.Storage) ethereum.ListAccountsUseCase {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "WithStorage", storage)
+	ret0, _ := ret[0].(ethereum.ListAccountsUseCase)
+	return ret0
+}
+
+// WithStorage indicates an expected call of WithStorage
+func (mr *MockListAccountsUseCaseMockRecorder) WithStorage(storage interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithStorage", reflect.TypeOf((*MockListAccountsUseCase)(nil).WithStorage), storage)
 }
 
 // MockSignUseCase is a mock of SignUseCase interface

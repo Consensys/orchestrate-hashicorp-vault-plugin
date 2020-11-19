@@ -28,7 +28,6 @@ func (c *controller) NewImportOperation() *framework.PathOperation {
 		Responses: map[int][]framework.Response{
 			200: {*successExample},
 			400: {utils.Example400Response()},
-			422: {utils.Example422Response()},
 			500: {utils.Example500Response()},
 		},
 	}
