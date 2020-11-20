@@ -22,6 +22,7 @@ func NewEthereumUseCases() usecases.UseCases {
 		getAccount:    getAccount,
 		listAccounts:  ethereum.NewListAccountsUseCase(),
 		sign:          ethereum.NewSignUseCase(getAccount),
+		signTx:        ethereum.NewSignTransactionUseCase(getAccount),
 	}
 }
 
