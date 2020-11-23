@@ -4,35 +4,35 @@ import (
 	"context"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/hashicorp/vault/sdk/logical"
 	"gitlab.com/ConsenSys/client/fr/core-stack/orchestrate.git/v2/pkg/crypto/ethereum/signing"
 
 	"github.com/consensys/quorum/common/hexutil"
+	quorumtypes "github.com/consensys/quorum/core/types"
 )
 
-// signTxUseCase is a use case to sign an ethereum transaction using an existing account
-type signTxUseCase struct {
+// signQuorumPrivateTxUseCase is a use case to sign a Quorum private transaction using an existing account
+type signQuorumPrivateTxUseCase struct {
 	getAccountUC usecases.GetAccountUseCase
 }
 
-// NewSignTransactionUseCase creates a new SignTransactionUseCase
-func NewSignTransactionUseCase(getAccountUC usecases.GetAccountUseCase) usecases.SignTransactionUseCase {
-	return &signTxUseCase{
+// NewSignQuorumPrivateTransactionUseCase creates a new signQuorumPrivateTxUseCase
+func NewSignQuorumPrivateTransactionUseCase(getAccountUC usecases.GetAccountUseCase) usecases.SignQuorumPrivateTransactionUseCase {
+	return &signQuorumPrivateTxUseCase{
 		getAccountUC: getAccountUC,
 	}
 }
 
-func (uc signTxUseCase) WithStorage(storage logical.Storage) usecases.SignTransactionUseCase {
+func (uc signQuorumPrivateTxUseCase) WithStorage(storage logical.Storage) usecases.SignQuorumPrivateTransactionUseCase {
 	uc.getAccountUC = uc.getAccountUC.WithStorage(storage)
 	return &uc
 }
 
-// Execute signs an ethereum transaction
-func (uc *signTxUseCase) Execute(ctx context.Context, address, namespace, chainID string, tx *ethtypes.Transaction) (string, error) {
+// Execute signs a Quorum private transaction
+func (uc *signQuorumPrivateTxUseCase) Execute(ctx context.Context, address, namespace string, tx *quorumtypes.Transaction) (string, error) {
 	logger := apputils.Logger(ctx).With("namespace", namespace).With("address", address)
-	logger.Debug("signing ethereum transaction")
+	logger.Debug("signing quorum private transaction")
 
 	account, err := uc.getAccountUC.Execute(ctx, address, namespace)
 	if err != nil {
@@ -46,13 +46,13 @@ func (uc *signTxUseCase) Execute(ctx context.Context, address, namespace, chainI
 		return "", err
 	}
 
-	signature, err := signing.SignTransaction(tx, ecdsaPrivKey, signing.GetEIP155Signer(chainID))
+	signature, err := signing.SignQuorumPrivateTransaction(tx, ecdsaPrivKey, signing.GetQuorumPrivateTxSigner())
 	if err != nil {
-		errMessage := "failed to sign transaction using ECDSA"
+		errMessage := "failed to sign quorum private transaction"
 		logger.With("error", err).Error(errMessage)
 		return "", err
 	}
 
-	logger.Info("ethereum transaction signed successfully")
+	logger.Info("quorum private transaction signed successfully")
 	return hexutil.Encode(signature), nil
 }

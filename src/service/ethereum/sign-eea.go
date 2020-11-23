@@ -8,25 +8,24 @@ import (
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
-func (c *controller) NewSignTransactionOperation() *framework.PathOperation {
+func (c *controller) NewSignEEATransactionOperation() *framework.PathOperation {
 	exampleAccount := utils.ExampleETHAccount()
 
 	return &framework.PathOperation{
-		Callback:    c.signTransactionHandler(),
-		Summary:     "Signs an Ethereum transaction using an existing account",
-		Description: "Signs an Ethereum transaction using ECDSA and the private key of an existing account",
+		Callback:    c.signEEATransactionHandler(),
+		Summary:     "Signs an EEA private transaction using an existing account",
+		Description: "Signs an EEA private transaction using ECDSA and the private key of an existing account",
 		Examples: []framework.RequestExample{
 			{
-				Description: "Signs an Ethereum transaction",
+				Description: "Signs an EEA transaction",
 				Data: map[string]interface{}{
-					formatters.AddressLabel:  exampleAccount.Address,
-					formatters.NonceLabel:    0,
-					formatters.ToLabel:       "0x905B88EFf8Bda1543d4d6f4aA05afef143D27E18",
-					formatters.AmountLabel:   "0",
-					formatters.GasPriceLabel: "0",
-					formatters.GasLimitLabel: 21000,
-					formatters.ChainIDLabel:  "1",
-					formatters.DataLabel:     "0xfeee...",
+					formatters.AddressLabel:     exampleAccount.Address,
+					formatters.NonceLabel:       0,
+					formatters.ToLabel:          "0x905B88EFf8Bda1543d4d6f4aA05afef143D27E18",
+					formatters.ChainIDLabel:     "1",
+					formatters.DataLabel:        "0xfeee...",
+					formatters.PrivateFromLabel: "A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=",
+					formatters.PrivateForLabel:  []string{"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=", "B1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="},
 				},
 				Response: utils.Example200ResponseSignature(),
 			},
@@ -40,7 +39,7 @@ func (c *controller) NewSignTransactionOperation() *framework.PathOperation {
 	}
 }
 
-func (c *controller) signTransactionHandler() framework.OperationFunc {
+func (c *controller) signEEATransactionHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 		address := data.Get(formatters.AddressLabel).(string)
 		chainID := data.Get(formatters.ChainIDLabel).(string)
@@ -50,13 +49,13 @@ func (c *controller) signTransactionHandler() framework.OperationFunc {
 			return logical.ErrorResponse("chainID must be provided"), nil
 		}
 
-		tx, err := formatters.FormatSignETHTransactionRequest(data)
+		tx, privateArgs, err := formatters.FormatSignEEATransactionRequest(data)
 		if err != nil {
 			return nil, err
 		}
 
 		ctx = utils.WithLogger(ctx, c.logger)
-		signature, err := c.useCases.SignTransaction().WithStorage(req.Storage).Execute(ctx, address, namespace, chainID, tx)
+		signature, err := c.useCases.SignEEATransaction().WithStorage(req.Storage).Execute(ctx, address, namespace, chainID, tx, privateArgs)
 		if err != nil {
 			return nil, err
 		}

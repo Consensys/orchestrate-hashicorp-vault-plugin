@@ -125,11 +125,17 @@ func (c *controller) pathSignQuorumPrivate() *framework.Path {
 	return &framework.Path{
 		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign-quorum-private-transaction", framework.GenericNameRegex("address")),
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AddressLabel: formatters.AddressFieldSchema,
+			formatters.AddressLabel:  formatters.AddressFieldSchema,
+			formatters.NonceLabel:    formatters.NonceFieldSchema,
+			formatters.ToLabel:       formatters.ToFieldSchema,
+			formatters.AmountLabel:   formatters.AmountFieldSchema,
+			formatters.GasPriceLabel: formatters.GasPriceFieldSchema,
+			formatters.GasLimitLabel: formatters.GasLimitFieldSchema,
+			formatters.DataLabel:     formatters.DataFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
-			logical.CreateOperation: c.NewSignPayloadOperation(),
-			logical.UpdateOperation: c.NewSignPayloadOperation(),
+			logical.CreateOperation: c.NewSignQuorumPrivateTransactionOperation(),
+			logical.UpdateOperation: c.NewSignQuorumPrivateTransactionOperation(),
 		},
 		HelpSynopsis: "Signs a Quorum private transaction using an existing account",
 	}
@@ -139,11 +145,18 @@ func (c *controller) pathSignEEA() *framework.Path {
 	return &framework.Path{
 		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign-eea-transaction", framework.GenericNameRegex("address")),
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AddressLabel: formatters.AddressFieldSchema,
+			formatters.AddressLabel:        formatters.AddressFieldSchema,
+			formatters.NonceLabel:          formatters.NonceFieldSchema,
+			formatters.ToLabel:             formatters.ToFieldSchema,
+			formatters.ChainIDLabel:        formatters.ChainIDFieldSchema,
+			formatters.DataLabel:           formatters.DataFieldSchema,
+			formatters.PrivateFromLabel:    formatters.PrivateFromFielSchema,
+			formatters.PrivateForLabel:     formatters.PrivateForFielSchema,
+			formatters.PrivacyGroupIDLabel: formatters.PrivacyGroupIDFielSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
-			logical.CreateOperation: c.NewSignPayloadOperation(),
-			logical.UpdateOperation: c.NewSignPayloadOperation(),
+			logical.CreateOperation: c.NewSignEEATransactionOperation(),
+			logical.UpdateOperation: c.NewSignEEATransactionOperation(),
 		},
 		HelpSynopsis: "Signs an EEA private transaction using an existing account",
 	}

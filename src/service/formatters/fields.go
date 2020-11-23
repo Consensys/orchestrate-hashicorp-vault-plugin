@@ -3,15 +3,18 @@ package formatters
 import "github.com/hashicorp/vault/sdk/framework"
 
 const (
-	PrivateKeyLabel = "privateKey"
-	AddressLabel    = "address"
-	DataLabel       = "data"
-	NonceLabel      = "nonce"
-	ToLabel         = "to"
-	AmountLabel     = "amount"
-	GasPriceLabel   = "gasPrice"
-	GasLimitLabel   = "gasLimit"
-	ChainIDLabel    = "chainID"
+	PrivateKeyLabel     = "privateKey"
+	AddressLabel        = "address"
+	DataLabel           = "data"
+	NonceLabel          = "nonce"
+	ToLabel             = "to"
+	AmountLabel         = "amount"
+	GasPriceLabel       = "gasPrice"
+	GasLimitLabel       = "gasLimit"
+	ChainIDLabel        = "chainID"
+	PrivateFromLabel    = "privateFrom"
+	PrivateForLabel     = "privateFor"
+	PrivacyGroupIDLabel = "privacyGroupID"
 
 	NamespaceHeader = "X-Vault-Namespace"
 )
@@ -59,4 +62,19 @@ var ChainIDFieldSchema = &framework.FieldSchema{
 var DataFieldSchema = &framework.FieldSchema{
 	Type:        framework.TypeString,
 	Description: "Data of the transaction",
+}
+
+var PrivateFromFielSchema = &framework.FieldSchema{
+	Type:        framework.TypeString,
+	Description: "EEA PrivateFrom address in base64 format",
+}
+
+var PrivateForFielSchema = &framework.FieldSchema{
+	Type:        framework.TypeCommaStringSlice,
+	Description: "EEA PrivateFor addresses in base64 format",
+}
+
+var PrivacyGroupIDFielSchema = &framework.FieldSchema{
+	Type:        framework.TypeString,
+	Description: "EEA PrivacyGroupID address in base64 format",
 }
