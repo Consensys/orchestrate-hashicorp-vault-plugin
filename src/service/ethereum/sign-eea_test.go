@@ -74,7 +74,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignEEATransaction() {
 		assert.Equal(t, expectedSignature, response.Data["signature"])
 	})
 
-	s.T().Run("should fail if validation fails", func(t *testing.T) {
+	s.T().Run("should fail if chainID is not provided", func(t *testing.T) {
 		account := testutils.FakeETHAccount()
 		request := &logical.Request{
 			Storage: s.storage,
@@ -99,6 +99,34 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignEEATransaction() {
 
 		assert.NoError(t, err)
 		assert.NotEmpty(t, response.Data["error"])
+	})
+
+	s.T().Run("should fail if validation fails", func(t *testing.T) {
+		account := testutils.FakeETHAccount()
+		request := &logical.Request{
+			Storage: s.storage,
+		}
+		data := &framework.FieldData{
+			Raw: map[string]interface{}{
+				formatters.AddressLabel: account.Address,
+				formatters.ChainIDLabel: "1",
+			},
+			Schema: map[string]*framework.FieldSchema{
+				formatters.AddressLabel:        formatters.AddressFieldSchema,
+				formatters.NonceLabel:          formatters.NonceFieldSchema,
+				formatters.ToLabel:             formatters.ToFieldSchema,
+				formatters.ChainIDLabel:        formatters.ChainIDFieldSchema,
+				formatters.DataLabel:           formatters.DataFieldSchema,
+				formatters.PrivateFromLabel:    formatters.PrivateFromFielSchema,
+				formatters.PrivateForLabel:     formatters.PrivateForFielSchema,
+				formatters.PrivacyGroupIDLabel: formatters.PrivacyGroupIDFielSchema,
+			},
+		}
+
+		response, err := signOperation.Handler()(s.ctx, request, data)
+
+		assert.Nil(t, response)
+		assert.Error(t, err)
 	})
 
 	s.T().Run("should return same error if use case fails", func(t *testing.T) {

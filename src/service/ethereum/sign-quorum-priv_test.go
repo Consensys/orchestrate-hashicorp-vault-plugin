@@ -95,8 +95,8 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignQuorumPrivateTransact
 
 		response, err := signOperation.Handler()(s.ctx, request, data)
 
-		assert.NoError(t, err)
-		assert.NotEmpty(t, response.Data["error"])
+		assert.Nil(t, response)
+		assert.Error(t, err)
 	})
 
 	s.T().Run("should return same error if use case fails", func(t *testing.T) {
