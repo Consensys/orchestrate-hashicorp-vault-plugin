@@ -7,6 +7,7 @@ import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases/ethereum/utils"
 	"github.com/hashicorp/vault/sdk/logical"
+	"net/http"
 )
 
 // getAccountUseCase is a use case to get an Ethereum account
@@ -35,7 +36,7 @@ func (uc *getAccountUseCase) Execute(ctx context.Context, address, namespace str
 	}
 
 	if entry == nil {
-		return nil, nil
+		return nil, logical.CodedError(http.StatusNotFound, "ethereum account could not be found")
 	}
 
 	account := &entities.ETHAccount{}

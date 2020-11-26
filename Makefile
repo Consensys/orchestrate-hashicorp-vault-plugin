@@ -5,7 +5,7 @@ DATE = $(shell date +'%s')
 test:
 	go test  ./... -cover -coverprofile=coverage.txt -covermode=atomic
 build:
-	@CGO_ENABLED=1 GOOS=linux go build -a -v -o build/bin/orchestrate-hashicorp-vault-plugin
+	@CGO_ENABLED=0 GOOS=linux go build -a -v -o build/bin/orchestrate-hashicorp-vault-plugin
 lint-tools: ## Install linting tools
 	@GO111MODULE=on go get github.com/client9/misspell/cmd/misspell@v0.3.4
 	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH)/bin v1.27.0
