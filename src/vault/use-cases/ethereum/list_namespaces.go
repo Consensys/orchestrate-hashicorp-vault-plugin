@@ -36,6 +36,9 @@ func (uc *listNamespacesUseCase) Execute(ctx context.Context) ([]string, error) 
 
 	namespaces := make([]string, 0, len(namespaceSet))
 	for namespace := range namespaceSet {
+		if namespace != "" {
+			namespace = strings.TrimSuffix(namespace, "/")
+		}
 		namespaces = append(namespaces, namespace)
 	}
 
@@ -45,6 +48,12 @@ func (uc *listNamespacesUseCase) Execute(ctx context.Context) ([]string, error) 
 }
 
 func (uc *listNamespacesUseCase) getNamespaces(ctx context.Context, prefix string, namespaceSet map[string]bool) error {
+	if strings.HasSuffix(prefix, "ethereum/") {
+		namespace := strings.TrimSuffix(prefix, "ethereum/")
+		namespaceSet[namespace] = true
+		return nil
+	}
+
 	keys, err := uc.storage.List(ctx, prefix)
 	if err != nil {
 		errMessage := "failed to get namespace"
@@ -53,19 +62,11 @@ func (uc *listNamespacesUseCase) getNamespaces(ctx context.Context, prefix strin
 	}
 
 	for _, key := range keys {
-		if key == "ethereum/" {
-			namespace := prefix
-			if prefix != "" {
-				namespace = strings.TrimSuffix(prefix, "/")
-			}
-			namespaceSet[namespace] = true
-		} else {
-			err := uc.getNamespaces(ctx, prefix+key, namespaceSet)
-			if err != nil {
-				errMessage := "failed to get namespace"
-				apputils.Logger(ctx).With("prefix", prefix).With("error", err).Error(errMessage)
-				return err
-			}
+		err := uc.getNamespaces(ctx, prefix+key, namespaceSet)
+		if err != nil {
+			errMessage := "failed to get namespace"
+			apputils.Logger(ctx).With("prefix", prefix).With("error", err).Error(errMessage)
+			return err
 		}
 	}
 
