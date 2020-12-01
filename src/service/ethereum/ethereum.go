@@ -38,7 +38,7 @@ func (c *controller) Paths() []*framework.Path {
 
 func (c *controller) pathAccounts() *framework.Path {
 	return &framework.Path{
-		Pattern:      "ethereum/accounts",
+		Pattern:      "ethereum/accounts/?",
 		HelpSynopsis: "Creates a new Ethereum account",
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewCreateOperation(),
