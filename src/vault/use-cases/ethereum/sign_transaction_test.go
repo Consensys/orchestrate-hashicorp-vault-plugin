@@ -2,16 +2,16 @@ package ethereum
 
 import (
 	"context"
+	"math/big"
+	"testing"
+
 	mocks2 "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/testutils/mocks"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/testutils"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases/mocks"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/hashicorp/go-hclog"
 	"gitlab.com/ConsenSys/client/fr/core-stack/orchestrate.git/v2/pkg/errors"
-	"math/big"
-	"testing"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -40,7 +40,7 @@ func TestSignTransaction_Execute(t *testing.T) {
 	usecase := NewSignTransactionUseCase(mockGetAccountUC).WithStorage(mockStorage)
 
 	t.Run("should execute use case successfully", func(t *testing.T) {
-		fakeAccount := testutils.FakeETHAccount()
+		fakeAccount := apputils.FakeETHAccount()
 		fakeAccount.PrivateKey = "5385714a2f6d69ca034f56a5268833216ffb8fba7229c39569bc4c5f42cde97c"
 		mockGetAccountUC.EXPECT().Execute(ctx, address, namespace).Return(fakeAccount, nil)
 
@@ -51,7 +51,7 @@ func TestSignTransaction_Execute(t *testing.T) {
 	})
 
 	t.Run("should fail with CryptoOperationError if creation of ECDSA private key fails", func(t *testing.T) {
-		fakeAccount := testutils.FakeETHAccount()
+		fakeAccount := apputils.FakeETHAccount()
 		fakeAccount.PrivateKey = "invalidPrivKey"
 		mockGetAccountUC.EXPECT().Execute(ctx, address, namespace).Return(fakeAccount, nil)
 

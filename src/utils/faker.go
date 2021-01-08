@@ -1,4 +1,4 @@
-package testutils
+package utils
 
 import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"

@@ -10,11 +10,11 @@ import (
 )
 
 type controller struct {
-	useCases usecases.UseCases
+	useCases usecases.ETHUseCases
 	logger   hclog.Logger
 }
 
-func NewController(useCases usecases.UseCases, logger hclog.Logger) *controller {
+func NewController(useCases usecases.ETHUseCases, logger hclog.Logger) *controller {
 	return &controller{
 		useCases: useCases,
 		logger:   logger,

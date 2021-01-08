@@ -16,7 +16,7 @@ type useCases struct {
 	signEEATx           usecases.SignEEATransactionUseCase
 }
 
-func NewEthereumUseCases() usecases.UseCases {
+func NewEthereumUseCases() usecases.ETHUseCases {
 	getAccount := ethereum.NewGetAccountUseCase()
 	return &useCases{
 		createAccount:       ethereum.NewCreateAccountUseCase(),

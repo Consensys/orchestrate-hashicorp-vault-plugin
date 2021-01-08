@@ -2,13 +2,14 @@ package ethereum
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/testutils"
+	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/golang/mock/gomock"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func (s *ethereumCtrlTestSuite) TestEthereumController_SignQuorumPrivateTransaction() {
@@ -35,7 +36,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignQuorumPrivateTransact
 	})
 
 	s.T().Run("handler should execute the correct use case", func(t *testing.T) {
-		account := testutils.FakeETHAccount()
+		account := apputils.FakeETHAccount()
 		request := &logical.Request{
 			Storage: s.storage,
 			Headers: map[string][]string{
@@ -74,7 +75,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignQuorumPrivateTransact
 	})
 
 	s.T().Run("should fail if validation fails", func(t *testing.T) {
-		account := testutils.FakeETHAccount()
+		account := apputils.FakeETHAccount()
 		request := &logical.Request{
 			Storage: s.storage,
 		}
@@ -100,7 +101,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignQuorumPrivateTransact
 	})
 
 	s.T().Run("should return same error if use case fails", func(t *testing.T) {
-		account := testutils.FakeETHAccount()
+		account := apputils.FakeETHAccount()
 		request := &logical.Request{
 			Storage: s.storage,
 		}

@@ -4,10 +4,11 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"encoding/hex"
+
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases/ethereum/utils"
 	"github.com/hashicorp/vault/sdk/logical"
 
 	"github.com/consensys/quorum/common/hexutil"
@@ -54,20 +55,12 @@ func (uc *createAccountUseCase) Execute(ctx context.Context, namespace, imported
 		Namespace:           namespace,
 	}
 
-	entry, err := logical.StorageEntryJSON(utils.ComputeKey(account.Address, account.Namespace), account)
+	err = storage.StoreJSON(ctx, uc.storage, apputils.ComputeEthereumKey(account.Address, account.Namespace), account)
 	if err != nil {
-		errMessage := "failed to create account entry"
-		apputils.Logger(ctx).With("error", err).Error(errMessage)
+		apputils.Logger(ctx).With("error", err).Error("failed to store account in vault")
 		return nil, err
 	}
-
-	err = uc.storage.Put(ctx, entry)
-	if err != nil {
-		errMessage := "failed to store account in vault"
-		apputils.Logger(ctx).With("error", err).Error(errMessage)
-		return nil, err
-	}
-
+	
 	logger.With("address", account.Address).Info("Ethereum account created successfully")
 	return account, nil
 }

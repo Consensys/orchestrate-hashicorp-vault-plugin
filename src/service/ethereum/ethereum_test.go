@@ -59,7 +59,7 @@ func (s *ethereumCtrlTestSuite) SignEEATransaction() usecases.SignEEATransaction
 	return s.signEEATransactionUC
 }
 
-var _ usecases.UseCases = &ethereumCtrlTestSuite{}
+var _ usecases.ETHUseCases = &ethereumCtrlTestSuite{}
 
 func TestEthereumController(t *testing.T) {
 	s := new(ethereumCtrlTestSuite)

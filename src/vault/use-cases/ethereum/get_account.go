@@ -4,6 +4,7 @@ import (
 	"context"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases/ethereum/utils"
 	"github.com/hashicorp/vault/sdk/logical"
@@ -29,18 +30,10 @@ func (uc *getAccountUseCase) Execute(ctx context.Context, address, namespace str
 	logger := apputils.Logger(ctx).With("namespace", namespace).With("address", address)
 	logger.Debug("getting Ethereum account")
 
-	entry, err := uc.storage.Get(ctx, utils.ComputeKey(address, namespace))
-	if err != nil {
-		return nil, err
-	}
-
-	if entry == nil {
-		return nil, logical.CodedError(404, "ethereum account could not be found")
-	}
-
 	account := &entities.ETHAccount{}
-	err = entry.DecodeJSON(&account)
+	err := storage.GetJSON(ctx, uc.storage, apputils.ComputeEthereumKey(address, namespace), account)
 	if err != nil {
+		apputils.Logger(ctx).With("error", err).Error("failed to retrieve account from vault")
 		return nil, err
 	}
 
