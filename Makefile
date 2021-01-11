@@ -16,7 +16,6 @@ lint-ci: ## Check linting
 	@misspell -error $(GOFILES)
 	@golangci-lint run
 up:
-	docker-compose -f docker/docker-compose.yml up --build --remove-orphans
+	@docker-compose -f docker-compose.yml up --build 
 down:
-	sudo bash ./docker/clear.sh
-	@docker-compose -f docker/docker-compose.yml down --volumes --timeout 0
+	@docker-compose -f docker-compose.yml down --volumes --timeout 0
