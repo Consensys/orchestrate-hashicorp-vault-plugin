@@ -1,4 +1,4 @@
-package ethereum
+package zksnarks
 
 import (
 	"context"
@@ -12,20 +12,20 @@ import (
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
-type createBN256AccountUseCase struct {
+type createAccountUseCase struct {
 	storage logical.Storage
 }
 
-func NewCreateBN256AccountUseCase() usecases.CreateBN256AccountUseCase {
-	return &createBN256AccountUseCase{}
+func NewCreateAccountUseCase() usecases.CreateZksAccountUseCase {
+	return &createAccountUseCase{}
 }
 
-func (uc createBN256AccountUseCase) WithStorage(storage logical.Storage) usecases.CreateBN256AccountUseCase {
+func (uc createAccountUseCase) WithStorage(storage logical.Storage) usecases.CreateZksAccountUseCase {
 	uc.storage = storage
 	return &uc
 }
 
-func (uc *createBN256AccountUseCase) Execute(ctx context.Context, namespace string) (*entities.ZkSnarksAccount, error) {
+func (uc *createAccountUseCase) Execute(ctx context.Context, namespace string) (*entities.ZksAccount, error) {
 	logger := apputils.Logger(ctx).With("namespace", namespace)
 	logger.Debug("creating new zk-snarks bn256 account")
 
@@ -38,7 +38,7 @@ func (uc *createBN256AccountUseCase) Execute(ctx context.Context, namespace stri
 
 	hFunc := bn256.NewMiMC("seed")
 	pubKey, privKey := eddsa.New(seed, hFunc)
-	account := &entities.ZkSnarksAccount{
+	account := &entities.ZksAccount{
 		PrivateKey: privKey,
 		Address:    pubKey.A.X.String(),
 		PublicKey:  pubKey,

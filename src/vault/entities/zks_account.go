@@ -4,7 +4,7 @@ import (
 	eddsa "github.com/consensys/gnark/crypto/signature/eddsa/bn256"
 )
 
-type ZkSnarksAccount struct {
+type ZksAccount struct {
 	Address             string           `json:"address"`
 	PrivateKey          eddsa.PrivateKey `json:"privateKey"`
 	PublicKey           eddsa.PublicKey  `json:"publicKey"`

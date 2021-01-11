@@ -74,10 +74,10 @@ func (m *MockCreateBN256AccountUseCase) EXPECT() *MockCreateBN256AccountUseCaseM
 }
 
 // Execute mocks base method
-func (m *MockCreateBN256AccountUseCase) Execute(ctx context.Context, namespace string) (*entities.ZkSnarksAccount, error) {
+func (m *MockCreateBN256AccountUseCase) Execute(ctx context.Context, namespace string) (*entities.ZksAccount, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Execute", ctx, namespace)
-	ret0, _ := ret[0].(*entities.ZkSnarksAccount)
+	ret0, _ := ret[0].(*entities.ZksAccount)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -89,10 +89,10 @@ func (mr *MockCreateBN256AccountUseCaseMockRecorder) Execute(ctx, namespace inte
 }
 
 // WithStorage mocks base method
-func (m *MockCreateBN256AccountUseCase) WithStorage(storage logical.Storage) usecases.CreateBN256AccountUseCase {
+func (m *MockCreateBN256AccountUseCase) WithStorage(storage logical.Storage) usecases.CreateZksAccountUseCase {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "WithStorage", storage)
-	ret0, _ := ret[0].(usecases.CreateBN256AccountUseCase)
+	ret0, _ := ret[0].(usecases.CreateZksAccountUseCase)
 	return ret0
 }
 

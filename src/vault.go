@@ -3,6 +3,7 @@ package src
 import (
 	"context"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/ethereum"
+	zksnarks "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/zk-snarks"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/builder"
 	"github.com/hashicorp/vault/sdk/framework"
@@ -16,6 +17,7 @@ func NewVaultBackend(ctx context.Context, conf *logical.BackendConfig) (logical.
 		PathsSpecial: &logical.Paths{
 			SealWrapStorage: []string{
 				"ethereum/accounts/",
+				"zk-snarks/accounts/",
 			},
 		},
 		Secrets:     []*framework.Secret{},
@@ -23,7 +25,8 @@ func NewVaultBackend(ctx context.Context, conf *logical.BackendConfig) (logical.
 	}
 
 	ethereumController := ethereum.NewController(builder.NewEthereumUseCases(), vaultPlugin.Logger())
-	vaultPlugin.Paths = ethereumController.Paths()
+	zkSnarksController := zksnarks.NewController(builder.NewZkSnarksUseCases(), vaultPlugin.Logger())
+	vaultPlugin.Paths = framework.PathAppend(ethereumController.Paths(), zkSnarksController.Paths())
 
 	ctx = utils.WithLogger(ctx, vaultPlugin.Logger())
 	if err := vaultPlugin.Setup(ctx, conf); err != nil {

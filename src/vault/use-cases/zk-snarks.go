@@ -10,11 +10,11 @@ import (
 //go:generate mockgen -source=zk-snarks.go -destination=mocks/zk-snarks.go -package=mocks
 
 
-type ZkSnarksUseCases interface {
-	CreateAccount() CreateAccountUseCase
+type ZksUseCases interface {
+	CreateAccount() CreateZksAccountUseCase
 }
 
-type CreateBN256AccountUseCase interface {
-	Execute(ctx context.Context, namespace string) (*entities.ZkSnarksAccount, error)
-	WithStorage(storage logical.Storage) CreateBN256AccountUseCase
+type CreateZksAccountUseCase interface {
+	Execute(ctx context.Context, namespace string) (*entities.ZksAccount, error)
+	WithStorage(storage logical.Storage) CreateZksAccountUseCase
 }

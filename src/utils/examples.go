@@ -19,6 +19,15 @@ func ExampleETHAccount() *entities.ETHAccount {
 	}
 }
 
+func ExampleZksAccount() *entities.ZksAccount {
+	return &entities.ZksAccount{
+		Namespace:           "tenant0",
+		Address:             common.HexToAddress("0x5962e04754cbE29a544f5104Ca100d94738Fd5d4").String(),
+		// PrivateKey:          "0b0232595b77568d99364bede133839ccbcb40775967a7eacd15d355c96288b5",
+		// PublicKey:           common.HexToHash("0x0433d7f005495fb6c0a34e22336dc3adcf4064553d5e194f77126bcac6da19491e0bab2772115cd284605d3bba94b69dc8c7a215021b58bcc87a70c9a440a3ff83").String(),
+	}
+}
+
 func Example500Response() framework.Response {
 	return framework.Response{
 		Description: "Internal server error",
@@ -58,6 +67,14 @@ func Example200Response() *framework.Response {
 		Example:     formatters.FormatAccountResponse(ExampleETHAccount()),
 	}
 }
+
+func Example200ZksResponse() *framework.Response {
+	return &framework.Response{
+		Description: "Success",
+		Example:     formatters.FormatZksAccountResponse(ExampleZksAccount()),
+	}
+}
+
 
 func Example200ResponseSignature() *framework.Response {
 	exampleSignature := "0x8b9679a75861e72fa6968dd5add3bf96e2747f0f124a2e728980f91e1958367e19c2486a40fdc65861824f247603bc18255fa497ca0b8b0a394aa7a6740fdc4601"
