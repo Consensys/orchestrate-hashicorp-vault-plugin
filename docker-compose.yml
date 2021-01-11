@@ -5,6 +5,19 @@ x-container-common: &container-common
     - vault
     
 services:
+  vault-dev:
+    <<: *container-common
+    image: library/vault:1.6.0
+    restart: ${CONTAINER_RESTART-on-failure}
+    tty: true
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ./build/bin/orchestrate-hashicorp-vault-plugin:/vault/plugins/orchestrate
+    entrypoint: vault server -dev -dev-plugin-dir=/vault/plugins/ -dev-listen-address="0.0.0.0:8200" -log-level=debug
+    ports:
+      - 8200:8200
+
   vault:
     <<: *container-common
     image: library/vault:1.6.0

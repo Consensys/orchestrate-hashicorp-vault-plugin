@@ -39,13 +39,15 @@ func (uc *createAccountUseCase) Execute(ctx context.Context, namespace string) (
 	hFunc := bn256.NewMiMC("seed")
 	pubKey, privKey := eddsa.New(seed, hFunc)
 	account := &entities.ZksAccount{
+		Algorithm:  entities.ZksAlgorithmEDDSA,
+		Curve:      entities.ZksCurveBN256,
 		PrivateKey: privKey,
 		Address:    pubKey.A.X.String(),
 		PublicKey:  pubKey,
 		Namespace:  namespace,
 	}
 
-	err := storage.StoreJSON(ctx, uc.storage, apputils.ComputeZkSnarkKey(account.Address, account.Namespace), account)
+	err := storage.StoreJSON(ctx, uc.storage, apputils.ComputeZksKey(account.Address, account.Namespace), account)
 	if err != nil {
 		errMessage := "failed to create account entry"
 		apputils.Logger(ctx).With("error", err).Error(errMessage)

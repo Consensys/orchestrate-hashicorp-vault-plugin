@@ -26,6 +26,9 @@ lint-ci: ## Check linting
 	@golangci-lint run
 
 up: build-dev
-	@docker-compose -f docker-compose.yml up --build 
+	@docker-compose -f docker-compose.yml up --build vault-init vault
+dev: build-dev
+	@docker-compose -f docker-compose.yml up --build vault-dev
 down:
 	@docker-compose -f docker-compose.yml down --volumes --timeout 0
+

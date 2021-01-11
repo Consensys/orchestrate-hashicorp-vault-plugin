@@ -10,7 +10,7 @@ import (
 )
 
 func (c *controller) NewCreateOperation() *framework.PathOperation {
-	successExample := utils.Example200Response()
+	successExample := utils.Example200ZksResponse()
 
 	return &framework.PathOperation{
 		Callback:    c.createHandler(),

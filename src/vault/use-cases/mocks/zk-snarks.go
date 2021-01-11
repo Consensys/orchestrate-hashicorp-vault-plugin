@@ -13,68 +13,96 @@ import (
 	reflect "reflect"
 )
 
-// MockZkSnarksUseCases is a mock of ZkSnarksUseCases interface
-type MockZkSnarksUseCases struct {
+// MockZksUseCases is a mock of ZksUseCases interface
+type MockZksUseCases struct {
 	ctrl     *gomock.Controller
-	recorder *MockZkSnarksUseCasesMockRecorder
+	recorder *MockZksUseCasesMockRecorder
 }
 
-// MockZkSnarksUseCasesMockRecorder is the mock recorder for MockZkSnarksUseCases
-type MockZkSnarksUseCasesMockRecorder struct {
-	mock *MockZkSnarksUseCases
+// MockZksUseCasesMockRecorder is the mock recorder for MockZksUseCases
+type MockZksUseCasesMockRecorder struct {
+	mock *MockZksUseCases
 }
 
-// NewMockZkSnarksUseCases creates a new mock instance
-func NewMockZkSnarksUseCases(ctrl *gomock.Controller) *MockZkSnarksUseCases {
-	mock := &MockZkSnarksUseCases{ctrl: ctrl}
-	mock.recorder = &MockZkSnarksUseCasesMockRecorder{mock}
+// NewMockZksUseCases creates a new mock instance
+func NewMockZksUseCases(ctrl *gomock.Controller) *MockZksUseCases {
+	mock := &MockZksUseCases{ctrl: ctrl}
+	mock.recorder = &MockZksUseCasesMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockZkSnarksUseCases) EXPECT() *MockZkSnarksUseCasesMockRecorder {
+func (m *MockZksUseCases) EXPECT() *MockZksUseCasesMockRecorder {
 	return m.recorder
 }
 
 // CreateAccount mocks base method
-func (m *MockZkSnarksUseCases) CreateAccount() usecases.CreateAccountUseCase {
+func (m *MockZksUseCases) CreateAccount() usecases.CreateZksAccountUseCase {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateAccount")
-	ret0, _ := ret[0].(usecases.CreateAccountUseCase)
+	ret0, _ := ret[0].(usecases.CreateZksAccountUseCase)
 	return ret0
 }
 
 // CreateAccount indicates an expected call of CreateAccount
-func (mr *MockZkSnarksUseCasesMockRecorder) CreateAccount() *gomock.Call {
+func (mr *MockZksUseCasesMockRecorder) CreateAccount() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAccount", reflect.TypeOf((*MockZkSnarksUseCases)(nil).CreateAccount))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAccount", reflect.TypeOf((*MockZksUseCases)(nil).CreateAccount))
 }
 
-// MockCreateBN256AccountUseCase is a mock of CreateBN256AccountUseCase interface
-type MockCreateBN256AccountUseCase struct {
+// GetAccount mocks base method
+func (m *MockZksUseCases) GetAccount() usecases.GetZksAccountUseCase {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAccount")
+	ret0, _ := ret[0].(usecases.GetZksAccountUseCase)
+	return ret0
+}
+
+// GetAccount indicates an expected call of GetAccount
+func (mr *MockZksUseCasesMockRecorder) GetAccount() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccount", reflect.TypeOf((*MockZksUseCases)(nil).GetAccount))
+}
+
+// ListAccounts mocks base method
+func (m *MockZksUseCases) ListAccounts() usecases.ListZksAccountsUseCase {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListAccounts")
+	ret0, _ := ret[0].(usecases.ListZksAccountsUseCase)
+	return ret0
+}
+
+// ListAccounts indicates an expected call of ListAccounts
+func (mr *MockZksUseCasesMockRecorder) ListAccounts() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListAccounts", reflect.TypeOf((*MockZksUseCases)(nil).ListAccounts))
+}
+
+// MockCreateZksAccountUseCase is a mock of CreateZksAccountUseCase interface
+type MockCreateZksAccountUseCase struct {
 	ctrl     *gomock.Controller
-	recorder *MockCreateBN256AccountUseCaseMockRecorder
+	recorder *MockCreateZksAccountUseCaseMockRecorder
 }
 
-// MockCreateBN256AccountUseCaseMockRecorder is the mock recorder for MockCreateBN256AccountUseCase
-type MockCreateBN256AccountUseCaseMockRecorder struct {
-	mock *MockCreateBN256AccountUseCase
+// MockCreateZksAccountUseCaseMockRecorder is the mock recorder for MockCreateZksAccountUseCase
+type MockCreateZksAccountUseCaseMockRecorder struct {
+	mock *MockCreateZksAccountUseCase
 }
 
-// NewMockCreateBN256AccountUseCase creates a new mock instance
-func NewMockCreateBN256AccountUseCase(ctrl *gomock.Controller) *MockCreateBN256AccountUseCase {
-	mock := &MockCreateBN256AccountUseCase{ctrl: ctrl}
-	mock.recorder = &MockCreateBN256AccountUseCaseMockRecorder{mock}
+// NewMockCreateZksAccountUseCase creates a new mock instance
+func NewMockCreateZksAccountUseCase(ctrl *gomock.Controller) *MockCreateZksAccountUseCase {
+	mock := &MockCreateZksAccountUseCase{ctrl: ctrl}
+	mock.recorder = &MockCreateZksAccountUseCaseMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockCreateBN256AccountUseCase) EXPECT() *MockCreateBN256AccountUseCaseMockRecorder {
+func (m *MockCreateZksAccountUseCase) EXPECT() *MockCreateZksAccountUseCaseMockRecorder {
 	return m.recorder
 }
 
 // Execute mocks base method
-func (m *MockCreateBN256AccountUseCase) Execute(ctx context.Context, namespace string) (*entities.ZksAccount, error) {
+func (m *MockCreateZksAccountUseCase) Execute(ctx context.Context, namespace string) (*entities.ZksAccount, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Execute", ctx, namespace)
 	ret0, _ := ret[0].(*entities.ZksAccount)
@@ -83,13 +111,13 @@ func (m *MockCreateBN256AccountUseCase) Execute(ctx context.Context, namespace s
 }
 
 // Execute indicates an expected call of Execute
-func (mr *MockCreateBN256AccountUseCaseMockRecorder) Execute(ctx, namespace interface{}) *gomock.Call {
+func (mr *MockCreateZksAccountUseCaseMockRecorder) Execute(ctx, namespace interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Execute", reflect.TypeOf((*MockCreateBN256AccountUseCase)(nil).Execute), ctx, namespace)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Execute", reflect.TypeOf((*MockCreateZksAccountUseCase)(nil).Execute), ctx, namespace)
 }
 
 // WithStorage mocks base method
-func (m *MockCreateBN256AccountUseCase) WithStorage(storage logical.Storage) usecases.CreateZksAccountUseCase {
+func (m *MockCreateZksAccountUseCase) WithStorage(storage logical.Storage) usecases.CreateZksAccountUseCase {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "WithStorage", storage)
 	ret0, _ := ret[0].(usecases.CreateZksAccountUseCase)
@@ -97,7 +125,111 @@ func (m *MockCreateBN256AccountUseCase) WithStorage(storage logical.Storage) use
 }
 
 // WithStorage indicates an expected call of WithStorage
-func (mr *MockCreateBN256AccountUseCaseMockRecorder) WithStorage(storage interface{}) *gomock.Call {
+func (mr *MockCreateZksAccountUseCaseMockRecorder) WithStorage(storage interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithStorage", reflect.TypeOf((*MockCreateBN256AccountUseCase)(nil).WithStorage), storage)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithStorage", reflect.TypeOf((*MockCreateZksAccountUseCase)(nil).WithStorage), storage)
+}
+
+// MockGetZksAccountUseCase is a mock of GetZksAccountUseCase interface
+type MockGetZksAccountUseCase struct {
+	ctrl     *gomock.Controller
+	recorder *MockGetZksAccountUseCaseMockRecorder
+}
+
+// MockGetZksAccountUseCaseMockRecorder is the mock recorder for MockGetZksAccountUseCase
+type MockGetZksAccountUseCaseMockRecorder struct {
+	mock *MockGetZksAccountUseCase
+}
+
+// NewMockGetZksAccountUseCase creates a new mock instance
+func NewMockGetZksAccountUseCase(ctrl *gomock.Controller) *MockGetZksAccountUseCase {
+	mock := &MockGetZksAccountUseCase{ctrl: ctrl}
+	mock.recorder = &MockGetZksAccountUseCaseMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockGetZksAccountUseCase) EXPECT() *MockGetZksAccountUseCaseMockRecorder {
+	return m.recorder
+}
+
+// Execute mocks base method
+func (m *MockGetZksAccountUseCase) Execute(ctx context.Context, address, namespace string) (*entities.ZksAccount, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Execute", ctx, address, namespace)
+	ret0, _ := ret[0].(*entities.ZksAccount)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Execute indicates an expected call of Execute
+func (mr *MockGetZksAccountUseCaseMockRecorder) Execute(ctx, address, namespace interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Execute", reflect.TypeOf((*MockGetZksAccountUseCase)(nil).Execute), ctx, address, namespace)
+}
+
+// WithStorage mocks base method
+func (m *MockGetZksAccountUseCase) WithStorage(storage logical.Storage) usecases.GetZksAccountUseCase {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "WithStorage", storage)
+	ret0, _ := ret[0].(usecases.GetZksAccountUseCase)
+	return ret0
+}
+
+// WithStorage indicates an expected call of WithStorage
+func (mr *MockGetZksAccountUseCaseMockRecorder) WithStorage(storage interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithStorage", reflect.TypeOf((*MockGetZksAccountUseCase)(nil).WithStorage), storage)
+}
+
+// MockListZksAccountsUseCase is a mock of ListZksAccountsUseCase interface
+type MockListZksAccountsUseCase struct {
+	ctrl     *gomock.Controller
+	recorder *MockListZksAccountsUseCaseMockRecorder
+}
+
+// MockListZksAccountsUseCaseMockRecorder is the mock recorder for MockListZksAccountsUseCase
+type MockListZksAccountsUseCaseMockRecorder struct {
+	mock *MockListZksAccountsUseCase
+}
+
+// NewMockListZksAccountsUseCase creates a new mock instance
+func NewMockListZksAccountsUseCase(ctrl *gomock.Controller) *MockListZksAccountsUseCase {
+	mock := &MockListZksAccountsUseCase{ctrl: ctrl}
+	mock.recorder = &MockListZksAccountsUseCaseMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockListZksAccountsUseCase) EXPECT() *MockListZksAccountsUseCaseMockRecorder {
+	return m.recorder
+}
+
+// Execute mocks base method
+func (m *MockListZksAccountsUseCase) Execute(ctx context.Context, namespace string) (*entities.ZksAccount, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Execute", ctx, namespace)
+	ret0, _ := ret[0].(*entities.ZksAccount)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Execute indicates an expected call of Execute
+func (mr *MockListZksAccountsUseCaseMockRecorder) Execute(ctx, namespace interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Execute", reflect.TypeOf((*MockListZksAccountsUseCase)(nil).Execute), ctx, namespace)
+}
+
+// WithStorage mocks base method
+func (m *MockListZksAccountsUseCase) WithStorage(storage logical.Storage) usecases.ListZksAccountsUseCase {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "WithStorage", storage)
+	ret0, _ := ret[0].(usecases.ListZksAccountsUseCase)
+	return ret0
+}
+
+// WithStorage indicates an expected call of WithStorage
+func (mr *MockListZksAccountsUseCaseMockRecorder) WithStorage(storage interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WithStorage", reflect.TypeOf((*MockListZksAccountsUseCase)(nil).WithStorage), storage)
 }

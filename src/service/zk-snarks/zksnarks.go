@@ -1,6 +1,8 @@
 package zksnarks
 
 import (
+	"fmt"
+
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/hashicorp/go-hclog"
@@ -25,6 +27,7 @@ func (c *controller) Paths() []*framework.Path {
 	return framework.PathAppend(
 		[]*framework.Path{
 			c.pathAccounts(),
+			c.pathAccount(),
 		},
 	)
 }
@@ -36,8 +39,21 @@ func (c *controller) pathAccounts() *framework.Path {
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewCreateOperation(),
 			logical.UpdateOperation: c.NewCreateOperation(),
-			// logical.ListOperation:   c.NewListOperation(),
-			// logical.ReadOperation:   c.NewListOperation(),
+			logical.ListOperation:   c.NewListOperation(),
+			logical.ReadOperation:   c.NewListOperation(),
+		},
+	}
+}
+
+func (c *controller) pathAccount() *framework.Path {
+	return &framework.Path{
+		Pattern:      fmt.Sprintf("zk-snarks/accounts/%s", framework.GenericNameRegex("address")),
+		HelpSynopsis: "Get, update or delete an Ethereum account",
+		Fields: map[string]*framework.FieldSchema{
+			formatters.AddressLabel: formatters.AddressFieldSchema,
+		},
+		Operations: map[logical.Operation]framework.OperationHandler{
+			logical.ReadOperation: c.NewGetOperation(),
 		},
 	}
 }
