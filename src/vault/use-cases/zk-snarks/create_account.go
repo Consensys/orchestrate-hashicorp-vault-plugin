@@ -37,13 +37,13 @@ func (uc *createAccountUseCase) Execute(ctx context.Context, namespace string) (
 	}
 
 	hFunc := bn256.NewMiMC("seed")
-	pubKey, privKey := eddsa.New(seed, hFunc)
+	pubKey, _ := eddsa.New(seed, hFunc)
 	account := &entities.ZksAccount{
 		Algorithm:  entities.ZksAlgorithmEDDSA,
 		Curve:      entities.ZksCurveBN256,
-		PrivateKey: privKey,
-		Address:    pubKey.A.X.String(),
-		PublicKey:  pubKey,
+		PrivateKey: "TODO", // @TODO
+		Address:    pubKey.A.X.String(), // @TODO
+		PublicKey:  pubKey.A.X.String(), // @TODO
 		Namespace:  namespace,
 	}
 

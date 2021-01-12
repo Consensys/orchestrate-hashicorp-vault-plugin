@@ -21,12 +21,12 @@ func ExampleETHAccount() *entities.ETHAccount {
 
 func ExampleZksAccount() *entities.ZksAccount {
 	return &entities.ZksAccount{
-		Curve:     entities.ZksCurveBN256,
-		Algorithm: entities.ZksAlgorithmEDDSA,
-		Namespace: "tenant0",
-		Address:   "10459788746654203044566730299653666314876003040095118049521181117616221186211",
-		// PrivateKey: "0b0232595b77568d99364bede133839ccbcb40775967a7eacd15d355c96288b5",
-		// PublicKey:           common.HexToHash("0x0433d7f005495fb6c0a34e22336dc3adcf4064553d5e194f77126bcac6da19491e0bab2772115cd284605d3bba94b69dc8c7a215021b58bcc87a70c9a440a3ff83").String(),
+		Curve:      entities.ZksCurveBN256,
+		Algorithm:  entities.ZksAlgorithmEDDSA,
+		Namespace:  "tenant0",
+		Address:    "10459788746654203044566730299653666314876003040095118049521181117616221186211",
+		PrivateKey: "0b0232595b77568d99364bede133839ccbcb40775967a7eacd15d355c96288b5",
+		PublicKey:  "0b0232595b77568d99364bede133839ccbcb40775967a7eacd15d355c96288b5",
 	}
 }
 

@@ -36,7 +36,8 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, address, namespace, d
 		return "", err
 	}
 	
-	signature, err := eddsa.Sign([]byte(data), account.PublicKey, account.PrivateKey)
+	logger.With("public key", account.PublicKey).Debug("signing with account")
+	signature, err := eddsa.Sign([]byte(data), eddsa.PublicKey{}, eddsa.PrivateKey{})
 	if err != nil {
 		errMessage := "failed to sign payload using EDDSA"
 		logger.With("error", err).Error(errMessage)
