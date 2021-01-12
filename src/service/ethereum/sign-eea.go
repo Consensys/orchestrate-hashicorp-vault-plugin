@@ -2,6 +2,7 @@ package ethereum
 
 import (
 	"context"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/hashicorp/vault/sdk/framework"
@@ -54,7 +55,7 @@ func (c *controller) signEEATransactionHandler() framework.OperationFunc {
 			return nil, err
 		}
 
-		ctx = utils.WithLogger(ctx, c.logger)
+		ctx = log.Context(ctx, c.logger)
 		signature, err := c.useCases.SignEEATransaction().WithStorage(req.Storage).Execute(ctx, address, namespace, chainID, tx, privateArgs)
 		if err != nil {
 			return nil, err

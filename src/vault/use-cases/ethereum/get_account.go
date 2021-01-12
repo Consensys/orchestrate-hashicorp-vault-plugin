@@ -2,7 +2,8 @@ package ethereum
 
 import (
 	"context"
-	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
@@ -26,14 +27,14 @@ func (uc getAccountUseCase) WithStorage(storage logical.Storage) usecases.GetAcc
 
 // Execute creates a new Ethereum account and stores it in the Vault
 func (uc *getAccountUseCase) Execute(ctx context.Context, address, namespace string) (*entities.ETHAccount, error) {
-	logger := apputils.Logger(ctx).With("namespace", namespace).With("address", address)
+	logger := log.FromContext(ctx).With("namespace", namespace).With("address", address)
 	logger.Debug("getting Ethereum account")
 
 	account := &entities.ETHAccount{}
 	err := storage.GetJSON(ctx, uc.storage, 
 		storage.ComputeEthereumStorageKey(address, namespace), account)
 	if err != nil {
-		apputils.Logger(ctx).With("error", err).Error("failed to retrieve account from vault")
+		logger.With("error", err).Error("failed to retrieve account from vault")
 		return nil, err
 	}
 

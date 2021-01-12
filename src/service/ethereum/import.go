@@ -2,6 +2,7 @@ package ethereum
 
 import (
 	"context"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/hashicorp/vault/sdk/framework"
@@ -42,7 +43,7 @@ func (c *controller) importHandler() framework.OperationFunc {
 			return logical.ErrorResponse("privateKey must be provided"), nil
 		}
 
-		ctx = utils.WithLogger(ctx, c.logger)
+		ctx = log.Context(ctx, c.logger)
 		account, err := c.useCases.CreateAccount().WithStorage(req.Storage).Execute(ctx, namespace, privateKeyString)
 		if err != nil {
 			return nil, err

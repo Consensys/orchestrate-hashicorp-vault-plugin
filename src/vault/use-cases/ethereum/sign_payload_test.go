@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	mocks2 "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	mocks2 "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases/mocks"
-	"github.com/hashicorp/go-hclog"
-
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
@@ -20,7 +19,7 @@ func TestSignPayload_Execute(t *testing.T) {
 
 	mockStorage := mocks2.NewMockStorage(ctrl)
 	mockGetAccountUC := mocks.NewMockGetAccountUseCase(ctrl)
-	ctx := apputils.WithLogger(context.Background(), hclog.New(&hclog.LoggerOptions{}))
+	ctx := log.Context(context.Background(), log.Default())
 	address := "0xaddress"
 	namespace := "namespace"
 

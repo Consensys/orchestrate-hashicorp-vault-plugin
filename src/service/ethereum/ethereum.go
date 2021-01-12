@@ -2,22 +2,23 @@ package ethereum
 
 import (
 	"fmt"
+
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
-	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
 type controller struct {
 	useCases usecases.ETHUseCases
-	logger   hclog.Logger
+	logger   log.Logger
 }
 
-func NewController(useCases usecases.ETHUseCases, logger hclog.Logger) *controller {
+func NewController(useCases usecases.ETHUseCases, logger log.Logger) *controller {
 	return &controller{
 		useCases: useCases,
-		logger:   logger,
+		logger:   logger.Named("ethereum"),
 	}
 }
 

@@ -5,12 +5,12 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
 	mocks2 "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases/mocks"
 	quorumtypes "github.com/consensys/quorum/core/types"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/hashicorp/go-hclog"
 	"gitlab.com/ConsenSys/client/fr/core-stack/orchestrate.git/v2/pkg/errors"
 
 	"github.com/golang/mock/gomock"
@@ -23,7 +23,7 @@ func TestSignQuorumPrivateTransaction_Execute(t *testing.T) {
 
 	mockGetAccountUC := mocks2.NewMockGetAccountUseCase(ctrl)
 	mockStorage := mocks.NewMockStorage(ctrl)
-	ctx := apputils.WithLogger(context.Background(), hclog.New(&hclog.LoggerOptions{}))
+	ctx := log.Context(context.Background(), log.Default())
 	address := "0xaddress"
 	namespace := "namespace"
 	tx := quorumtypes.NewTransaction(

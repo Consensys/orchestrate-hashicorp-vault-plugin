@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
-	"github.com/hashicorp/go-hclog"
-
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +18,7 @@ func TestListAccounts_Execute(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockStorage := mocks.NewMockStorage(ctrl)
-	ctx := apputils.WithLogger(context.Background(), hclog.New(&hclog.LoggerOptions{}))
+	ctx := log.Context(context.Background(), log.Default())
 
 	usecase := NewListAccountsUseCase().WithStorage(mockStorage)
 

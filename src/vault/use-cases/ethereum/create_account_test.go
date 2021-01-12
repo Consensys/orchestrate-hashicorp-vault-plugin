@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"testing"
 
-	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/hashicorp/go-hclog"
 	"gitlab.com/ConsenSys/client/fr/core-stack/orchestrate.git/v2/pkg/types/testutils"
 
 	"github.com/golang/mock/gomock"
@@ -20,7 +19,7 @@ func TestCreateAccount_Execute(t *testing.T) {
 	defer ctrl.Finish()
 
 	mockStorage := mocks.NewMockStorage(ctrl)
-	ctx := apputils.WithLogger(context.Background(), hclog.New(&hclog.LoggerOptions{}))
+	ctx := log.Context(context.Background(), log.Default())
 
 	usecase := NewCreateAccountUseCase().WithStorage(mockStorage)
 

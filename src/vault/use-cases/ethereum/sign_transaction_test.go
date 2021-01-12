@@ -5,12 +5,12 @@ import (
 	"math/big"
 	"testing"
 
-	mocks2 "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	mocks2 "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases/mocks"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/hashicorp/go-hclog"
 	"gitlab.com/ConsenSys/client/fr/core-stack/orchestrate.git/v2/pkg/errors"
 
 	"github.com/golang/mock/gomock"
@@ -23,7 +23,7 @@ func TestSignTransaction_Execute(t *testing.T) {
 
 	mockGetAccountUC := mocks.NewMockGetAccountUseCase(ctrl)
 	mockStorage := mocks2.NewMockStorage(ctrl)
-	ctx := apputils.WithLogger(context.Background(), hclog.New(&hclog.LoggerOptions{}))
+	ctx := log.Context(context.Background(), log.Default())
 	address := "0xaddress"
 	namespace := "namespace"
 	chainID := "1"

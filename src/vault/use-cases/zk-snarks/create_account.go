@@ -3,7 +3,7 @@ package zksnarks
 import (
 	"context"
 
-	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
@@ -26,7 +26,7 @@ func (uc createAccountUseCase) WithStorage(storage logical.Storage) usecases.Cre
 }
 
 func (uc *createAccountUseCase) Execute(ctx context.Context, namespace string) (*entities.ZksAccount, error) {
-	logger := apputils.Logger(ctx).With("namespace", namespace)
+	logger := log.FromContext(ctx).With("namespace", namespace)
 	logger.Debug("creating new zk-snarks bn256 account")
 
 	// @TODO Generate random seed
@@ -50,7 +50,7 @@ func (uc *createAccountUseCase) Execute(ctx context.Context, namespace string) (
 	err := storage.StoreJSON(ctx, uc.storage, storage.ComputeZkSnarksStorageKey(account.Address, account.Namespace), account)
 	if err != nil {
 		errMessage := "failed to create account entry"
-		apputils.Logger(ctx).With("error", err).Error(errMessage)
+		logger.With("error", err).Error(errMessage)
 		return nil, err
 	}
 

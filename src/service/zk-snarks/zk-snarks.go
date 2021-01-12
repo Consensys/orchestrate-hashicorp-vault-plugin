@@ -3,22 +3,22 @@ package zksnarks
 import (
 	"fmt"
 
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
-	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
 type controller struct {
 	useCases usecases.ZksUseCases
-	logger   hclog.Logger
+	logger   log.Logger
 }
 
-func NewController(useCases usecases.ZksUseCases, logger hclog.Logger) *controller {
+func NewController(useCases usecases.ZksUseCases, logger log.Logger) *controller {
 	return &controller{
 		useCases: useCases,
-		logger:   logger,
+		logger:   logger.Named("zk-snarks"),
 	}
 }
 
@@ -62,8 +62,8 @@ func (c *controller) pathAccount() *framework.Path {
 
 func (c *controller) pathNamespaces() *framework.Path {
 	return &framework.Path{
-		Pattern:      "ethereum/namespaces/?",
-		HelpSynopsis: "Lists all ethereum namespaces",
+		Pattern:      "zk-snarks/namespaces/?",
+		HelpSynopsis: "Lists all zk-snarks namespaces",
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.ListOperation: c.NewListNamespacesOperation(),
 			logical.ReadOperation: c.NewListNamespacesOperation(),
@@ -73,7 +73,7 @@ func (c *controller) pathNamespaces() *framework.Path {
 
 func (c *controller) pathSignPayload() *framework.Path {
 	return &framework.Path{
-		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign", framework.GenericNameRegex("address")),
+		Pattern: fmt.Sprintf("zk-snarks/accounts/%s/sign", framework.GenericNameRegex("address")),
 		Fields: map[string]*framework.FieldSchema{
 			formatters.AddressLabel: formatters.AddressFieldSchema,
 			formatters.DataLabel: {

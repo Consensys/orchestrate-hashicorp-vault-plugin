@@ -2,6 +2,7 @@ package zksnarks
 
 import (
 	"context"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/hashicorp/vault/sdk/framework"
@@ -44,7 +45,7 @@ func (c *controller) signPayloadHandler() framework.OperationFunc {
 			return logical.ErrorResponse("data must be provided"), nil
 		}
 
-		ctx = utils.WithLogger(ctx, c.logger)
+		ctx = log.Context(ctx, c.logger)
 		signature, err := c.useCases.SignPayload().WithStorage(req.Storage).Execute(ctx, address, namespace, payload)
 		if err != nil {
 			return nil, err

@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/hashicorp/vault/sdk/logical"
@@ -16,25 +16,25 @@ type listNamespacesUseCase struct {
 }
 
 // NewListAccountUseCase creates a new ListAccountsUseCase
-func NewListNamespacesUseCase() usecases.ListNamespacesUseCase {
+func NewListNamespacesUseCase() usecases.ListZksNamespacesUseCase {
 	return &listNamespacesUseCase{}
 }
 
-func (uc listNamespacesUseCase) WithStorage(storage logical.Storage) usecases.ListNamespacesUseCase {
+func (uc listNamespacesUseCase) WithStorage(storage logical.Storage) usecases.ListZksNamespacesUseCase {
 	uc.storage = storage
 	return &uc
 }
 
 // Execute get a list of all available namespaces
 func (uc *listNamespacesUseCase) Execute(ctx context.Context) ([]string, error) {
-	logger := apputils.Logger(ctx)
+	logger := log.FromContext(ctx)
 	logger.Debug("listing zk-snarks namespaces")
 
 	namespaceSet := make(map[string]bool)
 	err := storage.GetZkSnarksNamespaces(ctx, uc.storage, "", namespaceSet)
 	if err != nil {
 		errMessage := "failed to get namespace"
-		apputils.Logger(ctx).With("error", err).Error(errMessage)
+		logger.With("error", err).Error(errMessage)
 		return nil, err
 	}
 

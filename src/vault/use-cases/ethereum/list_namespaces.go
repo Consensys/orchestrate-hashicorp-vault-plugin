@@ -2,11 +2,12 @@ package ethereum
 
 import (
 	"context"
-	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"strings"
+
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/hashicorp/vault/sdk/logical"
-	"strings"
 )
 
 // listNamespacesUseCase is a use case to get a list of Ethereum accounts
@@ -26,14 +27,14 @@ func (uc listNamespacesUseCase) WithStorage(storage logical.Storage) usecases.Li
 
 // Execute get a list of all available namespaces
 func (uc *listNamespacesUseCase) Execute(ctx context.Context) ([]string, error) {
-	logger := apputils.Logger(ctx)
+	logger := log.FromContext(ctx)
 	logger.Debug("listing ethereum namespaces")
 
 	namespaceSet := make(map[string]bool)
 	err := storage.GetEthereumNamespaces(ctx, uc.storage, "", namespaceSet)
 	if err != nil {
 		errMessage := "failed to get namespace"
-		apputils.Logger(ctx).With("error", err).Error(errMessage)
+		logger.With("error", err).Error(errMessage)
 		return nil, err
 	}
 

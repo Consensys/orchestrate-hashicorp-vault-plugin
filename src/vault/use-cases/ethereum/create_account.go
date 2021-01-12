@@ -5,7 +5,7 @@ import (
 	"crypto/ecdsa"
 	"encoding/hex"
 
-	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
@@ -33,15 +33,15 @@ func (uc createAccountUseCase) WithStorage(storage logical.Storage) usecases.Cre
 
 // Execute creates a new Ethereum account and stores it in the Vault
 func (uc *createAccountUseCase) Execute(ctx context.Context, namespace, importedPrivKey string) (*entities.ETHAccount, error) {
-	logger := apputils.Logger(ctx).With("namespace", namespace)
+	logger := log.FromContext(ctx).With("namespace", namespace)
 	logger.Debug("creating new Ethereum account")
 
 	var privKey = new(ecdsa.PrivateKey)
 	var err error
 	if importedPrivKey == "" {
-		privKey, err = generatePrivKey(ctx)
+		privKey, err = generatePrivKey(logger)
 	} else {
-		privKey, err = retrievePrivKey(ctx, importedPrivKey)
+		privKey, err = retrievePrivKey(logger, importedPrivKey)
 	}
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (uc *createAccountUseCase) Execute(ctx context.Context, namespace, imported
 		storage.ComputeEthereumStorageKey(account.Address, account.Namespace), account)
 
 	if err != nil {
-		apputils.Logger(ctx).With("error", err).Error("failed to store account in vault")
+		logger.With("error", err).Error("failed to store account in vault")
 		return nil, err
 	}
 	
@@ -67,22 +67,22 @@ func (uc *createAccountUseCase) Execute(ctx context.Context, namespace, imported
 	return account, nil
 }
 
-func retrievePrivKey(ctx context.Context, importedPrivKey string) (*ecdsa.PrivateKey, error) {
+func retrievePrivKey(logger log.Logger, importedPrivKey string) (*ecdsa.PrivateKey, error) {
 	privKey, err := crypto.HexToECDSA(importedPrivKey)
 	if err != nil {
 		errMessage := "failed to import Ethereum private key, please verify that the provided private key is valid"
-		apputils.Logger(ctx).With("error", err).Error(errMessage)
+		logger.With("error", err).Error(errMessage)
 		return nil, err
 	}
 
 	return privKey, nil
 }
 
-func generatePrivKey(ctx context.Context) (*ecdsa.PrivateKey, error) {
+func generatePrivKey(logger log.Logger) (*ecdsa.PrivateKey, error) {
 	privKey, err := crypto.GenerateKey()
 	if err != nil {
 		errMessage := "failed to generate Ethereum private key"
-		apputils.Logger(ctx).With("error", err).Error(errMessage)
+		logger.With("error", err).Error(errMessage)
 		return nil, err
 	}
 
