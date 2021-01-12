@@ -7,6 +7,7 @@ import (
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/sdk/logical"
@@ -26,8 +27,8 @@ func TestGetAccount_Execute(t *testing.T) {
 
 	t.Run("should execute use case successfully", func(t *testing.T) {
 		fakeAccount := apputils.FakeETHAccount()
-		expectedEntry, _ := logical.StorageEntryJSON(apputils.ComputeEthereumKey(fakeAccount.Address, fakeAccount.Namespace), fakeAccount)
-		mockStorage.EXPECT().Get(ctx, apputils.ComputeEthereumKey(fakeAccount.Address, fakeAccount.Namespace)).Return(expectedEntry, nil)
+		expectedEntry, _ := logical.StorageEntryJSON(storage.ComputeEthereumStorageKey(fakeAccount.Address, fakeAccount.Namespace), fakeAccount)
+		mockStorage.EXPECT().Get(ctx, storage.ComputeEthereumStorageKey(fakeAccount.Address, fakeAccount.Namespace)).Return(expectedEntry, nil)
 
 		account, err := usecase.Execute(ctx, fakeAccount.Address, fakeAccount.Namespace)
 

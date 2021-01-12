@@ -43,7 +43,7 @@ func (c *controller) signEEATransactionHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 		address := data.Get(formatters.AddressLabel).(string)
 		chainID := data.Get(formatters.ChainIDLabel).(string)
-		namespace := getNamespace(req)
+		namespace := formatters.GetRequestNamespace(req)
 
 		if chainID == "" {
 			return logical.ErrorResponse("chainID must be provided"), nil

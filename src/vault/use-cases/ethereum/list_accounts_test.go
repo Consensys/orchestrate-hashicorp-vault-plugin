@@ -7,6 +7,7 @@ import (
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils/mocks"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/hashicorp/go-hclog"
 
 	"github.com/golang/mock/gomock"
@@ -25,7 +26,7 @@ func TestListAccounts_Execute(t *testing.T) {
 	t.Run("should execute use case successfully", func(t *testing.T) {
 		fakeAccount := apputils.FakeETHAccount()
 		expectedKeys := []string{fakeAccount.Address}
-		mockStorage.EXPECT().List(ctx, apputils.ComputeEthereumKey("", fakeAccount.Namespace)).Return(expectedKeys, nil)
+		mockStorage.EXPECT().List(ctx, storage.ComputeEthereumStorageKey("", fakeAccount.Namespace)).Return(expectedKeys, nil)
 
 		keys, err := usecase.Execute(ctx, fakeAccount.Namespace)
 

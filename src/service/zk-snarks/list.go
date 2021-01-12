@@ -2,6 +2,7 @@ package zksnarks
 
 import (
 	"context"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
@@ -33,7 +34,7 @@ func (c *controller) NewListOperation() *framework.PathOperation {
 
 func (c *controller) listHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-		namespace := getNamespace(req)
+		namespace := formatters.GetRequestNamespace(req)
 
 		ctx = utils.WithLogger(ctx, c.logger)
 		accounts, err := c.useCases.ListAccounts().WithStorage(req.Storage).Execute(ctx, namespace)

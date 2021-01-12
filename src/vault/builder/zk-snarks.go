@@ -6,9 +6,11 @@ import (
 )
 
 type zkSnarksUseCases struct {
-	createAccount usecases.CreateZksAccountUseCase
-	getAccount    usecases.GetZksAccountUseCase
-	listAccounts  usecases.ListZksAccountsUseCase
+	createAccount  usecases.CreateZksAccountUseCase
+	getAccount     usecases.GetZksAccountUseCase
+	listAccounts   usecases.ListZksAccountsUseCase
+	listNamespaces usecases.ListZksNamespacesUseCase
+	sign           usecases.ZksSignUseCase
 }
 
 func NewZkSnarksUseCases() usecases.ZksUseCases {
@@ -29,4 +31,12 @@ func (z *zkSnarksUseCases) GetAccount() usecases.GetZksAccountUseCase {
 
 func (z *zkSnarksUseCases) ListAccounts() usecases.ListZksAccountsUseCase {
 	return z.listAccounts
+}
+
+func (z *zkSnarksUseCases) ListNamespaces() usecases.ListZksNamespacesUseCase {
+	return z.listNamespaces
+}
+
+func (z *zkSnarksUseCases) SignPayload() usecases.ZksSignUseCase {
+	return z.sign
 }

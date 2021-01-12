@@ -55,7 +55,9 @@ func (uc *createAccountUseCase) Execute(ctx context.Context, namespace, imported
 		Namespace:           namespace,
 	}
 
-	err = storage.StoreJSON(ctx, uc.storage, apputils.ComputeEthereumKey(account.Address, account.Namespace), account)
+	err = storage.StoreJSON(ctx, uc.storage, 
+		storage.ComputeEthereumStorageKey(account.Address, account.Namespace), account)
+
 	if err != nil {
 		apputils.Logger(ctx).With("error", err).Error("failed to store account in vault")
 		return nil, err

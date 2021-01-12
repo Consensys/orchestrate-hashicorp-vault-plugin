@@ -1,4 +1,4 @@
-package ethereum
+package zksnarks
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 )
 
 func (c *controller) NewSignPayloadOperation() *framework.PathOperation {
-	exampleAccount := utils.ExampleETHAccount()
+	exampleAccount := utils.ExampleZksAccount()
 
 	return &framework.PathOperation{
 		Callback:    c.signPayloadHandler(),
-		Summary:     "Signs an arbitrary message using an existing Ethereum account",
-		Description: "Signs an arbitrary message using ECDSA and the private key of an existing Ethereum account",
+		Summary:     "Signs an arbitrary message using an existing zk-snarks account",
+		Description: "Signs an arbitrary message using EDDSA and the private key of an existing zk-snarks account",
 		Examples: []framework.RequestExample{
 			{
 				Description: "Signs a message",

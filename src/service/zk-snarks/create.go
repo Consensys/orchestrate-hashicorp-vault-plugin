@@ -31,7 +31,7 @@ func (c *controller) NewCreateOperation() *framework.PathOperation {
 
 func (c *controller) createHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-		namespace := getNamespace(req)
+		namespace := formatters.GetRequestNamespace(req)
 
 		ctx = utils.WithLogger(ctx, c.logger)
 		account, err := c.useCases.CreateAccount().WithStorage(req.Storage).Execute(ctx, namespace)

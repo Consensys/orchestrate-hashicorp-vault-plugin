@@ -4,6 +4,7 @@ import (
 	"context"
 
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -26,5 +27,5 @@ func (uc *listZksAccountsUseCase) Execute(ctx context.Context, namespace string)
 	logger := apputils.Logger(ctx).With("namespace", namespace)
 	logger.Debug("listing zk-snarks accounts")
 
-	return uc.storage.List(ctx, apputils.ComputeZksKey("", namespace))
+	return uc.storage.List(ctx, storage.ComputeZkSnarksStorageKey("", namespace))
 }

@@ -42,7 +42,7 @@ func (c *controller) NewSignQuorumPrivateTransactionOperation() *framework.PathO
 func (c *controller) signQuorumPrivateTransactionHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 		address := data.Get(formatters.AddressLabel).(string)
-		namespace := getNamespace(req)
+		namespace := formatters.GetRequestNamespace(req)
 
 		tx, err := formatters.FormatSignQuorumPrivateTransactionRequest(data)
 		if err != nil {

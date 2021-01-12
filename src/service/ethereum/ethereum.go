@@ -172,13 +172,3 @@ func (c *controller) pathSignEEA() *framework.Path {
 		HelpSynopsis: "Signs an EEA private transaction using an existing account",
 	}
 }
-
-func getNamespace(req *logical.Request) string {
-	namespace := ""
-
-	if val, hasVal := req.Headers[formatters.NamespaceHeader]; hasVal {
-		namespace = val[0]
-	}
-
-	return namespace
-}

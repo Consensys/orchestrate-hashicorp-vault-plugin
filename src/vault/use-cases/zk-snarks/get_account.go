@@ -27,7 +27,7 @@ func (uc *getZksAccountUseCase) Execute(ctx context.Context, address, namespace 
 	logger.Debug("getting zk-snarks account")
 
 	account := &entities.ZksAccount{}
-	err := storage.GetJSON(ctx, uc.storage, apputils.ComputeZksKey(address, namespace), account)
+	err := storage.GetJSON(ctx, uc.storage, storage.ComputeZkSnarksStorageKey(address, namespace), account)
 	if err != nil {
 		apputils.Logger(ctx).With("error", err).Error("failed to retrieve account from vault")
 		return nil, err

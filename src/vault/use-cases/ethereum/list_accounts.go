@@ -4,6 +4,7 @@ import (
 	"context"
 
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -28,5 +29,5 @@ func (uc *listAccountsUseCase) Execute(ctx context.Context, namespace string) ([
 	logger := apputils.Logger(ctx).With("namespace", namespace)
 	logger.Debug("listing Ethereum accounts")
 
-	return uc.storage.List(ctx, apputils.ComputeEthereumKey("", namespace))
+	return uc.storage.List(ctx, storage.ComputeEthereumStorageKey("", namespace))
 }

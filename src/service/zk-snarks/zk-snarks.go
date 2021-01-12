@@ -28,6 +28,8 @@ func (c *controller) Paths() []*framework.Path {
 		[]*framework.Path{
 			c.pathAccounts(),
 			c.pathAccount(),
+			c.pathNamespaces(),
+			c.pathSignPayload(),
 		},
 	)
 }
@@ -58,12 +60,32 @@ func (c *controller) pathAccount() *framework.Path {
 	}
 }
 
-func getNamespace(req *logical.Request) string {
-	namespace := ""
-
-	if val, hasVal := req.Headers[formatters.NamespaceHeader]; hasVal {
-		namespace = val[0]
+func (c *controller) pathNamespaces() *framework.Path {
+	return &framework.Path{
+		Pattern:      "ethereum/namespaces/?",
+		HelpSynopsis: "Lists all ethereum namespaces",
+		Operations: map[logical.Operation]framework.OperationHandler{
+			logical.ListOperation: c.NewListNamespacesOperation(),
+			logical.ReadOperation: c.NewListNamespacesOperation(),
+		},
 	}
+}
 
-	return namespace
+func (c *controller) pathSignPayload() *framework.Path {
+	return &framework.Path{
+		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign", framework.GenericNameRegex("address")),
+		Fields: map[string]*framework.FieldSchema{
+			formatters.AddressLabel: formatters.AddressFieldSchema,
+			formatters.DataLabel: {
+				Type:        framework.TypeString,
+				Description: "data to sign",
+				Required:    true,
+			},
+		},
+		Operations: map[logical.Operation]framework.OperationHandler{
+			logical.CreateOperation: c.NewSignPayloadOperation(),
+			logical.UpdateOperation: c.NewSignPayloadOperation(),
+		},
+		HelpSynopsis: "Signs an arbitrary message using an existing Ethereum account",
+	}
 }

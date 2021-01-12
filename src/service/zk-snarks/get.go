@@ -37,7 +37,7 @@ func (c *controller) NewGetOperation() *framework.PathOperation {
 func (c *controller) getHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 		address := data.Get(formatters.AddressLabel).(string)
-		namespace := getNamespace(req)
+		namespace := formatters.GetRequestNamespace(req)
 
 		ctx = utils.WithLogger(ctx, c.logger)
 		account, err := c.useCases.GetAccount().WithStorage(req.Storage).Execute(ctx, address, namespace)

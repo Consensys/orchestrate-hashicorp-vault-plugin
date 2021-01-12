@@ -13,6 +13,8 @@ type ZksUseCases interface {
 	CreateAccount() CreateZksAccountUseCase
 	GetAccount() GetZksAccountUseCase
 	ListAccounts() ListZksAccountsUseCase
+	ListNamespaces() ListZksNamespacesUseCase
+	SignPayload() ZksSignUseCase
 }
 
 type CreateZksAccountUseCase interface {
@@ -28,4 +30,14 @@ type GetZksAccountUseCase interface {
 type ListZksAccountsUseCase interface {
 	Execute(ctx context.Context, namespace string) ([]string, error)
 	WithStorage(storage logical.Storage) ListZksAccountsUseCase
+}
+
+type ZksSignUseCase interface {
+	Execute(ctx context.Context, address, namespace, data string) (string, error)
+	WithStorage(storage logical.Storage) ZksSignUseCase
+}
+
+type ListZksNamespacesUseCase interface {
+	Execute(ctx context.Context) ([]string, error)
+	WithStorage(storage logical.Storage) ListZksNamespacesUseCase
 }
