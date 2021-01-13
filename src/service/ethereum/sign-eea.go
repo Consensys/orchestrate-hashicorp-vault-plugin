@@ -2,7 +2,6 @@ package ethereum
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
@@ -22,7 +21,7 @@ func (c *controller) NewSignEEATransactionOperation() *framework.PathOperation {
 			{
 				Description: "Signs an EEA transaction",
 				Data: map[string]interface{}{
-					formatters.AddressLabel:     exampleAccount.Address,
+					formatters.AccountIDLabel:   exampleAccount.Address,
 					formatters.NonceLabel:       0,
 					formatters.ToLabel:          "0x905B88EFf8Bda1543d4d6f4aA05afef143D27E18",
 					formatters.ChainIDLabel:     "1",
@@ -44,7 +43,7 @@ func (c *controller) NewSignEEATransactionOperation() *framework.PathOperation {
 
 func (c *controller) signEEATransactionHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-		address := data.Get(formatters.AddressLabel).(string)
+		address := data.Get(formatters.AccountIDLabel).(string)
 		chainID := data.Get(formatters.ChainIDLabel).(string)
 		namespace := formatters.GetRequestNamespace(req)
 
@@ -58,8 +57,6 @@ func (c *controller) signEEATransactionHandler() framework.OperationFunc {
 		}
 
 		ctx = log.Context(ctx, c.logger)
-		txstr, _ := json.Marshal(tx)
-		c.logger.Warn(string(txstr))
 		signature, err := c.useCases.SignEEATransaction().WithStorage(req.Storage).Execute(ctx, address, namespace, chainID, tx, privateArgs)
 		if err != nil {
 			return nil, err

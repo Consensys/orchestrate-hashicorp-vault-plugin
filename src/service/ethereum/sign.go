@@ -20,8 +20,8 @@ func (c *controller) NewSignPayloadOperation() *framework.PathOperation {
 			{
 				Description: "Signs a message",
 				Data: map[string]interface{}{
-					formatters.AddressLabel: exampleAccount.Address,
-					formatters.DataLabel:    "my data to sign",
+					formatters.AccountIDLabel: exampleAccount.Address,
+					formatters.DataLabel:      "my data to sign",
 				},
 				Response: utils.Example200ResponseSignature(),
 			},
@@ -37,7 +37,7 @@ func (c *controller) NewSignPayloadOperation() *framework.PathOperation {
 
 func (c *controller) signPayloadHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-		address := data.Get(formatters.AddressLabel).(string)
+		address := data.Get(formatters.AccountIDLabel).(string)
 		payload := data.Get(formatters.DataLabel).(string)
 		namespace := formatters.GetRequestNamespace(req)
 

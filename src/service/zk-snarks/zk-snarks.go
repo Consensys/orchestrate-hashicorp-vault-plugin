@@ -53,10 +53,10 @@ func (c *controller) pathAccounts() *framework.Path {
 
 func (c *controller) pathAccount() *framework.Path {
 	return &framework.Path{
-		Pattern:      fmt.Sprintf("zk-snarks/accounts/%s", framework.GenericNameRegex("address")),
+		Pattern:      fmt.Sprintf("zk-snarks/accounts/%s", framework.GenericNameRegex(formatters.AccountIDLabel)),
 		HelpSynopsis: "Get, update or delete an Ethereum account",
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AddressLabel: formatters.AddressFieldSchema,
+			formatters.AccountIDLabel: formatters.AddressFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.ReadOperation: c.NewGetOperation(),
@@ -77,9 +77,9 @@ func (c *controller) pathNamespaces() *framework.Path {
 
 func (c *controller) pathSignPayload() *framework.Path {
 	return &framework.Path{
-		Pattern: fmt.Sprintf("zk-snarks/accounts/%s/sign", framework.GenericNameRegex("address")),
+		Pattern: fmt.Sprintf("zk-snarks/accounts/%s/sign", framework.GenericNameRegex(formatters.AccountIDLabel)),
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AddressLabel: formatters.AddressFieldSchema,
+			formatters.AccountIDLabel: formatters.AddressFieldSchema,
 			formatters.DataLabel: {
 				Type:        framework.TypeString,
 				Description: "data to sign",

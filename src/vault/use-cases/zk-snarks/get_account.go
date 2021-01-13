@@ -23,12 +23,12 @@ func (uc getAccountUseCase) WithStorage(storage logical.Storage) usecases.GetZks
 	return &uc
 }
 
-func (uc *getAccountUseCase) Execute(ctx context.Context, address, namespace string) (*entities.ZksAccount, error) {
-	logger := log.FromContext(ctx).With("namespace", namespace).With("address", address)
+func (uc *getAccountUseCase) Execute(ctx context.Context, pubKey, namespace string) (*entities.ZksAccount, error) {
+	logger := log.FromContext(ctx).With("namespace", namespace).With("pub_key", pubKey)
 	logger.Debug("getting zk-snarks account")
 
 	account := &entities.ZksAccount{}
-	err := storage.GetJSON(ctx, uc.storage, storage.ComputeZksStorageKey(address, namespace), account)
+	err := storage.GetJSON(ctx, uc.storage, storage.ComputeZksStorageKey(pubKey, namespace), account)
 	if err != nil {
 		logger.With("error", err).Error("failed to retrieve account from vault")
 		return nil, err

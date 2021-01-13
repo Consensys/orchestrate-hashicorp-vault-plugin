@@ -16,24 +16,24 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignEEATransaction() {
 	path := s.controller.Paths()[6]
 	signOperation := path.Operations[logical.CreateOperation]
 
-	// s.T().Run("should define the correct path", func(t *testing.T) {
-	// 	assert.Equal(t, fmt.Sprintf("ethereum/accounts/%s/sign-eea-transaction", framework.GenericNameRegex("address")), path.Pattern)
-	// 	assert.NotEmpty(t, signOperation)
-	// })
-	// 
-	// s.T().Run("should define correct properties", func(t *testing.T) {
-	// 	properties := signOperation.Properties()
-	// 
-	// 	assert.NotEmpty(t, properties.Description)
-	// 	assert.NotEmpty(t, properties.Summary)
-	// 	assert.NotEmpty(t, properties.Examples[0].Description)
-	// 	assert.NotEmpty(t, properties.Examples[0].Response)
-	// 	assert.NotEmpty(t, properties.Examples[0].Data)
-	// 	assert.NotEmpty(t, properties.Responses[200])
-	// 	assert.NotEmpty(t, properties.Responses[400])
-	// 	assert.NotEmpty(t, properties.Responses[404])
-	// 	assert.NotEmpty(t, properties.Responses[500])
-	// })
+	s.T().Run("should define the correct path", func(t *testing.T) {
+		assert.Equal(t, fmt.Sprintf("ethereum/accounts/%s/sign-eea-transaction", framework.GenericNameRegex(formatters.AccountIDLabel)), path.Pattern)
+		assert.NotEmpty(t, signOperation)
+	})
+	
+	s.T().Run("should define correct properties", func(t *testing.T) {
+		properties := signOperation.Properties()
+	
+		assert.NotEmpty(t, properties.Description)
+		assert.NotEmpty(t, properties.Summary)
+		assert.NotEmpty(t, properties.Examples[0].Description)
+		assert.NotEmpty(t, properties.Examples[0].Response)
+		assert.NotEmpty(t, properties.Examples[0].Data)
+		assert.NotEmpty(t, properties.Responses[200])
+		assert.NotEmpty(t, properties.Responses[400])
+		assert.NotEmpty(t, properties.Responses[404])
+		assert.NotEmpty(t, properties.Responses[500])
+	})
 
 	s.T().Run("handler should execute the correct use case", func(t *testing.T) {
 		account := apputils.FakeETHAccount()
@@ -45,7 +45,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignEEATransaction() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel:     account.Address,
+				formatters.AccountIDLabel:   account.Address,
 				formatters.NonceLabel:       0,
 				formatters.ToLabel:          "0x905B88EFf8Bda1543d4d6f4aA05afef143D27E18",
 				formatters.ChainIDLabel:     "1",
@@ -54,7 +54,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignEEATransaction() {
 				formatters.PrivateForLabel:  []string{"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=", "B1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="},
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel:        formatters.AddressFieldSchema,
+				formatters.AccountIDLabel:      formatters.AddressFieldSchema,
 				formatters.NonceLabel:          formatters.NonceFieldSchema,
 				formatters.ToLabel:             formatters.ToFieldSchema,
 				formatters.ChainIDLabel:        formatters.ChainIDFieldSchema,
@@ -83,10 +83,10 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignEEATransaction() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel: account.Address,
+				formatters.AccountIDLabel: account.Address,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel:        formatters.AddressFieldSchema,
+				formatters.AccountIDLabel:      formatters.AddressFieldSchema,
 				formatters.NonceLabel:          formatters.NonceFieldSchema,
 				formatters.ToLabel:             formatters.ToFieldSchema,
 				formatters.ChainIDLabel:        formatters.ChainIDFieldSchema,
@@ -110,11 +110,11 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignEEATransaction() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel: account.Address,
-				formatters.ChainIDLabel: "1",
+				formatters.AccountIDLabel: account.Address,
+				formatters.ChainIDLabel:   "1",
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel:        formatters.AddressFieldSchema,
+				formatters.AccountIDLabel:      formatters.AddressFieldSchema,
 				formatters.NonceLabel:          formatters.NonceFieldSchema,
 				formatters.ToLabel:             formatters.ToFieldSchema,
 				formatters.ChainIDLabel:        formatters.ChainIDFieldSchema,
@@ -138,7 +138,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignEEATransaction() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel:     account.Address,
+				formatters.AccountIDLabel:   account.Address,
 				formatters.NonceLabel:       0,
 				formatters.ToLabel:          "0x905B88EFf8Bda1543d4d6f4aA05afef143D27E18",
 				formatters.ChainIDLabel:     "1",
@@ -147,7 +147,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignEEATransaction() {
 				formatters.PrivateForLabel:  []string{"A1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo=", "B1aVtMxLCUHmBVHXoZzzBgPbW/wj5axDpW9X8l91SGo="},
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel:        formatters.AddressFieldSchema,
+				formatters.AccountIDLabel:      formatters.AddressFieldSchema,
 				formatters.NonceLabel:          formatters.NonceFieldSchema,
 				formatters.ToLabel:             formatters.ToFieldSchema,
 				formatters.ChainIDLabel:        formatters.ChainIDFieldSchema,

@@ -20,14 +20,14 @@ func (c *controller) NewSignTransactionOperation() *framework.PathOperation {
 			{
 				Description: "Signs an Ethereum transaction",
 				Data: map[string]interface{}{
-					formatters.AddressLabel:  exampleAccount.Address,
-					formatters.NonceLabel:    0,
-					formatters.ToLabel:       "0x905B88EFf8Bda1543d4d6f4aA05afef143D27E18",
-					formatters.AmountLabel:   "0",
-					formatters.GasPriceLabel: "0",
-					formatters.GasLimitLabel: 21000,
-					formatters.ChainIDLabel:  "1",
-					formatters.DataLabel:     "0xfeee...",
+					formatters.AccountIDLabel: exampleAccount.Address,
+					formatters.NonceLabel:     0,
+					formatters.ToLabel:        "0x905B88EFf8Bda1543d4d6f4aA05afef143D27E18",
+					formatters.AmountLabel:    "0",
+					formatters.GasPriceLabel:  "0",
+					formatters.GasLimitLabel:  21000,
+					formatters.ChainIDLabel:   "1",
+					formatters.DataLabel:      "0xfeee...",
 				},
 				Response: utils.Example200ResponseSignature(),
 			},
@@ -43,7 +43,7 @@ func (c *controller) NewSignTransactionOperation() *framework.PathOperation {
 
 func (c *controller) signTransactionHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-		address := data.Get(formatters.AddressLabel).(string)
+		address := data.Get(formatters.AccountIDLabel).(string)
 		chainID := data.Get(formatters.ChainIDLabel).(string)
 		namespace := formatters.GetRequestNamespace(req)
 

@@ -4,7 +4,7 @@ import "github.com/hashicorp/vault/sdk/framework"
 
 const (
 	PrivateKeyLabel     = "privateKey"
-	AddressLabel        = "address"
+	AccountIDLabel      = "id"
 	DataLabel           = "data"
 	NonceLabel          = "nonce"
 	ToLabel             = "to"

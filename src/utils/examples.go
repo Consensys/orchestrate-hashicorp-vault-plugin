@@ -24,7 +24,6 @@ func ExampleZksAccount() *entities.ZksAccount {
 		Curve:      entities.ZksCurveBN256,
 		Algorithm:  entities.ZksAlgorithmEDDSA,
 		Namespace:  "tenant0",
-		Address:    "10459788746654203044566730299653666314876003040095118049521181117616221186211",
 		PrivateKey: "0b0232595b77568d99364bede133839ccbcb40775967a7eacd15d355c96288b5",
 		PublicKey:  "0b0232595b77568d99364bede133839ccbcb40775967a7eacd15d355c96288b5",
 	}

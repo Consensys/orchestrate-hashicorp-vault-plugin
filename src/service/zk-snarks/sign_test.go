@@ -18,7 +18,7 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 	signOperation := path.Operations[logical.CreateOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, fmt.Sprintf("zk-snarks/accounts/%s/sign", framework.GenericNameRegex("address")), path.Pattern)
+		assert.Equal(t, fmt.Sprintf("zk-snarks/accounts/%s/sign", framework.GenericNameRegex(formatters.AccountIDLabel)), path.Pattern)
 		assert.NotEmpty(t, signOperation)
 	})
 
@@ -47,11 +47,11 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel: account.Address,
-				formatters.DataLabel:    payload,
+				formatters.AccountIDLabel: account.PublicKey,
+				formatters.DataLabel:      payload,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel: formatters.AddressFieldSchema,
+				formatters.AccountIDLabel: formatters.AddressFieldSchema,
 				formatters.DataLabel: {
 					Type:        framework.TypeString,
 					Description: "data to sign",
@@ -61,7 +61,7 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 		}
 		expectedSignature := "0x8b9679a75861e72fa6968dd5add3bf96e2747f0f124a2e728980f91e1958367e19c2486a40fdc65861824f247603bc18255fa497ca0b8b0a394aa7a6740fdc4601"
 
-		s.signPayloadUC.EXPECT().Execute(gomock.Any(), account.Address, account.Namespace, payload).Return(expectedSignature, nil)
+		s.signPayloadUC.EXPECT().Execute(gomock.Any(), account.PublicKey, account.Namespace, payload).Return(expectedSignature, nil)
 
 		response, err := signOperation.Handler()(s.ctx, request, data)
 
@@ -77,11 +77,11 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel: account.Address,
-				formatters.DataLabel:    payload,
+				formatters.AccountIDLabel: account.Address,
+				formatters.DataLabel:      payload,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel: formatters.AddressFieldSchema,
+				formatters.AccountIDLabel: formatters.AddressFieldSchema,
 				formatters.DataLabel: {
 					Type:        framework.TypeString,
 					Description: "data to sign",

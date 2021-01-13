@@ -21,7 +21,7 @@ func (c *controller) NewGetOperation() *framework.PathOperation {
 			{
 				Description: "Gets an account on the tenant0 namespace",
 				Data: map[string]interface{}{
-					formatters.AddressLabel: exampleAccount.Address,
+					formatters.AccountIDLabel: exampleAccount.PublicKey,
 				},
 				Response: successExample,
 			},
@@ -37,11 +37,11 @@ func (c *controller) NewGetOperation() *framework.PathOperation {
 
 func (c *controller) getHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-		address := data.Get(formatters.AddressLabel).(string)
+		accountID := data.Get(formatters.AccountIDLabel).(string)
 		namespace := formatters.GetRequestNamespace(req)
 
 		ctx = log.Context(ctx, c.logger)
-		account, err := c.useCases.GetAccount().WithStorage(req.Storage).Execute(ctx, address, namespace)
+		account, err := c.useCases.GetAccount().WithStorage(req.Storage).Execute(ctx, accountID, namespace)
 		if err != nil {
 			return nil, err
 		}

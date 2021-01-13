@@ -33,7 +33,7 @@ func (s *zksCtrlTestSuite) TestEthereumController_List() {
 
 	s.T().Run("handler should execute the correct use case", func(t *testing.T) {
 		account := apputils.FakeZksAccount()
-		expectedList := []string{account.Address}
+		expectedList := []string{account.PublicKey}
 		request := &logical.Request{
 			Storage: s.storage,
 			Headers: map[string][]string{

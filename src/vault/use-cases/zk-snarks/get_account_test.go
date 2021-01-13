@@ -27,16 +27,16 @@ func TestGetAccount_Execute(t *testing.T) {
 	t.Run("should execute use case successfully", func(t *testing.T) {
 		fakeAccount := apputils.FakeZksAccount()
 		expectedEntry, _ := logical.StorageEntryJSON(
-			storage.ComputeZksStorageKey(fakeAccount.Address, fakeAccount.Namespace), fakeAccount)
+			storage.ComputeZksStorageKey(fakeAccount.PublicKey, fakeAccount.Namespace), fakeAccount)
 		mockStorage.EXPECT().
-			Get(ctx, storage.ComputeZksStorageKey(fakeAccount.Address, fakeAccount.Namespace)).
+			Get(ctx, storage.ComputeZksStorageKey(fakeAccount.PublicKey, fakeAccount.Namespace)).
 			Return(expectedEntry, nil)
 
-		account, err := usecase.Execute(ctx, fakeAccount.Address, fakeAccount.Namespace)
+		account, err := usecase.Execute(ctx, fakeAccount.PublicKey, fakeAccount.Namespace)
 
 		assert.NoError(t, err)
 		assert.Equal(t, fakeAccount.Namespace, account.Namespace)
-		assert.NotEmpty(t, account.Address)
+		assert.NotEmpty(t, account.PublicKey)
 	})
 
 	t.Run("should fail with same error if Get fails", func(t *testing.T) {

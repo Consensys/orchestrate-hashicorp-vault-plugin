@@ -41,16 +41,16 @@ func getNamespaces(ctx context.Context, storage logical.Storage, secretsPath, na
 	return nil
 }
 
-func ComputeEthereumStorageKey(address, namespace string) string {
-	return computeStorageKey(EthereumSecretsPath, address, namespace)
+func ComputeEthereumStorageKey(accountID, namespace string) string {
+	return computeStorageKey(EthereumSecretsPath, accountID, namespace)
 }
 
-func ComputeZksStorageKey(address, namespace string) string {
-	return computeStorageKey(ZkSnarksSecretsPath, address, namespace)
+func ComputeZksStorageKey(accountID, namespace string) string {
+	return computeStorageKey(ZkSnarksSecretsPath, accountID, namespace)
 }
 
-func computeStorageKey(secretsPath, address, namespace string) string {
-	path := fmt.Sprintf("%s/accounts/%s", secretsPath, address)
+func computeStorageKey(secretsPath, accountID, namespace string) string {
+	path := fmt.Sprintf("%s/accounts/%s", secretsPath, accountID)
 	if namespace != "" {
 		path = fmt.Sprintf("%s/%s", namespace, path)
 	}

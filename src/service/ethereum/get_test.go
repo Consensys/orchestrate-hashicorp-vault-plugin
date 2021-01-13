@@ -17,7 +17,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Get() {
 	getOperation := path.Operations[logical.ReadOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, fmt.Sprintf("ethereum/accounts/%s", framework.GenericNameRegex("address")), path.Pattern)
+		assert.Equal(t, fmt.Sprintf("ethereum/accounts/%s", framework.GenericNameRegex(formatters.AccountIDLabel)), path.Pattern)
 		assert.NotEmpty(t, getOperation)
 	})
 
@@ -44,10 +44,10 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Get() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel: account.Address,
+				formatters.AccountIDLabel: account.Address,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel: formatters.AddressFieldSchema,
+				formatters.AccountIDLabel: formatters.AddressFieldSchema,
 			},
 		}
 
@@ -68,10 +68,10 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Get() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel: "myAddress",
+				formatters.AccountIDLabel: "myAddress",
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel: formatters.AddressFieldSchema,
+				formatters.AccountIDLabel: formatters.AddressFieldSchema,
 			},
 		}
 		expectedErr := fmt.Errorf("error")

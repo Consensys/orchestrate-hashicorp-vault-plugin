@@ -2,13 +2,12 @@ package zksnarks
 
 import (
 	"context"
+	"crypto/sha256"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	eddsa "github.com/consensys/gnark/crypto/signature/eddsa/bn256"
 	"github.com/hashicorp/vault/sdk/logical"
-
-	"github.com/consensys/quorum/common/hexutil"
 )
 
 type signPayloadUseCase struct {
@@ -26,18 +25,22 @@ func (uc signPayloadUseCase) WithStorage(storage logical.Storage) usecases.ZksSi
 	return &uc
 }
 
-// Execute signs an arbitrary payload using an existing Ethereum account
-func (uc *signPayloadUseCase) Execute(ctx context.Context, address, namespace, data string) (string, error) {
-	logger := log.FromContext(ctx).With("namespace", namespace).With("address", address)
+func (uc *signPayloadUseCase) Execute(ctx context.Context, pubKey, namespace, data string) (string, error) {
+	logger := log.FromContext(ctx).With("namespace", namespace).With("pub_key", pubKey)
 	logger.Debug("signing message")
 
-	account, err := uc.getAccountUC.Execute(ctx, address, namespace)
+	account, err := uc.getAccountUC.Execute(ctx, pubKey, namespace)
 	if err != nil {
 		return "", err
 	}
 	
+	// @TODO Generate new keys till we can deserialize stored keys correctly
+	publicKey, privKey := eddsa.New(account.Seed, sha256.New())
+	////
+	
 	logger.With("public key", account.PublicKey).Debug("signing with account")
-	signature, err := eddsa.Sign([]byte(data), eddsa.PublicKey{}, eddsa.PrivateKey{})
+	
+	signature, err := eddsa.Sign([]byte(data), publicKey, privKey)
 	if err != nil {
 		errMessage := "failed to sign payload using EDDSA"
 		logger.With("error", err).Error(errMessage)
@@ -45,5 +48,6 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, address, namespace, d
 	}
 
 	logger.Info("payload signed successfully")
-	return hexutil.Encode([]byte(signature.R.X.String())), nil
+	// @TODO Integrate gnark serialization for signature
+	return signature.R.X.String(), nil
 }

@@ -6,10 +6,10 @@ const (
 )
 
 type ZksAccount struct {
-	Curve      string `json:"curve"`
-	Algorithm  string `json:"algorithm"`
-	Address    string `json:"address"`
-	PrivateKey string `json:"privateKey"`
-	PublicKey  string `json:"publicKey"`
-	Namespace  string `json:"namespace,omitempty"`
+	Curve      string   `json:"curve"`
+	Algorithm  string   `json:"algorithm"`
+	PrivateKey string   `json:"privateKey"`
+	PublicKey  string   `json:"publicKey"`
+	Namespace  string   `json:"namespace,omitempty"`
+	Seed       [32]byte `json:"seed"`
 }

@@ -47,10 +47,9 @@ func (s *zksCtrlTestSuite) TestZksController_Create() {
 		response, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
 
 		assert.NoError(t, err)
-		assert.Equal(t, account.Address, response.Data["address"])
 		assert.Equal(t, account.PublicKey, response.Data["publicKey"])
 		assert.Equal(t, account.Namespace, response.Data["namespace"])
-		assert.Equal(t, account.Algorithm, response.Data["algorithm"])
+		assert.Equal(t, account.Algorithm, response.Data["signingAlgorithm"])
 		assert.Equal(t, account.Curve, response.Data["curve"])
 	})
 

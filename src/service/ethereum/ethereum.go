@@ -68,10 +68,10 @@ func (c *controller) pathNamespaces() *framework.Path {
 
 func (c *controller) pathAccount() *framework.Path {
 	return &framework.Path{
-		Pattern:      fmt.Sprintf("ethereum/accounts/%s", framework.GenericNameRegex("address")),
+		Pattern:      fmt.Sprintf("ethereum/accounts/%s", framework.GenericNameRegex(formatters.AccountIDLabel)),
 		HelpSynopsis: "Get, update or delete an Ethereum account",
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AddressLabel: formatters.AddressFieldSchema,
+			formatters.AccountIDLabel: formatters.AddressFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.ReadOperation: c.NewGetOperation(),
@@ -99,9 +99,9 @@ func (c *controller) pathImportAccount() *framework.Path {
 
 func (c *controller) pathSignPayload() *framework.Path {
 	return &framework.Path{
-		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign", framework.GenericNameRegex("address")),
+		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign", framework.GenericNameRegex(formatters.AccountIDLabel)),
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AddressLabel: formatters.AddressFieldSchema,
+			formatters.AccountIDLabel: formatters.AddressFieldSchema,
 			formatters.DataLabel: {
 				Type:        framework.TypeString,
 				Description: "data to sign",
@@ -118,16 +118,16 @@ func (c *controller) pathSignPayload() *framework.Path {
 
 func (c *controller) pathSignTransaction() *framework.Path {
 	return &framework.Path{
-		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign-transaction", framework.GenericNameRegex("address")),
+		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign-transaction", framework.GenericNameRegex(formatters.AccountIDLabel)),
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AddressLabel:  formatters.AddressFieldSchema,
-			formatters.NonceLabel:    formatters.NonceFieldSchema,
-			formatters.ToLabel:       formatters.ToFieldSchema,
-			formatters.AmountLabel:   formatters.AmountFieldSchema,
-			formatters.GasPriceLabel: formatters.GasPriceFieldSchema,
-			formatters.GasLimitLabel: formatters.GasLimitFieldSchema,
-			formatters.ChainIDLabel:  formatters.ChainIDFieldSchema,
-			formatters.DataLabel:     formatters.DataFieldSchema,
+			formatters.AccountIDLabel: formatters.AddressFieldSchema,
+			formatters.NonceLabel:     formatters.NonceFieldSchema,
+			formatters.ToLabel:        formatters.ToFieldSchema,
+			formatters.AmountLabel:    formatters.AmountFieldSchema,
+			formatters.GasPriceLabel:  formatters.GasPriceFieldSchema,
+			formatters.GasLimitLabel:  formatters.GasLimitFieldSchema,
+			formatters.ChainIDLabel:   formatters.ChainIDFieldSchema,
+			formatters.DataLabel:      formatters.DataFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewSignTransactionOperation(),
@@ -139,15 +139,15 @@ func (c *controller) pathSignTransaction() *framework.Path {
 
 func (c *controller) pathSignQuorumPrivate() *framework.Path {
 	return &framework.Path{
-		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign-quorum-private-transaction", framework.GenericNameRegex("address")),
+		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign-quorum-private-transaction", framework.GenericNameRegex(formatters.AccountIDLabel)),
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AddressLabel:  formatters.AddressFieldSchema,
-			formatters.NonceLabel:    formatters.NonceFieldSchema,
-			formatters.ToLabel:       formatters.ToFieldSchema,
-			formatters.AmountLabel:   formatters.AmountFieldSchema,
-			formatters.GasPriceLabel: formatters.GasPriceFieldSchema,
-			formatters.GasLimitLabel: formatters.GasLimitFieldSchema,
-			formatters.DataLabel:     formatters.DataFieldSchema,
+			formatters.AccountIDLabel: formatters.AddressFieldSchema,
+			formatters.NonceLabel:     formatters.NonceFieldSchema,
+			formatters.ToLabel:        formatters.ToFieldSchema,
+			formatters.AmountLabel:    formatters.AmountFieldSchema,
+			formatters.GasPriceLabel:  formatters.GasPriceFieldSchema,
+			formatters.GasLimitLabel:  formatters.GasLimitFieldSchema,
+			formatters.DataLabel:      formatters.DataFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewSignQuorumPrivateTransactionOperation(),
@@ -159,9 +159,9 @@ func (c *controller) pathSignQuorumPrivate() *framework.Path {
 
 func (c *controller) pathSignEEA() *framework.Path {
 	return &framework.Path{
-		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign-eea-transaction", framework.GenericNameRegex("address")),
+		Pattern: fmt.Sprintf("ethereum/accounts/%s/sign-eea-transaction", framework.GenericNameRegex(formatters.AccountIDLabel)),
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AddressLabel:        formatters.AddressFieldSchema,
+			formatters.AccountIDLabel:      formatters.AddressFieldSchema,
 			formatters.NonceLabel:          formatters.NonceFieldSchema,
 			formatters.ToLabel:             formatters.ToFieldSchema,
 			formatters.ChainIDLabel:        formatters.ChainIDFieldSchema,

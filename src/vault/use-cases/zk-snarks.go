@@ -23,7 +23,7 @@ type CreateZksAccountUseCase interface {
 }
 
 type GetZksAccountUseCase interface {
-	Execute(ctx context.Context, address, namespace string) (*entities.ZksAccount, error)
+	Execute(ctx context.Context, pubKey, namespace string) (*entities.ZksAccount, error)
 	WithStorage(storage logical.Storage) GetZksAccountUseCase
 }
 
@@ -33,7 +33,7 @@ type ListZksAccountsUseCase interface {
 }
 
 type ZksSignUseCase interface {
-	Execute(ctx context.Context, address, namespace, data string) (string, error)
+	Execute(ctx context.Context, pubKey, namespace, data string) (string, error)
 	WithStorage(storage logical.Storage) ZksSignUseCase
 }
 

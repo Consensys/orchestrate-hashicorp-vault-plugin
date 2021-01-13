@@ -17,7 +17,7 @@ func (s *zksCtrlTestSuite) TestZksController_Get() {
 	getOperation := path.Operations[logical.ReadOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, fmt.Sprintf("zk-snarks/accounts/%s", framework.GenericNameRegex("address")), path.Pattern)
+		assert.Equal(t, fmt.Sprintf("zk-snarks/accounts/%s", framework.GenericNameRegex(formatters.AccountIDLabel)), path.Pattern)
 		assert.NotEmpty(t, getOperation)
 	})
 
@@ -44,22 +44,21 @@ func (s *zksCtrlTestSuite) TestZksController_Get() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel: account.Address,
+				formatters.AccountIDLabel: account.PublicKey,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel: formatters.AddressFieldSchema,
+				formatters.AccountIDLabel: formatters.AddressFieldSchema,
 			},
 		}
 
-		s.getAccountUC.EXPECT().Execute(gomock.Any(), account.Address, account.Namespace).Return(account, nil)
+		s.getAccountUC.EXPECT().Execute(gomock.Any(), account.PublicKey, account.Namespace).Return(account, nil)
 
 		response, err := getOperation.Handler()(s.ctx, request, data)
 
 		assert.NoError(t, err)
-		assert.Equal(t, account.Address, response.Data["address"])
 		assert.Equal(t, account.PublicKey, response.Data["publicKey"])
 		assert.Equal(t, account.Namespace, response.Data["namespace"])
-		assert.Equal(t, account.Algorithm, response.Data["algorithm"])
+		assert.Equal(t, account.Algorithm, response.Data["signingAlgorithm"])
 		assert.Equal(t, account.Curve, response.Data["curve"])
 	})
 
@@ -69,10 +68,10 @@ func (s *zksCtrlTestSuite) TestZksController_Get() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AddressLabel: "myAddress",
+				formatters.AccountIDLabel: "myAddress",
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AddressLabel: formatters.AddressFieldSchema,
+				formatters.AccountIDLabel: formatters.AddressFieldSchema,
 			},
 		}
 		expectedErr := fmt.Errorf("error")
