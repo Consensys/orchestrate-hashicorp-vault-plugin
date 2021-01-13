@@ -10,25 +10,25 @@ import (
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
-type getZksAccountUseCase struct {
+type getAccountUseCase struct {
 	storage logical.Storage
 }
 
-func NewGetZksAccountUseCase() usecases.GetZksAccountUseCase {
-	return &getZksAccountUseCase{}
+func NewGetAccountUseCase() usecases.GetZksAccountUseCase {
+	return &getAccountUseCase{}
 }
 
-func (uc getZksAccountUseCase) WithStorage(storage logical.Storage) usecases.GetZksAccountUseCase {
+func (uc getAccountUseCase) WithStorage(storage logical.Storage) usecases.GetZksAccountUseCase {
 	uc.storage = storage
 	return &uc
 }
 
-func (uc *getZksAccountUseCase) Execute(ctx context.Context, address, namespace string) (*entities.ZksAccount, error) {
+func (uc *getAccountUseCase) Execute(ctx context.Context, address, namespace string) (*entities.ZksAccount, error) {
 	logger := log.FromContext(ctx).With("namespace", namespace).With("address", address)
 	logger.Debug("getting zk-snarks account")
 
 	account := &entities.ZksAccount{}
-	err := storage.GetJSON(ctx, uc.storage, storage.ComputeZkSnarksStorageKey(address, namespace), account)
+	err := storage.GetJSON(ctx, uc.storage, storage.ComputeZksStorageKey(address, namespace), account)
 	if err != nil {
 		logger.With("error", err).Error("failed to retrieve account from vault")
 		return nil, err

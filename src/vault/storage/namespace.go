@@ -45,7 +45,7 @@ func ComputeEthereumStorageKey(address, namespace string) string {
 	return computeStorageKey(EthereumSecretsPath, address, namespace)
 }
 
-func ComputeZkSnarksStorageKey(address, namespace string) string {
+func ComputeZksStorageKey(address, namespace string) string {
 	return computeStorageKey(ZkSnarksSecretsPath, address, namespace)
 }
 

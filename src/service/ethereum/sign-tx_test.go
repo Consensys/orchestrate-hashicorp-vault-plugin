@@ -66,9 +66,9 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignTransaction() {
 			},
 		}
 		expectedSignature := "0x8b9679a75861e72fa6968dd5add3bf96e2747f0f124a2e728980f91e1958367e19c2486a40fdc65861824f247603bc18255fa497ca0b8b0a394aa7a6740fdc4601"
-		expectedTx, _ := formatters.FormatSignETHTransactionRequest(data)
 
-		s.signTransactionUC.EXPECT().Execute(gomock.Any(), account.Address, account.Namespace, "1", expectedTx).Return(expectedSignature, nil)
+		s.signTransactionUC.EXPECT().Execute(gomock.Any(), account.Address, account.Namespace, "1", 
+			gomock.Any()).Return(expectedSignature, nil)
 
 		response, err := signOperation.Handler()(s.ctx, request, data)
 

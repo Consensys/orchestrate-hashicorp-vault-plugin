@@ -16,6 +16,10 @@ type controller struct {
 }
 
 func NewController(useCases usecases.ETHUseCases, logger log.Logger) *controller {
+	if logger == nil {
+		logger = log.Default()
+	}
+	
 	return &controller{
 		useCases: useCases,
 		logger:   logger.Named("ethereum"),
@@ -162,9 +166,9 @@ func (c *controller) pathSignEEA() *framework.Path {
 			formatters.ToLabel:             formatters.ToFieldSchema,
 			formatters.ChainIDLabel:        formatters.ChainIDFieldSchema,
 			formatters.DataLabel:           formatters.DataFieldSchema,
-			formatters.PrivateFromLabel:    formatters.PrivateFromFielSchema,
-			formatters.PrivateForLabel:     formatters.PrivateForFielSchema,
-			formatters.PrivacyGroupIDLabel: formatters.PrivacyGroupIDFielSchema,
+			formatters.PrivateFromLabel:    formatters.PrivateFromFieldSchema,
+			formatters.PrivateForLabel:     formatters.PrivateForFieldSchema,
+			formatters.PrivacyGroupIDLabel: formatters.PrivacyGroupIDFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewSignEEATransactionOperation(),

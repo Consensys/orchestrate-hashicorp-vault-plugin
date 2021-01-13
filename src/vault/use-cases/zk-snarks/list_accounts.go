@@ -9,23 +9,23 @@ import (
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
-type listZksAccountsUseCase struct {
+type listAccountsUseCase struct {
 	storage logical.Storage
 }
 
-func NewListZksAccountsUseCase() usecases.ListZksAccountsUseCase {
-	return &listZksAccountsUseCase{}
+func NewListAccountsUseCase() usecases.ListZksAccountsUseCase {
+	return &listAccountsUseCase{}
 }
 
-func (uc listZksAccountsUseCase) WithStorage(storage logical.Storage) usecases.ListZksAccountsUseCase {
+func (uc listAccountsUseCase) WithStorage(storage logical.Storage) usecases.ListZksAccountsUseCase {
 	uc.storage = storage
 	return &uc
 }
 
 // Execute gets a list of Ethereum accounts
-func (uc *listZksAccountsUseCase) Execute(ctx context.Context, namespace string) ([]string, error) {
+func (uc *listAccountsUseCase) Execute(ctx context.Context, namespace string) ([]string, error) {
 	logger := log.FromContext(ctx).With("namespace", namespace)
 	logger.Debug("listing zk-snarks accounts")
 
-	return uc.storage.List(ctx, storage.ComputeZkSnarksStorageKey("", namespace))
+	return uc.storage.List(ctx, storage.ComputeZksStorageKey("", namespace))
 }

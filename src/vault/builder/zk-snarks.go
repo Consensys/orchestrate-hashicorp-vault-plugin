@@ -14,11 +14,11 @@ type zkSnarksUseCases struct {
 }
 
 func NewZkSnarksUseCases() usecases.ZksUseCases {
-	getAccount := zksnarks.NewGetZksAccountUseCase()
+	getAccount := zksnarks.NewGetAccountUseCase()
 	return &zkSnarksUseCases{
 		createAccount:  zksnarks.NewCreateAccountUseCase(),
 		getAccount:     getAccount,
-		listAccounts:   zksnarks.NewListZksAccountsUseCase(),
+		listAccounts:   zksnarks.NewListAccountsUseCase(),
 		listNamespaces: zksnarks.NewListNamespacesUseCase(),
 		sign:           zksnarks.NewSignUseCase(getAccount),
 	}

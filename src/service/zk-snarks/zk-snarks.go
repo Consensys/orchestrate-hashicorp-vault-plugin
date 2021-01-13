@@ -16,6 +16,10 @@ type controller struct {
 }
 
 func NewController(useCases usecases.ZksUseCases, logger log.Logger) *controller {
+	if logger == nil {
+		logger = log.Default()
+	}
+
 	return &controller{
 		useCases: useCases,
 		logger:   logger.Named("zk-snarks"),

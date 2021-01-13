@@ -12,7 +12,6 @@ func FormatZksAccountResponse(account *entities.ZksAccount) *logical.Response {
 			"algorithm":  account.Algorithm,
 			"address":    account.Address,
 			"publicKey":  account.PublicKey,
-			"privateKey": account.PrivateKey,
 			"namespace":  account.Namespace,
 		},
 	}

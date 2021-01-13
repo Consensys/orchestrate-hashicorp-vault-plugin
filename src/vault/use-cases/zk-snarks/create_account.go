@@ -47,7 +47,7 @@ func (uc *createAccountUseCase) Execute(ctx context.Context, namespace string) (
 		Namespace:  namespace,
 	}
 
-	err := storage.StoreJSON(ctx, uc.storage, storage.ComputeZkSnarksStorageKey(account.Address, account.Namespace), account)
+	err := storage.StoreJSON(ctx, uc.storage, storage.ComputeZksStorageKey(account.Address, account.Namespace), account)
 	if err != nil {
 		errMessage := "failed to create account entry"
 		logger.With("error", err).Error(errMessage)

@@ -1,9 +1,10 @@
 package utils
 
 import (
+	"math/rand"
+
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
 	"github.com/ethereum/go-ethereum/common"
-	"math/rand"
 )
 
 func FakeETHAccount() *entities.ETHAccount {
@@ -12,6 +13,16 @@ func FakeETHAccount() *entities.ETHAccount {
 		PublicKey:           common.HexToHash(randHexString(12)).String(),
 		CompressedPublicKey: common.HexToHash(randHexString(12)).String(),
 		Namespace:           "_",
+	}
+}
+
+func FakeZksAccount() *entities.ZksAccount {
+	return &entities.ZksAccount{
+		Algorithm: entities.ZksAlgorithmEDDSA,
+		Curve: entities.ZksCurveBN256,
+		Address:   common.HexToAddress(randHexString(12)).String(),
+		PublicKey: common.HexToHash(randHexString(12)).String(),
+		Namespace: "_",
 	}
 }
 
