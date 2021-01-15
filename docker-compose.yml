@@ -13,7 +13,7 @@ services:
     cap_add:
       - IPC_LOCK
     volumes:
-      - ./build/bin/orchestrate-hashicorp-vault-plugin:/vault/plugins/orchestrate
+      - ./build/bin/orchestrate-hashicorp-vault-plugin:/vault/plugins/orchestrate-hashicorp-vault-plugin
     environment:
       VAULT_DEV_ROOT_TOKEN_ID: "DevVaultToken"
     entrypoint: vault server -dev -dev-plugin-dir=/vault/plugins/ -dev-listen-address="0.0.0.0:8200" -log-level=trace

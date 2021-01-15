@@ -22,7 +22,7 @@ lint-ci: ## Check linting
 	@misspell -error $(GOFILES)
 	@golangci-lint run
 
-up: build
+prod: build
 	@docker-compose -f docker-compose.yml up --build vault-init vault
 dev: build
 	@docker-compose -f docker-compose.yml up --build vault-dev-init vault-dev
