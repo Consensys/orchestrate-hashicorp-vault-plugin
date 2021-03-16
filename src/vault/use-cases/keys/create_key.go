@@ -10,11 +10,14 @@ import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	usecases "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
+	eddsa "github.com/consensys/gnark/crypto/signature/eddsa/bn256"
 	"github.com/consensys/quorum/common/hexutil"
 	crypto2 "github.com/ethereum/go-ethereum/crypto"
 	"github.com/hashicorp/vault/sdk/logical"
 	"gitlab.com/ConsenSys/client/fr/core-stack/orchestrate.git/v2/pkg/errors"
 )
+
+const errMessageFailedGeneration = "failed to generate key"
 
 type createKeyUseCase struct {
 	storage logical.Storage
@@ -30,10 +33,15 @@ func (uc createKeyUseCase) WithStorage(storage logical.Storage) usecases.CreateK
 }
 
 func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, id, algo, curve, importedPrivKey string, tags map[string]string) (*entities.Key, error) {
-	logger := log.FromContext(ctx).With("namespace", namespace).With("algorithm", algo).With("curve", curve)
+	logger := log.FromContext(ctx).
+		With("namespace", namespace).
+		With("algorithm", algo).
+		With("curve", curve).
+		With("id", id)
 	logger.Debug("creating new key")
 
 	key := &entities.Key{
+		ID:        id,
 		Algorithm: algo,
 		Curve:     curve,
 		Namespace: namespace,
@@ -42,31 +50,18 @@ func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, id, algo, cu
 
 	switch {
 	case algo == entities.EDDSA && curve == entities.BN256:
-		privKey, err := crypto.NewBN256()
+		privKey, err := uc.eddsaBN256(importedPrivKey)
 		if err != nil {
-			errMessage := "failed to generate key"
-			logger.With("error", err).Error(errMessage)
+			logger.With("error", err).Error(errMessageFailedGeneration)
 			return nil, err
 		}
 		key.PrivateKey = hexutil.Encode(privKey.Bytes())
 		key.PublicKey = hexutil.Encode(privKey.Public().Bytes())
 	case algo == entities.ECDSA && curve == entities.Secp256k1:
-		var privKey = new(ecdsa.PrivateKey)
-		var err error
-		if importedPrivKey == "" {
-			privKey, err = crypto.NewSecp256k1()
-			if err != nil {
-				errMessage := "failed to generate Ethereum private key"
-				logger.With("error", err).Error(errMessage)
-				return nil, err
-			}
-		} else {
-			privKey, err = crypto.ImportSecp256k1(importedPrivKey)
-			if err != nil {
-				errMessage := "failed to import Ethereum private key, please verify that the provided private key is valid"
-				logger.With("error", err).Error(errMessage)
-				return nil, err
-			}
+		privKey, err := uc.ecdsaSecp256k1(importedPrivKey)
+		if err != nil {
+			logger.With("error", err).Error(errMessageFailedGeneration)
+			return nil, err
 		}
 
 		key.PrivateKey = hex.EncodeToString(crypto2.FromECDSA(privKey))
@@ -86,4 +81,32 @@ func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, id, algo, cu
 
 	logger.With("pub_key", key.PublicKey).Info("key pair created successfully")
 	return key, nil
+}
+
+func (*createKeyUseCase) eddsaBN256(importedPrivKey string) (eddsa.PrivateKey, error) {
+	if importedPrivKey == "" {
+		return crypto.NewBN256()
+	} else {
+		privKey := eddsa.PrivateKey{}
+
+		privKeyBytes, err := hexutil.Decode(importedPrivKey)
+		if err != nil {
+			return privKey, err
+		}
+
+		_, err = privKey.SetBytes(privKeyBytes)
+		if err != nil {
+			return privKey, err
+		}
+
+		return privKey, nil
+	}
+}
+
+func (*createKeyUseCase) ecdsaSecp256k1(importedPrivKey string) (*ecdsa.PrivateKey, error) {
+	if importedPrivKey == "" {
+		return crypto.NewSecp256k1()
+	} else {
+		return crypto.ImportSecp256k1(importedPrivKey)
+	}
 }

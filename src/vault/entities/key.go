@@ -7,5 +7,5 @@ type Key struct {
 	PrivateKey string            `json:"privateKey"`
 	PublicKey  string            `json:"publicKey"`
 	Namespace  string            `json:"namespace,omitempty"`
-	Tags       map[string]string `json:"tags"`
+	Tags       map[string]string `json:"tags,omitempty"`
 }

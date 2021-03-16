@@ -2,6 +2,7 @@ package zksnarks
 
 import (
 	"context"
+
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
@@ -21,7 +22,7 @@ func (c *controller) NewGetOperation() *framework.PathOperation {
 			{
 				Description: "Gets an account on the tenant0 namespace",
 				Data: map[string]interface{}{
-					formatters.AccountIDLabel: exampleAccount.PublicKey,
+					formatters.IDLabel: exampleAccount.PublicKey,
 				},
 				Response: successExample,
 			},
@@ -37,7 +38,7 @@ func (c *controller) NewGetOperation() *framework.PathOperation {
 
 func (c *controller) getHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
-		accountID := data.Get(formatters.AccountIDLabel).(string)
+		accountID := data.Get(formatters.IDLabel).(string)
 		namespace := formatters.GetRequestNamespace(req)
 
 		ctx = log.Context(ctx, c.logger)

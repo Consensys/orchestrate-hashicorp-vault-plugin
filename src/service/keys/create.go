@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/errors"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/hashicorp/vault/sdk/framework"
@@ -33,10 +34,20 @@ func (c *controller) NewCreateOperation() *framework.PathOperation {
 func (c *controller) createHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 		namespace := formatters.GetRequestNamespace(req)
-		id := data.Get(formatters.AccountIDLabel).(string)
-		curve := data.Get(formatters.DataLabel).(string)
-		algo := data.Get(formatters.DataLabel).(string)
+		id := data.Get(formatters.IDLabel).(string)
+		curve := data.Get(formatters.CurveLabel).(string)
+		algo := data.Get(formatters.AlgoLabel).(string)
 		tags := data.Get(formatters.TagsLabel).(map[string]string)
+
+		if id == "" {
+			return errors.BadRequestError(req, "id must be provided")
+		}
+		if curve == "" {
+			return errors.BadRequestError(req, "curve must be provided")
+		}
+		if algo == "" {
+			return errors.BadRequestError(req, "algorithm must be provided")
+		}
 
 		ctx = log.Context(ctx, c.logger)
 		key, err := c.useCases.CreateKey().WithStorage(req.Storage).Execute(ctx, namespace, id, algo, curve, "", tags)

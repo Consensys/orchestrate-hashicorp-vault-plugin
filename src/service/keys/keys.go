@@ -49,6 +49,28 @@ func (c *controller) pathKeys() *framework.Path {
 			logical.ListOperation:   c.NewListOperation(),
 			logical.ReadOperation:   c.NewListOperation(),
 		},
+		Fields: map[string]*framework.FieldSchema{
+			formatters.IDLabel: {
+				Type:        framework.TypeString,
+				Description: "ID of the key pair",
+				Required:    true,
+			},
+			formatters.CurveLabel: {
+				Type:        framework.TypeString,
+				Description: "Elliptic curve",
+				Required:    true,
+			},
+			formatters.AlgoLabel: {
+				Type:        framework.TypeString,
+				Description: "Signing algorithm",
+				Required:    true,
+			},
+			formatters.TagsLabel: {
+				Type:        framework.TypeKVPairs,
+				Description: "Tags",
+				Required:    true,
+			},
+		},
 	}
 }
 
@@ -65,10 +87,10 @@ func (c *controller) pathNamespaces() *framework.Path {
 
 func (c *controller) pathKey() *framework.Path {
 	return &framework.Path{
-		Pattern:      fmt.Sprintf("keys/%s", framework.GenericNameRegex(formatters.AccountIDLabel)),
+		Pattern:      fmt.Sprintf("keys/%s", framework.GenericNameRegex(formatters.IDLabel)),
 		HelpSynopsis: "Get, update or delete a key pair",
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AccountIDLabel: formatters.AddressFieldSchema,
+			formatters.IDLabel: formatters.AddressFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.ReadOperation: c.NewGetOperation(),
@@ -85,6 +107,26 @@ func (c *controller) pathImportKey() *framework.Path {
 				Description: "Private key in hexadecimal format",
 				Required:    true,
 			},
+			formatters.IDLabel: {
+				Type:        framework.TypeString,
+				Description: "ID of the key pair",
+				Required:    true,
+			},
+			formatters.CurveLabel: {
+				Type:        framework.TypeString,
+				Description: "Elliptic curve",
+				Required:    true,
+			},
+			formatters.AlgoLabel: {
+				Type:        framework.TypeString,
+				Description: "Signing algorithm",
+				Required:    true,
+			},
+			formatters.TagsLabel: {
+				Type:        framework.TypeKVPairs,
+				Description: "Tags",
+				Required:    true,
+			},
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: c.NewImportOperation(),
@@ -96,9 +138,9 @@ func (c *controller) pathImportKey() *framework.Path {
 
 func (c *controller) pathSignPayload() *framework.Path {
 	return &framework.Path{
-		Pattern: fmt.Sprintf("keys/%s/sign", framework.GenericNameRegex(formatters.AccountIDLabel)),
+		Pattern: fmt.Sprintf("keys/%s/sign", framework.GenericNameRegex(formatters.IDLabel)),
 		Fields: map[string]*framework.FieldSchema{
-			formatters.AccountIDLabel: formatters.AddressFieldSchema,
+			formatters.IDLabel: formatters.AddressFieldSchema,
 			formatters.DataLabel: {
 				Type:        framework.TypeString,
 				Description: "data to sign",

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/log"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/errors"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/hashicorp/vault/sdk/framework"
@@ -38,14 +39,23 @@ func (c *controller) NewImportOperation() *framework.PathOperation {
 func (c *controller) importHandler() framework.OperationFunc {
 	return func(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 		namespace := formatters.GetRequestNamespace(req)
-		id := data.Get(formatters.AccountIDLabel).(string)
-		curve := data.Get(formatters.DataLabel).(string)
-		algo := data.Get(formatters.DataLabel).(string)
+		id := data.Get(formatters.IDLabel).(string)
+		curve := data.Get(formatters.CurveLabel).(string)
+		algo := data.Get(formatters.AlgoLabel).(string)
 		tags := data.Get(formatters.TagsLabel).(map[string]string)
 		privateKeyString := data.Get(formatters.PrivateKeyLabel).(string)
 
+		if id == "" {
+			return errors.BadRequestError(req, "id must be provided")
+		}
+		if curve == "" {
+			return errors.BadRequestError(req, "curve must be provided")
+		}
+		if algo == "" {
+			return errors.BadRequestError(req, "algorithm must be provided")
+		}
 		if privateKeyString == "" {
-			return logical.ErrorResponse("privateKey must be provided"), nil
+			return errors.BadRequestError(req, "privateKey must be provided")
 		}
 
 		ctx = log.Context(ctx, c.logger)
