@@ -18,12 +18,12 @@ type KeysUseCases interface {
 }
 
 type CreateKeyUseCase interface {
-	Execute(ctx context.Context, namespace, algo, curve, importedPrivKey string, tags map[string]string) (*entities.Key, error)
+	Execute(ctx context.Context, namespace, id, algo, curve, importedPrivKey string, tags map[string]string) (*entities.Key, error)
 	WithStorage(storage logical.Storage) CreateKeyUseCase
 }
 
 type GetKeyUseCase interface {
-	Execute(ctx context.Context, address, namespace string) (*entities.Key, error)
+	Execute(ctx context.Context, id, namespace string) (*entities.Key, error)
 	WithStorage(storage logical.Storage) GetKeyUseCase
 }
 
@@ -33,7 +33,7 @@ type ListKeysUseCase interface {
 }
 
 type KeysSignUseCase interface {
-	Execute(ctx context.Context, address, namespace, data string) (string, error)
+	Execute(ctx context.Context, id, namespace, data string) (string, error)
 	WithStorage(storage logical.Storage) KeysSignUseCase
 }
 

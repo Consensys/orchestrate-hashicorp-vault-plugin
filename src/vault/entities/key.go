@@ -1,6 +1,7 @@
 package entities
 
 type Key struct {
+	ID         string            `json:"id"`
 	Curve      string            `json:"curve"`
 	Algorithm  string            `json:"algorithm"`
 	PrivateKey string            `json:"privateKey"`

@@ -29,7 +29,7 @@ func (uc createKeyUseCase) WithStorage(storage logical.Storage) usecases.CreateK
 	return &uc
 }
 
-func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, algo, curve, importedPrivKey string, tags map[string]string) (*entities.Key, error) {
+func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, id, algo, curve, importedPrivKey string, tags map[string]string) (*entities.Key, error) {
 	logger := log.FromContext(ctx).With("namespace", namespace).With("algorithm", algo).With("curve", curve)
 	logger.Debug("creating new key")
 
@@ -77,7 +77,7 @@ func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, algo, curve,
 		return nil, errors.InvalidParameterError(errMessage)
 	}
 
-	err := storage.StoreJSON(ctx, uc.storage, storage.ComputeKeysStorageKey(key.PublicKey, key.Namespace), key)
+	err := storage.StoreJSON(ctx, uc.storage, storage.ComputeKeysStorageKey(id, key.Namespace), key)
 	if err != nil {
 		errMessage := "failed to store key"
 		logger.With("error", err).Error(errMessage)

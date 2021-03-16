@@ -15,6 +15,9 @@ const (
 	PrivateFromLabel    = "privateFrom"
 	PrivateForLabel     = "privateFor"
 	PrivacyGroupIDLabel = "privacyGroupID"
+	TagsLabel           = "tags"
+	AlgoLabel           = "algorithm"
+	CurveLabel          = "curve"
 
 	NamespaceHeader = "X-Vault-Namespace"
 )
