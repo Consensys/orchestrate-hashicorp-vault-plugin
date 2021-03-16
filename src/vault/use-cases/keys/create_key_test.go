@@ -22,14 +22,14 @@ func TestCreateKey_Execute(t *testing.T) {
 	usecase := NewCreateKeyUseCase().WithStorage(mockStorage)
 
 	t.Run("should execute use case successfully by generating a private key", func(t *testing.T) {
-		fakeAccount := utils.FakeZksAccount()
+		fakeKey := utils.FakeKey()
 		mockStorage.EXPECT().Put(ctx, gomock.Any()).Return(nil)
 
-		account, err := usecase.Execute(ctx, fakeAccount.Namespace)
+		key, err := usecase.Execute(ctx, fakeKey.Namespace, fakeKey.ID, fakeKey.Algorithm, fakeKey.Curve, "", fakeKey.Tags)
 
 		assert.NoError(t, err)
-		assert.Equal(t, fakeAccount.Namespace, account.Namespace)
-		assert.NotEmpty(t, account.PublicKey)
+		assert.Equal(t, fakeKey.Namespace, key.Namespace)
+		assert.NotEmpty(t, key.PublicKey)
 	})
 
 	t.Run("should fail with same error if Put fails", func(t *testing.T) {
@@ -37,8 +37,8 @@ func TestCreateKey_Execute(t *testing.T) {
 
 		mockStorage.EXPECT().Put(ctx, gomock.Any()).Return(expectedErr)
 
-		account, err := usecase.Execute(ctx, "namespace")
-		assert.Nil(t, account)
+		key, err := usecase.Execute(ctx, "namespace", "id", "algo", "curve", "", map[string]string{})
+		assert.Nil(t, key)
 		assert.Equal(t, expectedErr, err)
 	})
 }

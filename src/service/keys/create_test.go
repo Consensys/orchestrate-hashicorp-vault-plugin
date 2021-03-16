@@ -12,12 +12,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func (s *zksCtrlTestSuite) TestZksController_Create() {
+func (s *keysCtrlTestSuite) TestZksController_Create() {
 	path := s.controller.Paths()[0]
 	createOperation := path.Operations[logical.CreateOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, "zk-snarks/accounts/?", path.Pattern)
+		assert.Equal(t, "keys/?", path.Pattern)
 		assert.NotEmpty(t, createOperation)
 	})
 
@@ -34,23 +34,25 @@ func (s *zksCtrlTestSuite) TestZksController_Create() {
 	})
 
 	s.T().Run("handler should execute the correct use case", func(t *testing.T) {
-		account := apputils.FakeZksAccount()
+		key := apputils.FakeKey()
 		request := &logical.Request{
 			Storage: s.storage,
 			Headers: map[string][]string{
-				formatters.NamespaceHeader: {account.Namespace},
+				formatters.NamespaceHeader: {key.Namespace},
 			},
 		}
 
-		s.createAccountUC.EXPECT().Execute(gomock.Any(), account.Namespace).Return(account, nil)
+		s.createKeyUC.EXPECT().Execute(gomock.Any(), key.Namespace, key.ID, key.Algorithm, key.Curve, "", key.Tags).Return(key, nil)
 
 		response, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
 
 		assert.NoError(t, err)
-		assert.Equal(t, account.PublicKey, response.Data["publicKey"])
-		assert.Equal(t, account.Namespace, response.Data["namespace"])
-		assert.Equal(t, account.Algorithm, response.Data["signingAlgorithm"])
-		assert.Equal(t, account.Curve, response.Data["curve"])
+		assert.Equal(t, key.PublicKey, response.Data["publicKey"])
+		assert.Equal(t, key.Namespace, response.Data["namespace"])
+		assert.Equal(t, key.Algorithm, response.Data["algorithm"])
+		assert.Equal(t, key.Curve, response.Data["curve"])
+		assert.Equal(t, key.ID, response.Data["id"])
+		assert.Equal(t, key.Tags, response.Data["tags"])
 	})
 
 	s.T().Run("should return same error if use case fails", func(t *testing.T) {
@@ -59,7 +61,7 @@ func (s *zksCtrlTestSuite) TestZksController_Create() {
 		}
 		expectedErr := fmt.Errorf("error")
 
-		s.createAccountUC.EXPECT().Execute(gomock.Any(), "").Return(nil, expectedErr)
+		s.createKeyUC.EXPECT().Execute(gomock.Any(), "namespace", "id", "algo", "curve", "", map[string]string{}).Return(nil, expectedErr)
 
 		response, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
 

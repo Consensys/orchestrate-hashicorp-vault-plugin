@@ -2,19 +2,20 @@ package keys
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/golang/mock/gomock"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
-func (s *zksCtrlTestSuite) TestZksController_ListNamespaces() {
+func (s *keysCtrlTestSuite) TestZksController_ListNamespaces() {
 	path := s.controller.Paths()[2]
 	listOperation := path.Operations[logical.ListOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, "zk-snarks/namespaces/?", path.Pattern)
+		assert.Equal(t, "keys/?", path.Pattern)
 		assert.NotEmpty(t, listOperation)
 	})
 

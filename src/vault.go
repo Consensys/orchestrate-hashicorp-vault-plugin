@@ -20,7 +20,7 @@ func NewVaultBackend(ctx context.Context, conf *logical.BackendConfig) (logical.
 			SealWrapStorage: []string{
 				"ethereum/accounts/",
 				"zk-snarks/accounts/",
-				"keys",
+				"keys/",
 			},
 		},
 		Secrets:     []*framework.Secret{},

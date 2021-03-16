@@ -15,28 +15,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetAccount_Execute(t *testing.T) {
+func TestGetKey_Execute(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	mockStorage := mocks.NewMockStorage(ctrl)
 	ctx := log.Context(context.Background(), log.Default())
 
-	usecase := NewGetAccountUseCase().WithStorage(mockStorage)
+	usecase := NewGetKeyUseCase().WithStorage(mockStorage)
 
 	t.Run("should execute use case successfully", func(t *testing.T) {
-		fakeAccount := apputils.FakeZksAccount()
-		expectedEntry, _ := logical.StorageEntryJSON(
-			storage.ComputeZksStorageKey(fakeAccount.PublicKey, fakeAccount.Namespace), fakeAccount)
+		fakeKey := apputils.FakeKey()
+		expectedEntry, _ := logical.StorageEntryJSON(storage.ComputeZksStorageKey(fakeKey.ID, fakeKey.Namespace), fakeKey)
 		mockStorage.EXPECT().
-			Get(ctx, storage.ComputeZksStorageKey(fakeAccount.PublicKey, fakeAccount.Namespace)).
+			Get(ctx, storage.ComputeZksStorageKey(fakeKey.ID, fakeKey.Namespace)).
 			Return(expectedEntry, nil)
 
-		account, err := usecase.Execute(ctx, fakeAccount.PublicKey, fakeAccount.Namespace)
+		key, err := usecase.Execute(ctx, fakeKey.ID, fakeKey.Namespace)
 
 		assert.NoError(t, err)
-		assert.Equal(t, fakeAccount.Namespace, account.Namespace)
-		assert.NotEmpty(t, account.PublicKey)
+		assert.Equal(t, fakeKey.Namespace, key.Namespace)
+		assert.NotEmpty(t, key.PublicKey)
+		assert.Equal(t, fakeKey.ID, key.ID)
 	})
 
 	t.Run("should fail with same error if Get fails", func(t *testing.T) {
@@ -44,18 +44,18 @@ func TestGetAccount_Execute(t *testing.T) {
 
 		mockStorage.EXPECT().Get(ctx, gomock.Any()).Return(nil, expectedErr)
 
-		account, err := usecase.Execute(ctx, "0xaddress", "namespace")
+		key, err := usecase.Execute(ctx, "my-key", "namespace")
 
-		assert.Nil(t, account)
+		assert.Nil(t, key)
 		assert.Equal(t, expectedErr, err)
 	})
 
 	t.Run("should return CodedError with status 404 if nothing is found", func(t *testing.T) {
 		mockStorage.EXPECT().Get(ctx, gomock.Any()).Return(nil, nil)
 
-		account, err := usecase.Execute(ctx, "0xaddress", "namespace")
+		key, err := usecase.Execute(ctx, "my-key", "namespace")
 
-		assert.Nil(t, account)
+		assert.Nil(t, key)
 		assert.Error(t, err)
 
 		codedError, ok := err.(logical.HTTPCodedError)

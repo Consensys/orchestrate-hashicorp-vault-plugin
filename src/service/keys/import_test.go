@@ -12,12 +12,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func (s *ethereumCtrlTestSuite) TestEthereumController_Import() {
+func (s *keysCtrlTestSuite) TestEthereumController_Import() {
 	path := s.controller.Paths()[1]
 	importOperation := path.Operations[logical.CreateOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, "ethereum/accounts/import", path.Pattern)
+		assert.Equal(t, "keys/import", path.Pattern)
 		assert.NotEmpty(t, importOperation)
 	})
 
@@ -35,12 +35,12 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Import() {
 	})
 
 	s.T().Run("handler should execute the correct use case", func(t *testing.T) {
-		account := apputils.FakeETHAccount()
+		key := apputils.FakeKey()
 		privKey := "fa88c4a5912f80503d6b5503880d0745f4b88a1ff90ce8f64cdd8f32cc3bc249"
 		request := &logical.Request{
 			Storage: s.storage,
 			Headers: map[string][]string{
-				formatters.NamespaceHeader: {account.Namespace},
+				formatters.NamespaceHeader: {key.Namespace},
 			},
 		}
 		data := &framework.FieldData{
@@ -56,15 +56,17 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Import() {
 			},
 		}
 
-		s.createAccountUC.EXPECT().Execute(gomock.Any(), account.Namespace, privKey).Return(account, nil)
+		s.createKeyUC.EXPECT().Execute(gomock.Any(), key.Namespace, key.ID, key.Algorithm, key.Curve, privKey, key.Tags).Return(key, nil)
 
 		response, err := importOperation.Handler()(s.ctx, request, data)
 
 		assert.NoError(t, err)
-		assert.Equal(t, account.Address, response.Data["address"])
-		assert.Equal(t, account.PublicKey, response.Data["publicKey"])
-		assert.Equal(t, account.CompressedPublicKey, response.Data["compressedPublicKey"])
-		assert.Equal(t, account.Namespace, response.Data["namespace"])
+		assert.Equal(t, key.ID, response.Data["id"])
+		assert.Equal(t, key.PublicKey, response.Data["publicKey"])
+		assert.Equal(t, key.Namespace, response.Data["namespace"])
+		assert.Equal(t, key.Curve, response.Data["curve"])
+		assert.Equal(t, key.Algorithm, response.Data["algorithm"])
+		assert.Equal(t, key.Tags, response.Data["tags"])
 	})
 
 	s.T().Run("should return same error if use case fails", func(t *testing.T) {
@@ -86,7 +88,7 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Import() {
 		}
 		expectedErr := fmt.Errorf("error")
 
-		s.createAccountUC.EXPECT().Execute(gomock.Any(), "", privKey).Return(nil, expectedErr)
+		s.createKeyUC.EXPECT().Execute(gomock.Any(), "", "id", "algo", "curve", privKey, map[string]string{}).Return(nil, expectedErr)
 
 		response, err := importOperation.Handler()(s.ctx, request, data)
 

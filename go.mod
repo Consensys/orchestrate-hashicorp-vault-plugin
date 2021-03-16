@@ -13,6 +13,7 @@ require (
 	github.com/status-im/keycard-go v0.0.0-20190316090335-8537d3370df4
 	github.com/stretchr/testify v1.6.1
 	gitlab.com/ConsenSys/client/fr/core-stack/orchestrate.git/v2 v2.6.0-alpha.1
+	gopkg.in/ns1/ns1-go.v2 v2.0.0-20190730140822-b51389932cbc
 )
 
 replace (

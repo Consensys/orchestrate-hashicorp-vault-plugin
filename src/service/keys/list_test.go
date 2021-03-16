@@ -2,16 +2,17 @@ package keys
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
 	apputils "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/golang/mock/gomock"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
-func (s *zksCtrlTestSuite) TestEthereumController_List() {
+func (s *keysCtrlTestSuite) TestKeysController_List() {
 	path := s.controller.Paths()[0]
 	listOperation := path.Operations[logical.ListOperation]
 
@@ -42,7 +43,7 @@ func (s *zksCtrlTestSuite) TestEthereumController_List() {
 		}
 		data := &framework.FieldData{}
 
-		s.listAccountsUC.EXPECT().Execute(gomock.Any(), account.Namespace).Return(expectedList, nil)
+		s.listKeysUC.EXPECT().Execute(gomock.Any(), account.Namespace).Return(expectedList, nil)
 
 		response, err := listOperation.Handler()(s.ctx, request, data)
 
@@ -57,7 +58,7 @@ func (s *zksCtrlTestSuite) TestEthereumController_List() {
 		data := &framework.FieldData{}
 		expectedErr := fmt.Errorf("error")
 
-		s.listAccountsUC.EXPECT().Execute(gomock.Any(), "").Return(nil, expectedErr)
+		s.listKeysUC.EXPECT().Execute(gomock.Any(), "").Return(nil, expectedErr)
 
 		response, err := listOperation.Handler()(s.ctx, request, data)
 

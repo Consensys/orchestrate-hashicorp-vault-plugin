@@ -22,6 +22,12 @@ const (
 	NamespaceHeader = "X-Vault-Namespace"
 )
 
+var IDFieldSchema = &framework.FieldSchema{
+	Type:        framework.TypeString,
+	Description: "ID of the key pair",
+	Required:    true,
+}
+
 var AddressFieldSchema = &framework.FieldSchema{
 	Type:        framework.TypeString,
 	Description: "Address of the account",

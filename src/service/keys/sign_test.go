@@ -10,15 +10,14 @@ import (
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/assert"
-	"gitlab.com/ConsenSys/client/fr/core-stack/orchestrate.git/v2/pkg/types/testutils"
 )
 
-func (s *zksCtrlTestSuite) TestZksController_Sign() {
+func (s *keysCtrlTestSuite) TestKeysController_Sign() {
 	path := s.controller.Paths()[3]
 	signOperation := path.Operations[logical.CreateOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, fmt.Sprintf("zk-snarks/accounts/%s/sign", framework.GenericNameRegex(formatters.AccountIDLabel)), path.Pattern)
+		assert.Equal(t, fmt.Sprintf("keys/%s/sign", framework.GenericNameRegex(formatters.IDLabel)), path.Pattern)
 		assert.NotEmpty(t, signOperation)
 	})
 
@@ -37,7 +36,7 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 	})
 
 	s.T().Run("handler should execute the correct use case", func(t *testing.T) {
-		account := utils.FakeZksAccount()
+		account := utils.FakeKey()
 		payload := "my data to sign"
 		request := &logical.Request{
 			Storage: s.storage,
@@ -47,11 +46,11 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AccountIDLabel: account.PublicKey,
-				formatters.DataLabel:      payload,
+				formatters.IDLabel:   account.PublicKey,
+				formatters.DataLabel: payload,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AccountIDLabel: formatters.AddressFieldSchema,
+				formatters.IDLabel: formatters.AddressFieldSchema,
 				formatters.DataLabel: {
 					Type:        framework.TypeString,
 					Description: "data to sign",
@@ -70,18 +69,18 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 	})
 
 	s.T().Run("should return same error if use case fails", func(t *testing.T) {
-		account := testutils.FakeETHAccount()
+		key := utils.FakeKey()
 		payload := "my data to sign"
 		request := &logical.Request{
 			Storage: s.storage,
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AccountIDLabel: account.Address,
-				formatters.DataLabel:      payload,
+				formatters.IDLabel:   key.ID,
+				formatters.DataLabel: payload,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AccountIDLabel: formatters.AddressFieldSchema,
+				formatters.IDLabel: formatters.AddressFieldSchema,
 				formatters.DataLabel: {
 					Type:        framework.TypeString,
 					Description: "data to sign",
@@ -91,7 +90,7 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 		}
 		expectedErr := fmt.Errorf("error")
 
-		s.signPayloadUC.EXPECT().Execute(gomock.Any(), account.Address, "", payload).Return("", expectedErr)
+		s.signPayloadUC.EXPECT().Execute(gomock.Any(), key.ID, "", payload).Return("", expectedErr)
 
 		response, err := signOperation.Handler()(s.ctx, request, data)
 

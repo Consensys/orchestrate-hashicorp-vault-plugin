@@ -17,7 +17,7 @@ func (s *zksCtrlTestSuite) TestZksController_Get() {
 	getOperation := path.Operations[logical.ReadOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, fmt.Sprintf("zk-snarks/accounts/%s", framework.GenericNameRegex(formatters.AccountIDLabel)), path.Pattern)
+		assert.Equal(t, fmt.Sprintf("zk-snarks/accounts/%s", framework.GenericNameRegex(formatters.IDLabel)), path.Pattern)
 		assert.NotEmpty(t, getOperation)
 	})
 
@@ -44,10 +44,10 @@ func (s *zksCtrlTestSuite) TestZksController_Get() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AccountIDLabel: account.PublicKey,
+				formatters.IDLabel: account.PublicKey,
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AccountIDLabel: formatters.AddressFieldSchema,
+				formatters.IDLabel: formatters.AddressFieldSchema,
 			},
 		}
 
@@ -68,10 +68,10 @@ func (s *zksCtrlTestSuite) TestZksController_Get() {
 		}
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
-				formatters.AccountIDLabel: "myAddress",
+				formatters.IDLabel: "myAddress",
 			},
 			Schema: map[string]*framework.FieldSchema{
-				formatters.AccountIDLabel: formatters.AddressFieldSchema,
+				formatters.IDLabel: formatters.AddressFieldSchema,
 			},
 		}
 		expectedErr := fmt.Errorf("error")
