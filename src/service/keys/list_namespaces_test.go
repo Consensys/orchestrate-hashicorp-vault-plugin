@@ -10,12 +10,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func (s *keysCtrlTestSuite) TestZksController_ListNamespaces() {
-	path := s.controller.Paths()[2]
+func (s *keysCtrlTestSuite) TestKeysController_ListNamespaces() {
+	path := s.controller.Paths()[4]
 	listOperation := path.Operations[logical.ListOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, "keys/?", path.Pattern)
+		assert.Equal(t, "keys/namespaces/?", path.Pattern)
 		assert.NotEmpty(t, listOperation)
 	})
 

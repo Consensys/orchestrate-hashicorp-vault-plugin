@@ -26,9 +26,9 @@ func TestGetKey_Execute(t *testing.T) {
 
 	t.Run("should execute use case successfully", func(t *testing.T) {
 		fakeKey := apputils.FakeKey()
-		expectedEntry, _ := logical.StorageEntryJSON(storage.ComputeZksStorageKey(fakeKey.ID, fakeKey.Namespace), fakeKey)
+		expectedEntry, _ := logical.StorageEntryJSON(storage.ComputeKeysStorageKey(fakeKey.ID, fakeKey.Namespace), fakeKey)
 		mockStorage.EXPECT().
-			Get(ctx, storage.ComputeZksStorageKey(fakeKey.ID, fakeKey.Namespace)).
+			Get(ctx, storage.ComputeKeysStorageKey(fakeKey.ID, fakeKey.Namespace)).
 			Return(expectedEntry, nil)
 
 		key, err := usecase.Execute(ctx, fakeKey.ID, fakeKey.Namespace)

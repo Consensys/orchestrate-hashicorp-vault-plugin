@@ -50,11 +50,7 @@ func (c *controller) pathKeys() *framework.Path {
 			logical.ReadOperation:   c.NewListOperation(),
 		},
 		Fields: map[string]*framework.FieldSchema{
-			formatters.IDLabel: {
-				Type:        framework.TypeString,
-				Description: "ID of the key pair",
-				Required:    true,
-			},
+			formatters.IDLabel: formatters.IDFieldSchema,
 			formatters.CurveLabel: {
 				Type:        framework.TypeString,
 				Description: "Elliptic curve",
@@ -90,7 +86,7 @@ func (c *controller) pathKey() *framework.Path {
 		Pattern:      fmt.Sprintf("keys/%s", framework.GenericNameRegex(formatters.IDLabel)),
 		HelpSynopsis: "Get, update or delete a key pair",
 		Fields: map[string]*framework.FieldSchema{
-			formatters.IDLabel: formatters.AddressFieldSchema,
+			formatters.IDLabel: formatters.IDFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.ReadOperation: c.NewGetOperation(),
@@ -107,11 +103,7 @@ func (c *controller) pathImportKey() *framework.Path {
 				Description: "Private key in hexadecimal format",
 				Required:    true,
 			},
-			formatters.IDLabel: {
-				Type:        framework.TypeString,
-				Description: "ID of the key pair",
-				Required:    true,
-			},
+			formatters.IDLabel: formatters.IDFieldSchema,
 			formatters.CurveLabel: {
 				Type:        framework.TypeString,
 				Description: "Elliptic curve",
@@ -125,7 +117,6 @@ func (c *controller) pathImportKey() *framework.Path {
 			formatters.TagsLabel: {
 				Type:        framework.TypeKVPairs,
 				Description: "Tags",
-				Required:    true,
 			},
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{

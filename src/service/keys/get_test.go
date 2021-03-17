@@ -13,7 +13,7 @@ import (
 )
 
 func (s *keysCtrlTestSuite) TestKeysController_Get() {
-	path := s.controller.Paths()[1]
+	path := s.controller.Paths()[2]
 	getOperation := path.Operations[logical.ReadOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
@@ -58,7 +58,7 @@ func (s *keysCtrlTestSuite) TestKeysController_Get() {
 		assert.NoError(t, err)
 		assert.Equal(t, key.PublicKey, response.Data["publicKey"])
 		assert.Equal(t, key.Namespace, response.Data["namespace"])
-		assert.Equal(t, key.Algorithm, response.Data["signingAlgorithm"])
+		assert.Equal(t, key.Algorithm, response.Data["algorithm"])
 		assert.Equal(t, key.Curve, response.Data["curve"])
 		assert.Equal(t, key.ID, response.Data["id"])
 		assert.Equal(t, key.Tags, response.Data["tags"])

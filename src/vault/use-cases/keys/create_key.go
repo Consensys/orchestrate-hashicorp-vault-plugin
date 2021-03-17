@@ -87,19 +87,7 @@ func (*createKeyUseCase) eddsaBN256(importedPrivKey string) (eddsa.PrivateKey, e
 	if importedPrivKey == "" {
 		return crypto.NewBN256()
 	} else {
-		privKey := eddsa.PrivateKey{}
-
-		privKeyBytes, err := hexutil.Decode(importedPrivKey)
-		if err != nil {
-			return privKey, err
-		}
-
-		_, err = privKey.SetBytes(privKeyBytes)
-		if err != nil {
-			return privKey, err
-		}
-
-		return privKey, nil
+		return crypto.ImportBN256(importedPrivKey)
 	}
 }
 

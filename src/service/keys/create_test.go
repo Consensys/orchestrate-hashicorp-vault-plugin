@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func (s *keysCtrlTestSuite) TestZksController_Create() {
+func (s *keysCtrlTestSuite) TestKeysController_Create() {
 	path := s.controller.Paths()[0]
 	createOperation := path.Operations[logical.CreateOperation]
 
@@ -41,10 +41,36 @@ func (s *keysCtrlTestSuite) TestZksController_Create() {
 				formatters.NamespaceHeader: {key.Namespace},
 			},
 		}
+		data := &framework.FieldData{
+			Raw: map[string]interface{}{
+				formatters.CurveLabel: key.Curve,
+				formatters.AlgoLabel:  key.Algorithm,
+				formatters.IDLabel:    key.ID,
+				formatters.TagsLabel:  key.Tags,
+			},
+			Schema: map[string]*framework.FieldSchema{
+				formatters.IDLabel: formatters.IDFieldSchema,
+				formatters.CurveLabel: {
+					Type:        framework.TypeString,
+					Description: "Elliptic curve",
+					Required:    true,
+				},
+				formatters.AlgoLabel: {
+					Type:        framework.TypeString,
+					Description: "Signing algorithm",
+					Required:    true,
+				},
+				formatters.TagsLabel: {
+					Type:        framework.TypeKVPairs,
+					Description: "Tags",
+					Required:    true,
+				},
+			},
+		}
 
 		s.createKeyUC.EXPECT().Execute(gomock.Any(), key.Namespace, key.ID, key.Algorithm, key.Curve, "", key.Tags).Return(key, nil)
 
-		response, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
+		response, err := createOperation.Handler()(s.ctx, request, data)
 
 		assert.NoError(t, err)
 		assert.Equal(t, key.PublicKey, response.Data["publicKey"])
@@ -59,11 +85,36 @@ func (s *keysCtrlTestSuite) TestZksController_Create() {
 		request := &logical.Request{
 			Storage: s.storage,
 		}
+		data := &framework.FieldData{
+			Raw: map[string]interface{}{
+				formatters.CurveLabel: "curve",
+				formatters.AlgoLabel:  "algo",
+				formatters.IDLabel:    "id",
+			},
+			Schema: map[string]*framework.FieldSchema{
+				formatters.IDLabel: formatters.IDFieldSchema,
+				formatters.CurveLabel: {
+					Type:        framework.TypeString,
+					Description: "Elliptic curve",
+					Required:    true,
+				},
+				formatters.AlgoLabel: {
+					Type:        framework.TypeString,
+					Description: "Signing algorithm",
+					Required:    true,
+				},
+				formatters.TagsLabel: {
+					Type:        framework.TypeKVPairs,
+					Description: "Tags",
+					Required:    true,
+				},
+			},
+		}
 		expectedErr := fmt.Errorf("error")
 
-		s.createKeyUC.EXPECT().Execute(gomock.Any(), "namespace", "id", "algo", "curve", "", map[string]string{}).Return(nil, expectedErr)
+		s.createKeyUC.EXPECT().Execute(gomock.Any(), "", "id", "algo", "curve", "", map[string]string{}).Return(nil, expectedErr)
 
-		response, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
+		response, err := createOperation.Handler()(s.ctx, request, data)
 
 		assert.Empty(t, response)
 		assert.Equal(t, expectedErr, err)

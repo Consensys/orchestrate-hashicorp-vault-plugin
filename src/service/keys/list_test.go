@@ -17,7 +17,7 @@ func (s *keysCtrlTestSuite) TestKeysController_List() {
 	listOperation := path.Operations[logical.ListOperation]
 
 	s.T().Run("should define the correct path", func(t *testing.T) {
-		assert.Equal(t, "zk-snarks/accounts/?", path.Pattern)
+		assert.Equal(t, "keys/?", path.Pattern)
 		assert.NotEmpty(t, listOperation)
 	})
 
@@ -33,17 +33,17 @@ func (s *keysCtrlTestSuite) TestKeysController_List() {
 	})
 
 	s.T().Run("handler should execute the correct use case", func(t *testing.T) {
-		account := apputils.FakeZksAccount()
-		expectedList := []string{account.PublicKey}
+		key := apputils.FakeKey()
+		expectedList := []string{key.ID}
 		request := &logical.Request{
 			Storage: s.storage,
 			Headers: map[string][]string{
-				formatters.NamespaceHeader: {account.Namespace},
+				formatters.NamespaceHeader: {key.Namespace},
 			},
 		}
 		data := &framework.FieldData{}
 
-		s.listKeysUC.EXPECT().Execute(gomock.Any(), account.Namespace).Return(expectedList, nil)
+		s.listKeysUC.EXPECT().Execute(gomock.Any(), key.Namespace).Return(expectedList, nil)
 
 		response, err := listOperation.Handler()(s.ctx, request, data)
 

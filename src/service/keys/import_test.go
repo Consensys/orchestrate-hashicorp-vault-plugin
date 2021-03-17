@@ -46,11 +46,35 @@ func (s *keysCtrlTestSuite) TestEthereumController_Import() {
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
 				formatters.PrivateKeyLabel: privKey,
+				formatters.CurveLabel:      key.Curve,
+				formatters.AlgoLabel:       key.Algorithm,
+				formatters.IDLabel:         key.ID,
+				formatters.TagsLabel:       key.Tags,
 			},
 			Schema: map[string]*framework.FieldSchema{
 				formatters.PrivateKeyLabel: {
 					Type:        framework.TypeString,
 					Description: "Private key in hexadecimal format",
+					Required:    true,
+				},
+				formatters.IDLabel: {
+					Type:        framework.TypeString,
+					Description: "ID of the key pair",
+					Required:    true,
+				},
+				formatters.CurveLabel: {
+					Type:        framework.TypeString,
+					Description: "Elliptic curve",
+					Required:    true,
+				},
+				formatters.AlgoLabel: {
+					Type:        framework.TypeString,
+					Description: "Signing algorithm",
+					Required:    true,
+				},
+				formatters.TagsLabel: {
+					Type:        framework.TypeKVPairs,
+					Description: "Tags",
 					Required:    true,
 				},
 			},
@@ -77,11 +101,34 @@ func (s *keysCtrlTestSuite) TestEthereumController_Import() {
 		data := &framework.FieldData{
 			Raw: map[string]interface{}{
 				formatters.PrivateKeyLabel: privKey,
+				formatters.CurveLabel:      "curve",
+				formatters.AlgoLabel:       "algo",
+				formatters.IDLabel:         "id",
 			},
 			Schema: map[string]*framework.FieldSchema{
 				formatters.PrivateKeyLabel: {
 					Type:        framework.TypeString,
 					Description: "Private key in hexadecimal format",
+					Required:    true,
+				},
+				formatters.IDLabel: {
+					Type:        framework.TypeString,
+					Description: "ID of the key pair",
+					Required:    true,
+				},
+				formatters.CurveLabel: {
+					Type:        framework.TypeString,
+					Description: "Elliptic curve",
+					Required:    true,
+				},
+				formatters.AlgoLabel: {
+					Type:        framework.TypeString,
+					Description: "Signing algorithm",
+					Required:    true,
+				},
+				formatters.TagsLabel: {
+					Type:        framework.TypeKVPairs,
+					Description: "Tags",
 					Required:    true,
 				},
 			},

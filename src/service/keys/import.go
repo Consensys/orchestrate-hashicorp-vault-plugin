@@ -12,7 +12,7 @@ import (
 )
 
 func (c *controller) NewImportOperation() *framework.PathOperation {
-	exampleAccount := utils.ExampleKey()
+	exampleKey := utils.ExampleKey()
 	successExample := utils.Example200KeyResponse()
 
 	return &framework.PathOperation{
@@ -23,7 +23,11 @@ func (c *controller) NewImportOperation() *framework.PathOperation {
 			{
 				Description: "Imports a key pair on the tenant0 namespace",
 				Data: map[string]interface{}{
-					formatters.PrivateKeyLabel: exampleAccount.PrivateKey,
+					formatters.PrivateKeyLabel: exampleKey.PrivateKey,
+					formatters.CurveLabel:      exampleKey.Curve,
+					formatters.AlgoLabel:       exampleKey.Algorithm,
+					formatters.IDLabel:         exampleKey.ID,
+					formatters.TagsLabel:       exampleKey.Tags,
 				},
 				Response: successExample,
 			},
