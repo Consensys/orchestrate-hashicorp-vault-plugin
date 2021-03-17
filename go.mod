@@ -10,10 +10,8 @@ require (
 	github.com/hashicorp/go-hclog v0.9.2
 	github.com/hashicorp/vault/api v1.0.5-0.20200117231345-460d63e36490
 	github.com/hashicorp/vault/sdk v0.1.14-0.20200305172021-03a3749f220d
-	github.com/status-im/keycard-go v0.0.0-20190316090335-8537d3370df4
 	github.com/stretchr/testify v1.6.1
 	gitlab.com/ConsenSys/client/fr/core-stack/orchestrate.git/v2 v2.6.0-alpha.1
-	gopkg.in/ns1/ns1-go.v2 v2.0.0-20190730140822-b51389932cbc
 )
 
 replace (
