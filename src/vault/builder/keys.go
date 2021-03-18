@@ -15,8 +15,10 @@ type keysUseCases struct {
 
 func NewKeysUseCases() usecases.KeysUseCases {
 	return &keysUseCases{
-		createKey: keys.NewCreateKeyUseCase(),
-		getKey:    keys.NewGetKeyUseCase(),
+		createKey:      keys.NewCreateKeyUseCase(),
+		getKey:         keys.NewGetKeyUseCase(),
+		listKeys:       keys.NewListKeysUseCase(),
+		listNamespaces: keys.NewListNamespacesUseCase(),
 	}
 }
 
