@@ -16,8 +16,6 @@ import (
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
-const errMessageFailedGeneration = "failed to generate key"
-
 type createKeyUseCase struct {
 	storage logical.Storage
 }
