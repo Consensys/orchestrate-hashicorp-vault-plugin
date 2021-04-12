@@ -53,7 +53,7 @@ func (uc *createAccountUseCase) Execute(ctx context.Context, namespace, imported
 		if err != nil {
 			errMessage := "failed to import Ethereum private key, please verify that the provided private key is valid"
 			logger.With("error", err).Error(errMessage)
-			return nil, errors.CryptoOperationError(errMessage)
+			return nil, errors.InvalidParameterError(errMessage)
 		}
 	}
 

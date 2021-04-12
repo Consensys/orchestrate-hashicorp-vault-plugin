@@ -12,10 +12,10 @@ func WriteHTTPError(req *logical.Request, err error) (*logical.Response, error) 
 		return logical.RespondWithStatusCode(logical.ErrorResponse(err.Error()), req, http.StatusConflict)
 	case errors.IsNotFoundError(err):
 		return logical.RespondWithStatusCode(logical.ErrorResponse(err.Error()), req, http.StatusNotFound)
-	case errors.IsInvalidFormatError(err):
-		return logical.RespondWithStatusCode(logical.ErrorResponse(err.Error()), req, http.StatusBadRequest)
 	case errors.IsInvalidParameterError(err), errors.IsEncodingError(err):
 		return logical.RespondWithStatusCode(logical.ErrorResponse(err.Error()), req, http.StatusUnprocessableEntity)
+	case errors.IsInvalidFormatError(err):
+		return logical.RespondWithStatusCode(logical.ErrorResponse(err.Error()), req, http.StatusBadRequest)
 	default:
 		return logical.RespondWithStatusCode(logical.ErrorResponse("internal server error. Please retry or contact an administrator"), req, http.StatusInternalServerError)
 	}
