@@ -3,13 +3,13 @@ package keys
 import (
 	"context"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
-	"github.com/consensys/gnark/crypto/hash"
+	"github.com/consensys/gnark-crypto/crypto/hash"
+	"github.com/consensys/gnark-crypto/ecc/bn254/twistededwards/eddsa"
 	"github.com/hashicorp/go-hclog"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
 	usecases "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
-	eddsa "github.com/consensys/gnark/crypto/signature/eddsa/bn256"
 	"github.com/consensys/quorum/common/hexutil"
 	"github.com/consensys/quorum/crypto"
 	"github.com/hashicorp/vault/sdk/logical"
@@ -40,7 +40,7 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, id, namespace, data s
 	}
 
 	switch {
-	case key.Algorithm == entities.EDDSA && key.Curve == entities.BN256:
+	case key.Algorithm == entities.EDDSA && key.Curve == entities.BN254:
 		return uc.signEDDSA(logger, key.PrivateKey, data)
 	case key.Algorithm == entities.ECDSA && key.Curve == entities.Secp256k1:
 		return uc.signECDSA(logger, key.PrivateKey, data)
@@ -79,7 +79,7 @@ func (uc *signPayloadUseCase) signEDDSA(logger hclog.Logger, privKeyString, data
 		return "", errors.CryptoOperationError(errMessage)
 	}
 
-	signatureB, err := privKey.Sign([]byte(data), hash.MIMC_BN256.New("seed"))
+	signatureB, err := privKey.Sign([]byte(data), hash.MIMC_BN254.New("seed"))
 	if err != nil {
 		errMessage := "failed to sign payload with EDDSA"
 		logger.With("error", err).Error(errMessage)

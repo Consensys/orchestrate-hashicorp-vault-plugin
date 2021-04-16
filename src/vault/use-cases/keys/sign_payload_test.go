@@ -44,7 +44,7 @@ func TestSignPayload_Execute(t *testing.T) {
 
 	t.Run("should execute use case successfully: EDDSA", func(t *testing.T) {
 		key := apputils.FakeKey()
-		key.Curve = entities.BN256
+		key.Curve = entities.BN254
 		key.Algorithm = entities.EDDSA
 
 		mockGetKeyUC.EXPECT().Execute(ctx, address, namespace).Return(key, nil)
@@ -68,7 +68,7 @@ func TestSignPayload_Execute(t *testing.T) {
 
 	t.Run("should fail if creation of EDDSA private key fails", func(t *testing.T) {
 		key := apputils.FakeKey()
-		key.Curve = entities.BN256
+		key.Curve = entities.BN254
 		key.Algorithm = entities.EDDSA
 		key.PrivateKey = "account.PrivateKey"
 
