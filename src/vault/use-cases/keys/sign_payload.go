@@ -2,8 +2,8 @@ package keys
 
 import (
 	"context"
-	"crypto/sha256"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
+	"github.com/consensys/gnark/crypto/hash"
 	"github.com/hashicorp/go-hclog"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/log"
@@ -79,7 +79,7 @@ func (uc *signPayloadUseCase) signEDDSA(logger hclog.Logger, privKeyString, data
 		return "", errors.CryptoOperationError(errMessage)
 	}
 
-	signatureB, err := privKey.Sign([]byte(data), sha256.New())
+	signatureB, err := privKey.Sign([]byte(data), hash.MIMC_BN256.New("seed"))
 	if err != nil {
 		errMessage := "failed to sign payload with EDDSA"
 		logger.With("error", err).Error(errMessage)

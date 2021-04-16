@@ -2,8 +2,8 @@ package zksnarks
 
 import (
 	"context"
-	"crypto/sha256"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
+	"github.com/consensys/gnark/crypto/hash"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
@@ -45,7 +45,7 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, pubKey, namespace, da
 		return "", errors.CryptoOperationError(errMessage)
 	}
 
-	signatureB, err := privKey.Sign([]byte(data), sha256.New())
+	signatureB, err := privKey.Sign([]byte(data), hash.MIMC_BN256.New("seed"))
 	if err != nil {
 		errMessage := "failed to sign payload"
 		logger.With("error", err).Error(errMessage)
