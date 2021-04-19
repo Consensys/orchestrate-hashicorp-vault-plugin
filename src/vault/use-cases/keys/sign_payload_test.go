@@ -3,6 +3,7 @@ package keys
 import (
 	"context"
 	"fmt"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
 	"testing"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/log"
@@ -36,7 +37,7 @@ func TestSignPayload_Execute(t *testing.T) {
 
 		mockGetKeyUC.EXPECT().Execute(ctx, address, namespace).Return(key, nil)
 
-		signature, err := usecase.Execute(ctx, address, namespace, "my data to sign")
+		signature, err := usecase.Execute(ctx, address, namespace, "0xdaaa")
 
 		assert.NoError(t, err)
 		assert.NotEmpty(t, signature)
@@ -49,7 +50,7 @@ func TestSignPayload_Execute(t *testing.T) {
 
 		mockGetKeyUC.EXPECT().Execute(ctx, address, namespace).Return(key, nil)
 
-		signature, err := usecase.Execute(ctx, address, namespace, "my data to sign")
+		signature, err := usecase.Execute(ctx, address, namespace, "0xdaaa")
 
 		assert.NoError(t, err)
 		assert.NotEmpty(t, signature)
@@ -60,7 +61,7 @@ func TestSignPayload_Execute(t *testing.T) {
 
 		mockGetKeyUC.EXPECT().Execute(ctx, gomock.Any(), gomock.Any()).Return(nil, expectedErr)
 
-		signature, err := usecase.Execute(ctx, address, namespace, "my data to sign")
+		signature, err := usecase.Execute(ctx, address, namespace, "0xdaaa")
 
 		assert.Empty(t, signature)
 		assert.Equal(t, expectedErr, err)
@@ -74,7 +75,7 @@ func TestSignPayload_Execute(t *testing.T) {
 
 		mockGetKeyUC.EXPECT().Execute(ctx, address, namespace).Return(key, nil)
 
-		signature, err := usecase.Execute(ctx, address, namespace, "my data to sign")
+		signature, err := usecase.Execute(ctx, address, namespace, "0xdaaa")
 
 		assert.Empty(t, signature)
 		assert.Error(t, err)
@@ -88,9 +89,21 @@ func TestSignPayload_Execute(t *testing.T) {
 
 		mockGetKeyUC.EXPECT().Execute(ctx, address, namespace).Return(key, nil)
 
-		signature, err := usecase.Execute(ctx, address, namespace, "my data to sign")
+		signature, err := usecase.Execute(ctx, address, namespace, "0xdaaa")
 
 		assert.Empty(t, signature)
 		assert.Error(t, err)
+	})
+
+	t.Run("should fail with InvalidParameterError if data is not a hex string", func(t *testing.T) {
+		key := apputils.FakeKey()
+		key.Curve = entities.Secp256k1
+		key.Algorithm = entities.ECDSA
+		key.PrivateKey = "account.PrivateKey"
+
+		signature, err := usecase.Execute(ctx, address, namespace, "invalid data")
+
+		assert.Empty(t, signature)
+		assert.True(t, errors.IsInvalidParameterError(err))
 	})
 }

@@ -31,6 +31,13 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, pubKey, namespace, da
 	logger := log.FromContext(ctx).With("namespace", namespace).With("pub_key", pubKey)
 	logger.Debug("signing message")
 
+	dataBytes, err := hexutil.Decode(data)
+	if err != nil {
+		errMessage := "data must be a hex string"
+		logger.With("error", err).Error(errMessage)
+		return "", errors.InvalidParameterError(errMessage)
+	}
+
 	account, err := uc.getAccountUC.Execute(ctx, pubKey, namespace)
 	if err != nil {
 		return "", err
@@ -45,7 +52,7 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, pubKey, namespace, da
 		return "", errors.CryptoOperationError(errMessage)
 	}
 
-	signatureB, err := privKey.Sign([]byte(data), hash.MIMC_BN254.New("seed"))
+	signatureB, err := privKey.Sign(dataBytes, hash.MIMC_BN254.New("seed"))
 	if err != nil {
 		errMessage := "failed to sign payload"
 		logger.With("error", err).Error(errMessage)
