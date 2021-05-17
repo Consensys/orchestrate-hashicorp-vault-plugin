@@ -35,7 +35,7 @@ func TestSignPayload_Execute(t *testing.T) {
 		key := apputils.FakeKey()
 		key.Curve = entities.Secp256k1
 		key.Algorithm = entities.ECDSA
-		key.PrivateKey = "db337ca3295e4050586793f252e641f3b3a83739018fa4cce01a81ca920e7e1c"
+		key.PrivateKey = "2zN8oyleQFBYZ5PyUuZB87OoNzkBj6TM4BqBypIOfhw="
 
 		mockGetKeyUC.EXPECT().Execute(ctx, address, namespace).Return(key, nil)
 
@@ -55,7 +55,7 @@ func TestSignPayload_Execute(t *testing.T) {
 		signature, err := usecase.Execute(ctx, address, namespace, data)
 
 		assert.NoError(t, err)
-		assert.Equal(t, "jq/tQBLbZ2WOP3ERvd7MI+VFHxfNoz1zuc6AfW7wBx8Bu+WYme35dpm5RPoPFu2GNuM8rAI2M9wal4DO0QiC0w==", signature)
+		assert.Equal(t, "tdpR9JkX7lKSugSvYJX2icf6/uQnCAmXG9v/FG26vS0AcBqg6eVakZQNYwfic/Ec3LWqzSbXg54TBteQq6grdw==", signature)
 	})
 
 	t.Run("should fail with same error if Get Account fails", func(t *testing.T) {

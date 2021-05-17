@@ -11,7 +11,6 @@ import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities"
 	usecases "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
-	"github.com/consensys/quorum/common/hexutil"
 	"github.com/consensys/quorum/crypto"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -46,12 +45,13 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, id, namespace, data s
 	if err != nil {
 		return "", err
 	}
+	privKeyB, _ := base64.StdEncoding.DecodeString(key.PrivateKey)
 
 	switch {
 	case key.Algorithm == entities.EDDSA && key.Curve == entities.BN254:
-		return uc.signEDDSA(logger, key.PrivateKey, dataBytes)
+		return uc.signEDDSA(logger, privKeyB, dataBytes)
 	case key.Algorithm == entities.ECDSA && key.Curve == entities.Secp256k1:
-		return uc.signECDSA(logger, key.PrivateKey, dataBytes)
+		return uc.signECDSA(logger, privKeyB, dataBytes)
 	default:
 		errMessage := "invalid signing algorithm/elliptic curve combination"
 		logger.Error(errMessage)
@@ -59,8 +59,8 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, id, namespace, data s
 	}
 }
 
-func (uc *signPayloadUseCase) signECDSA(logger hclog.Logger, privKeyString string, data []byte) (string, error) {
-	ecdsaPrivKey, err := crypto.HexToECDSA(privKeyString)
+func (uc *signPayloadUseCase) signECDSA(logger hclog.Logger, privKeyB, data []byte) (string, error) {
+	ecdsaPrivKey, err := crypto.ToECDSA(privKeyB)
 	if err != nil {
 		errMessage := "failed to parse ECDSA private key"
 		logger.With("error", err).Error(errMessage)
@@ -78,9 +78,8 @@ func (uc *signPayloadUseCase) signECDSA(logger hclog.Logger, privKeyString strin
 	return base64.StdEncoding.EncodeToString(signatureB[:len(signatureB)-1]), nil
 }
 
-func (uc *signPayloadUseCase) signEDDSA(logger hclog.Logger, privKeyString string, data []byte) (string, error) {
+func (uc *signPayloadUseCase) signEDDSA(logger hclog.Logger, privKeyB, data []byte) (string, error) {
 	privKey := eddsa.PrivateKey{}
-	privKeyB, _ := hexutil.Decode(privKeyString)
 	_, err := privKey.SetBytes(privKeyB)
 	if err != nil {
 		errMessage := "failed to parse EDDSA private key"

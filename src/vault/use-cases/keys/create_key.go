@@ -12,7 +12,6 @@ import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/storage"
 	usecases "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/use-cases"
 	"github.com/consensys/gnark-crypto/ecc/bn254/twistededwards/eddsa"
-	"github.com/consensys/quorum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/hashicorp/vault/sdk/logical"
 	"time"
@@ -60,7 +59,7 @@ func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, id, algo, cu
 			return nil, errors.InvalidParameterError(errMessage)
 		}
 
-		key.PrivateKey = hexutil.Encode(privKey.Bytes())
+		key.PrivateKey = base64.StdEncoding.EncodeToString(privKey.Bytes())
 		key.PublicKey = base64.StdEncoding.EncodeToString(privKey.Public().Bytes())
 	case algo == entities.ECDSA && curve == entities.Secp256k1:
 		privKey, err := uc.ecdsaSecp256k1(importedPrivKey)
@@ -70,7 +69,7 @@ func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, id, algo, cu
 			return nil, errors.InvalidParameterError(errMessage)
 		}
 
-		key.PrivateKey = hexutil.Encode(crypto.FromECDSA(privKey))
+		key.PrivateKey = base64.StdEncoding.EncodeToString(crypto.FromECDSA(privKey))
 		key.PublicKey = base64.StdEncoding.EncodeToString(crypto.FromECDSAPub(&privKey.PublicKey))
 	default:
 		errMessage := "invalid signing algorithm/elliptic curve combination"
