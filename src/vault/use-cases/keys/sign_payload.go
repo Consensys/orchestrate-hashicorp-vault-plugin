@@ -2,6 +2,7 @@ package keys
 
 import (
 	"context"
+	"encoding/base64"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
 	"github.com/consensys/gnark-crypto/crypto/hash"
 	"github.com/consensys/gnark-crypto/ecc/bn254/twistededwards/eddsa"
@@ -34,9 +35,9 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, id, namespace, data s
 	logger := log.FromContext(ctx).With("namespace", namespace).With("id", id)
 	logger.Debug("signing message")
 
-	dataBytes, err := hexutil.Decode(data)
+	dataBytes, err := base64.StdEncoding.DecodeString(data)
 	if err != nil {
-		errMessage := "data must be a hex string"
+		errMessage := "data must be a base64 string"
 		logger.With("error", err).Error(errMessage)
 		return "", errors.InvalidParameterError(errMessage)
 	}
@@ -66,14 +67,15 @@ func (uc *signPayloadUseCase) signECDSA(logger hclog.Logger, privKeyString strin
 		return "", errors.CryptoOperationError(errMessage)
 	}
 
-	signatureB, err := crypto.Sign(crypto.Keccak256([]byte(data)), ecdsaPrivKey)
+	signatureB, err := crypto.Sign(crypto.Keccak256(data), ecdsaPrivKey)
 	if err != nil {
 		errMessage := "failed to sign payload with ECDSA"
 		logger.With("error", err).Error(errMessage)
 		return "", errors.CryptoOperationError(errMessage)
 	}
 
-	return hexutil.Encode(signatureB), nil
+	// We remove the recID from the signature (last byte).
+	return base64.StdEncoding.EncodeToString(signatureB[:len(signatureB)-1]), nil
 }
 
 func (uc *signPayloadUseCase) signEDDSA(logger hclog.Logger, privKeyString string, data []byte) (string, error) {
@@ -93,5 +95,5 @@ func (uc *signPayloadUseCase) signEDDSA(logger hclog.Logger, privKeyString strin
 		return "", errors.CryptoOperationError(errMessage)
 	}
 
-	return hexutil.Encode(signatureB), nil
+	return base64.StdEncoding.EncodeToString(signatureB), nil
 }
