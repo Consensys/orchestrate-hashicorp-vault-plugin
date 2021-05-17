@@ -3,8 +3,8 @@ package keys
 import (
 	"context"
 	"crypto/ecdsa"
-	"encoding/base64"
 	crypto2 "github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/crypto"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/encoding"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/log"
 
@@ -59,8 +59,8 @@ func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, id, algo, cu
 			return nil, errors.InvalidParameterError(errMessage)
 		}
 
-		key.PrivateKey = base64.StdEncoding.EncodeToString(privKey.Bytes())
-		key.PublicKey = base64.StdEncoding.EncodeToString(privKey.Public().Bytes())
+		key.PrivateKey = encoding.EncodeToBase64(privKey.Bytes())
+		key.PublicKey = encoding.EncodeToBase64(privKey.Public().Bytes())
 	case algo == entities.ECDSA && curve == entities.Secp256k1:
 		privKey, err := uc.ecdsaSecp256k1(importedPrivKey)
 		if err != nil {
@@ -69,8 +69,8 @@ func (uc *createKeyUseCase) Execute(ctx context.Context, namespace, id, algo, cu
 			return nil, errors.InvalidParameterError(errMessage)
 		}
 
-		key.PrivateKey = base64.StdEncoding.EncodeToString(crypto.FromECDSA(privKey))
-		key.PublicKey = base64.StdEncoding.EncodeToString(crypto.FromECDSAPub(&privKey.PublicKey))
+		key.PrivateKey = encoding.EncodeToBase64(crypto.FromECDSA(privKey))
+		key.PublicKey = encoding.EncodeToBase64(crypto.FromECDSAPub(&privKey.PublicKey))
 	default:
 		errMessage := "invalid signing algorithm/elliptic curve combination"
 		logger.Error(errMessage)
@@ -97,8 +97,7 @@ func (*createKeyUseCase) eddsaBN254(importedPrivKey string) (eddsa.PrivateKey, e
 	}
 
 	key := eddsa.PrivateKey{}
-
-	privKeyBytes, err := base64.StdEncoding.DecodeString(importedPrivKey)
+	privKeyBytes, err := encoding.DecodeBase64(importedPrivKey)
 	if err != nil {
 		return key, err
 	}
@@ -121,7 +120,7 @@ func (*createKeyUseCase) ecdsaSecp256k1(importedPrivKey string) (*ecdsa.PrivateK
 		return key, nil
 	}
 
-	privKeyBytes, err := base64.StdEncoding.DecodeString(importedPrivKey)
+	privKeyBytes, err := encoding.DecodeBase64(importedPrivKey)
 	if err != nil {
 		return nil, err
 	}

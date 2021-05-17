@@ -41,7 +41,7 @@ func TestCreateKey_Execute(t *testing.T) {
 		fakeKey := utils.FakeKey()
 		fakeKey.Algorithm = entities.EDDSA
 		fakeKey.Curve = entities.BN254
-		privKey := "X9Yz/5+O42+eOodHCUBhA4VMD2ZQy5CMAQ6lXqvDUZGGbioek5qYuzJzTNZpTHrVjjFk7iFe3FYwfpxZyNPxtIaFB5gb9VP9IcHZewwNZly821re7RkmB8pGdjywygPH"
+		privKey := "X9Yz_5-O42-eOodHCUBhA4VMD2ZQy5CMAQ6lXqvDUZGGbioek5qYuzJzTNZpTHrVjjFk7iFe3FYwfpxZyNPxtIaFB5gb9VP9IcHZewwNZly821re7RkmB8pGdjywygPH"
 
 		mockStorage.EXPECT().Put(ctx, gomock.Any()).Return(nil)
 
@@ -49,7 +49,7 @@ func TestCreateKey_Execute(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Equal(t, fakeKey.Namespace, key.Namespace)
-		assert.Equal(t, "X9Yz/5+O42+eOodHCUBhA4VMD2ZQy5CMAQ6lXqvDUZE=", key.PublicKey)
+		assert.Equal(t, "X9Yz_5-O42-eOodHCUBhA4VMD2ZQy5CMAQ6lXqvDUZE=", key.PublicKey)
 	})
 
 	t.Run("should execute use case successfully by generating a private key: Secp256k1, ECDSA", func(t *testing.T) {
@@ -78,7 +78,7 @@ func TestCreateKey_Execute(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Equal(t, fakeKey.Namespace, key.Namespace)
-		assert.Equal(t, "BFVSFJhqUh9DQJwcayNtsWdDMvqq8R/EKnBHqwd4Hr5vCXTyJlqKfYIgj4jCGixVZjsz5a+S2RklJRFjjoLf+LI=", key.PublicKey)
+		assert.Equal(t, "BFVSFJhqUh9DQJwcayNtsWdDMvqq8R_EKnBHqwd4Hr5vCXTyJlqKfYIgj4jCGixVZjsz5a-S2RklJRFjjoLf-LI=", key.PublicKey)
 	})
 
 	t.Run("should fail with InvalidParameter if curve and algo pair are not supported", func(t *testing.T) {

@@ -31,8 +31,8 @@ func FakeKey() *entities.Key {
 	return &entities.Key{
 		Algorithm:  entities.EDDSA,
 		Curve:      entities.BN254,
-		PublicKey:  "X9Yz/5+O42+eOodHCUBhA4VMD2ZQy5CMAQ6lXqvDUZE=",
-		PrivateKey: "X9Yz/5+O42+eOodHCUBhA4VMD2ZQy5CMAQ6lXqvDUZGGbioek5qYuzJzTNZpTHrVjjFk7iFe3FYwfpxZyNPxtIaFB5gb9VP9IcHZewwNZly821re7RkmB8pGdjywygPH",
+		PublicKey:  "X9Yz_5-O42-eOodHCUBhA4VMD2ZQy5CMAQ6lXqvDUZE=",
+		PrivateKey: "X9Yz_5-O42-eOodHCUBhA4VMD2ZQy5CMAQ6lXqvDUZGGbioek5qYuzJzTNZpTHrVjjFk7iFe3FYwfpxZyNPxtIaFB5gb9VP9IcHZewwNZly821re7RkmB8pGdjywygPH",
 		Namespace:  "_",
 		ID:         "my-key",
 		Tags: map[string]string{

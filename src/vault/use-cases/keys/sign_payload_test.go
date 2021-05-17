@@ -42,7 +42,7 @@ func TestSignPayload_Execute(t *testing.T) {
 		signature, err := usecase.Execute(ctx, address, namespace, data)
 
 		assert.NoError(t, err)
-		assert.Equal(t, "YzQeLIN0Sd43Nbb0QCsVSqChGNAuRaKzEfujnERAJd0523aZyz2KXK93KKh+d4ws3MxAhc8qNG43wYI97Fzi7Q==", signature)
+		assert.Equal(t, "YzQeLIN0Sd43Nbb0QCsVSqChGNAuRaKzEfujnERAJd0523aZyz2KXK93KKh-d4ws3MxAhc8qNG43wYI97Fzi7Q==", signature)
 	})
 
 	t.Run("should execute use case successfully: EDDSA", func(t *testing.T) {
@@ -55,7 +55,7 @@ func TestSignPayload_Execute(t *testing.T) {
 		signature, err := usecase.Execute(ctx, address, namespace, data)
 
 		assert.NoError(t, err)
-		assert.Equal(t, "tdpR9JkX7lKSugSvYJX2icf6/uQnCAmXG9v/FG26vS0AcBqg6eVakZQNYwfic/Ec3LWqzSbXg54TBteQq6grdw==", signature)
+		assert.Equal(t, "tdpR9JkX7lKSugSvYJX2icf6_uQnCAmXG9v_FG26vS0AcBqg6eVakZQNYwfic_Ec3LWqzSbXg54TBteQq6grdw==", signature)
 	})
 
 	t.Run("should fail with same error if Get Account fails", func(t *testing.T) {

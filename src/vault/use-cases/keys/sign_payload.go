@@ -2,7 +2,7 @@ package keys
 
 import (
 	"context"
-	"encoding/base64"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/encoding"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
 	"github.com/consensys/gnark-crypto/crypto/hash"
 	"github.com/consensys/gnark-crypto/ecc/bn254/twistededwards/eddsa"
@@ -34,7 +34,7 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, id, namespace, data s
 	logger := log.FromContext(ctx).With("namespace", namespace).With("id", id)
 	logger.Debug("signing message")
 
-	dataBytes, err := base64.StdEncoding.DecodeString(data)
+	dataBytes, err := encoding.DecodeBase64(data)
 	if err != nil {
 		errMessage := "data must be a base64 string"
 		logger.With("error", err).Error(errMessage)
@@ -45,7 +45,7 @@ func (uc *signPayloadUseCase) Execute(ctx context.Context, id, namespace, data s
 	if err != nil {
 		return "", err
 	}
-	privKeyB, _ := base64.StdEncoding.DecodeString(key.PrivateKey)
+	privKeyB, _ := encoding.DecodeBase64(key.PrivateKey)
 
 	switch {
 	case key.Algorithm == entities.EDDSA && key.Curve == entities.BN254:
@@ -75,7 +75,7 @@ func (uc *signPayloadUseCase) signECDSA(logger hclog.Logger, privKeyB, data []by
 	}
 
 	// We remove the recID from the signature (last byte).
-	return base64.StdEncoding.EncodeToString(signatureB[:len(signatureB)-1]), nil
+	return encoding.EncodeToBase64(signatureB[:len(signatureB)-1]), nil
 }
 
 func (uc *signPayloadUseCase) signEDDSA(logger hclog.Logger, privKeyB, data []byte) (string, error) {
@@ -94,5 +94,5 @@ func (uc *signPayloadUseCase) signEDDSA(logger hclog.Logger, privKeyB, data []by
 		return "", errors.CryptoOperationError(errMessage)
 	}
 
-	return base64.StdEncoding.EncodeToString(signatureB), nil
+	return encoding.EncodeToBase64(signatureB), nil
 }
