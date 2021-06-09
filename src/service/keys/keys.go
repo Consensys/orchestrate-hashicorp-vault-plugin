@@ -84,7 +84,7 @@ func (c *controller) pathKey() *framework.Path {
 		HelpSynopsis: "Get, update or delete a key pair",
 		Fields: map[string]*framework.FieldSchema{
 			formatters.IDLabel:   formatters.IDFieldSchema,
-			formatters.TagsLabel: formatters.DataFieldSchema,
+			formatters.TagsLabel: formatters.TagsFieldSchema,
 		},
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.ReadOperation:   c.NewGetOperation(),
