@@ -5,6 +5,7 @@ import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/log"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/errors"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
+	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/utils"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -24,6 +25,8 @@ func (c *controller) NewDestroyOperation() *framework.PathOperation {
 		},
 		Responses: map[int][]framework.Response{
 			204: {},
+			404: {utils.Example404Response()},
+			500: {utils.Example500Response()},
 		},
 	}
 }
