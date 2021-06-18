@@ -23,14 +23,6 @@ func FormatAccountResponse(account *entities.ETHAccount) *logical.Response {
 	}
 }
 
-func FormatSignatureResponse(signature string) *logical.Response {
-	return &logical.Response{
-		Data: map[string]interface{}{
-			SignatureLabel: signature,
-		},
-	}
-}
-
 func FormatSignETHTransactionRequest(requestData *framework.FieldData) (*types.Transaction, error) {
 	amount, ok := new(big.Int).SetString(requestData.Get(AmountLabel).(string), 10)
 	if !ok {
