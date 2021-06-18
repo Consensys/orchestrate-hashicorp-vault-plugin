@@ -15,10 +15,10 @@ import (
 func FormatAccountResponse(account *entities.ETHAccount) *logical.Response {
 	return &logical.Response{
 		Data: map[string]interface{}{
-			"address":             account.Address,
-			"publicKey":           account.PublicKey,
-			"compressedPublicKey": account.CompressedPublicKey,
-			"namespace":           account.Namespace,
+			AddressLabel:             account.Address,
+			PublicKeyLabel:           account.PublicKey,
+			CompressedPublicKeyLabel: account.CompressedPublicKey,
+			NamespaceLabel:           account.Namespace,
 		},
 	}
 }
@@ -26,7 +26,7 @@ func FormatAccountResponse(account *entities.ETHAccount) *logical.Response {
 func FormatSignatureResponse(signature string) *logical.Response {
 	return &logical.Response{
 		Data: map[string]interface{}{
-			"signature": signature,
+			SignatureLabel: signature,
 		},
 	}
 }
