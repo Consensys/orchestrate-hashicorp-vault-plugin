@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
-func WriteHTTPError(err error) (*logical.Response, error) {
+func ParseHTTPError(err error) (*logical.Response, error) {
 	switch {
 	case pkgerrors.IsNotFoundError(err):
 		return logical.ErrorResponse(err.Error()), logical.ErrUnsupportedPath

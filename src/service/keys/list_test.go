@@ -2,6 +2,7 @@ package keys
 
 import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
+	"github.com/stretchr/testify/require"
 	"testing"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
@@ -46,8 +47,8 @@ func (s *keysCtrlTestSuite) TestKeysController_List() {
 		s.listKeysUC.EXPECT().Execute(gomock.Any(), key.Namespace).Return(expectedList, nil)
 
 		response, err := listOperation.Handler()(s.ctx, request, data)
+		require.NoError(t, err)
 
-		assert.NoError(t, err)
 		assert.Equal(t, expectedList, response.Data["keys"])
 	})
 

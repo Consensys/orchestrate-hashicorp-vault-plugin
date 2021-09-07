@@ -3,6 +3,7 @@ package ethereum
 import (
 	"fmt"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
+	"github.com/stretchr/testify/require"
 	"testing"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
@@ -70,8 +71,8 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_SignQuorumPrivateTransact
 		s.signQuorumPrivateTransactionUC.EXPECT().Execute(gomock.Any(), account.Address, account.Namespace, expectedTx).Return(expectedSignature, nil)
 
 		response, err := signOperation.Handler()(s.ctx, request, data)
+		require.NoError(t, err)
 
-		assert.NoError(t, err)
 		assert.Equal(t, expectedSignature, response.Data[formatters.SignatureLabel])
 	})
 

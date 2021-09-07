@@ -2,6 +2,7 @@ package zksnarks
 
 import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
+	"github.com/stretchr/testify/require"
 	"testing"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
@@ -45,8 +46,8 @@ func (s *zksCtrlTestSuite) TestZksController_Create() {
 		s.createAccountUC.EXPECT().Execute(gomock.Any(), account.Namespace).Return(account, nil)
 
 		response, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
+		require.NoError(t, err)
 
-		assert.NoError(t, err)
 		assert.Equal(t, account.PublicKey, response.Data[formatters.PublicKeyLabel])
 		assert.Equal(t, account.Namespace, response.Data[formatters.NamespaceLabel])
 		assert.Equal(t, account.Algorithm, response.Data[formatters.AlgorithmLabel])

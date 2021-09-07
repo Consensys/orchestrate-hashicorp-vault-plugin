@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
@@ -61,8 +62,8 @@ func (s *keysCtrlTestSuite) TestKeysController_Update() {
 		s.updateKeyUC.EXPECT().Execute(gomock.Any(), key.Namespace, key.ID, key.Tags).Return(key, nil)
 
 		response, err := updateOperation.Handler()(s.ctx, request, data)
+		require.NoError(t, err)
 
-		assert.NoError(t, err)
 		assert.Equal(t, key.PublicKey, response.Data[formatters.PublicKeyLabel])
 		assert.Equal(t, key.Namespace, response.Data[formatters.NamespaceLabel])
 		assert.Equal(t, key.Algorithm, response.Data[formatters.AlgorithmLabel])

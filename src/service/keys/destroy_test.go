@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
@@ -59,8 +60,8 @@ func (s *keysCtrlTestSuite) TestKeysController_Destroy() {
 		s.destroyKeyUC.EXPECT().Execute(gomock.Any(), account.Namespace, account.ID).Return(nil)
 
 		response, err := deleteOperation.Handler()(s.ctx, request, data)
+		require.NoError(t, err)
 
-		assert.NoError(t, err)
 		assert.Nil(t, response.Data)
 	})
 

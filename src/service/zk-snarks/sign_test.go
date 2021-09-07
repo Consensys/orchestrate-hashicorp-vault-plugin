@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities/testutils"
+	"github.com/stretchr/testify/require"
 	"testing"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
@@ -65,8 +66,8 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 		s.signPayloadUC.EXPECT().Execute(gomock.Any(), account.PublicKey, account.Namespace, payload).Return(expectedSignature, nil)
 
 		response, err := signOperation.Handler()(s.ctx, request, data)
+		require.NoError(t, err)
 
-		assert.NoError(t, err)
 		assert.Equal(t, expectedSignature, response.Data["signature"])
 	})
 
