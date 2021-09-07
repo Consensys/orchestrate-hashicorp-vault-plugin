@@ -2,7 +2,6 @@ package keys
 
 import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
-	"net/http"
 	"testing"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
@@ -115,9 +114,8 @@ func (s *keysCtrlTestSuite) TestKeysController_Create() {
 
 		s.createKeyUC.EXPECT().Execute(gomock.Any(), "", "id", "algo", "curve", "", map[string]string{}).Return(nil, expectedErr)
 
-		response, err := createOperation.Handler()(s.ctx, request, data)
+		_, err := createOperation.Handler()(s.ctx, request, data)
 
-		assert.NoError(t, err)
-		assert.Equal(t, http.StatusNotFound, response.Data[logical.HTTPStatusCode])
+		assert.Equal(t, err, logical.ErrUnsupportedPath)
 	})
 }

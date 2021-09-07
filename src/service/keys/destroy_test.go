@@ -9,7 +9,6 @@ import (
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/stretchr/testify/assert"
-	"net/http"
 	"testing"
 )
 
@@ -88,9 +87,8 @@ func (s *keysCtrlTestSuite) TestKeysController_Destroy() {
 
 		s.destroyKeyUC.EXPECT().Execute(gomock.Any(), "", key.ID).Return(expectedErr)
 
-		response, err := deleteOperation.Handler()(s.ctx, request, data)
+		_, err := deleteOperation.Handler()(s.ctx, request, data)
 
-		assert.NoError(t, err)
-		assert.Equal(t, http.StatusNotFound, response.Data[logical.HTTPStatusCode])
+		assert.Equal(t, err, logical.ErrUnsupportedPath)
 	})
 }

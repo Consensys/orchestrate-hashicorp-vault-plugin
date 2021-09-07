@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/vault/entities/testutils"
-	"net/http"
 	"testing"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
@@ -95,9 +94,8 @@ func (s *zksCtrlTestSuite) TestZksController_Sign() {
 
 		s.signPayloadUC.EXPECT().Execute(gomock.Any(), account.Address, "", payload).Return("", expectedErr)
 
-		response, err := signOperation.Handler()(s.ctx, request, data)
+		_, err := signOperation.Handler()(s.ctx, request, data)
 
-		assert.NoError(t, err)
-		assert.Equal(t, http.StatusNotFound, response.Data[logical.HTTPStatusCode])
+		assert.Equal(t, err, logical.ErrUnsupportedPath)
 	})
 }

@@ -3,7 +3,6 @@ package keys
 import (
 	"fmt"
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
-	"net/http"
 	"testing"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
@@ -85,9 +84,8 @@ func (s *keysCtrlTestSuite) TestKeysController_Get() {
 
 		s.getKeyUC.EXPECT().Execute(gomock.Any(), "my-key", "").Return(nil, expectedErr)
 
-		response, err := getOperation.Handler()(s.ctx, request, data)
+		_, err := getOperation.Handler()(s.ctx, request, data)
 
-		assert.NoError(t, err)
-		assert.Equal(t, http.StatusNotFound, response.Data[logical.HTTPStatusCode])
+		assert.Equal(t, err, logical.ErrUnsupportedPath)
 	})
 }

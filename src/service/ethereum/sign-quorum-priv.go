@@ -49,13 +49,13 @@ func (c *controller) signQuorumPrivateTransactionHandler() framework.OperationFu
 
 		tx, err := formatters.FormatSignQuorumPrivateTransactionRequest(data)
 		if err != nil {
-			return errors.WriteHTTPError(req, err)
+			return errors.WriteHTTPError(err)
 		}
 
 		ctx = log.Context(ctx, c.logger)
 		signature, err := c.useCases.SignQuorumPrivateTransaction().WithStorage(req.Storage).Execute(ctx, address, namespace, tx)
 		if err != nil {
-			return errors.WriteHTTPError(req, err)
+			return errors.WriteHTTPError(err)
 		}
 
 		return formatters.FormatSignatureResponse(signature), nil

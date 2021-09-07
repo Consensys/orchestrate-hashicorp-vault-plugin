@@ -45,13 +45,13 @@ func (c *controller) updateHandler() framework.OperationFunc {
 		namespace := formatters.GetRequestNamespace(req)
 
 		if tags == nil {
-			return errors.WriteHTTPError(req, errors2.InvalidFormatError("tags must be provided"))
+			return errors.WriteHTTPError(errors2.InvalidFormatError("tags must be provided"))
 		}
 
 		ctx = log.Context(ctx, c.logger)
 		key, err := c.useCases.UpdateKey().WithStorage(req.Storage).Execute(ctx, namespace, id, tags)
 		if err != nil {
-			return errors.WriteHTTPError(req, err)
+			return errors.WriteHTTPError(err)
 		}
 
 		return formatters.FormatKeyResponse(key), nil

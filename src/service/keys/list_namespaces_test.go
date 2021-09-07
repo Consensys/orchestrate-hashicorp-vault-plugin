@@ -2,7 +2,6 @@ package keys
 
 import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
-	"net/http"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -53,9 +52,8 @@ func (s *keysCtrlTestSuite) TestKeysController_ListNamespaces() {
 
 		s.listNamespacesUC.EXPECT().Execute(gomock.Any()).Return(nil, expectedErr)
 
-		response, err := listOperation.Handler()(s.ctx, request, &framework.FieldData{})
+		_, err := listOperation.Handler()(s.ctx, request, &framework.FieldData{})
 
-		assert.NoError(t, err)
-		assert.Equal(t, http.StatusNotFound, response.Data[logical.HTTPStatusCode])
+		assert.Equal(t, err, logical.ErrUnsupportedPath)
 	})
 }

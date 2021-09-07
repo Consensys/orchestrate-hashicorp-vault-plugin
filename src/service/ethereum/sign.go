@@ -45,13 +45,13 @@ func (c *controller) signPayloadHandler() framework.OperationFunc {
 		namespace := formatters.GetRequestNamespace(req)
 
 		if payload == "" {
-			return errors.WriteHTTPError(req, errors2.InvalidFormatError("payload must be provided"))
+			return errors.WriteHTTPError(errors2.InvalidFormatError("payload must be provided"))
 		}
 
 		ctx = log.Context(ctx, c.logger)
 		signature, err := c.useCases.SignPayload().WithStorage(req.Storage).Execute(ctx, address, namespace, payload)
 		if err != nil {
-			return errors.WriteHTTPError(req, err)
+			return errors.WriteHTTPError(err)
 		}
 
 		return formatters.FormatSignatureResponse(signature), nil

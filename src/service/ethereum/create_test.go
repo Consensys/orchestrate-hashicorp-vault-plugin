@@ -2,7 +2,6 @@ package ethereum
 
 import (
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/pkg/errors"
-	"net/http"
 	"testing"
 
 	"github.com/ConsenSys/orchestrate-hashicorp-vault-plugin/src/service/formatters"
@@ -62,9 +61,8 @@ func (s *ethereumCtrlTestSuite) TestEthereumController_Create() {
 
 		s.createAccountUC.EXPECT().Execute(gomock.Any(), "", "").Return(nil, expectedErr)
 
-		response, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
+		_, err := createOperation.Handler()(s.ctx, request, &framework.FieldData{})
 
-		assert.NoError(t, err)
-		assert.Equal(t, http.StatusNotFound, response.Data[logical.HTTPStatusCode])
+		assert.Equal(t, err, logical.ErrUnsupportedPath)
 	})
 }
