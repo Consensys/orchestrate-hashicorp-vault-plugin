@@ -2,6 +2,12 @@
 [![Website](https://img.shields.io/website?label=website&url=https%3A%2F%2Fpegasys.tech%2Forchestrate%2F)](https://pegasys.tech/orchestrate/)
 [![CircleCI](https://img.shields.io/circleci/build/gh/ConsenSys/orchestrate-hashicorp-vault-plugin?token=8a52ab8f0640f5bee56991cd30d808f735749dbf)](https://circleci.com/gh/PegaSysEng/orchestrate-hashicorp-vault-plugin)
 
+### :exclamation: DEPRECATED :exclamation:
+
+This repository is **no longer maintained**.
+
+Active at [**quorum-hashicorp-vault-plugin**](https://github.com/ConsenSys/quorum-hashicorp-vault-plugin)
+
 ![](/img/codefi_orchestrate_logo.png)
 
 # Orchestrate Hashicorp Vault plugin
